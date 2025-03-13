@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import userRouter from "./routes/userRouter.js";
+import nfRouter from "./routes/nfRoutes.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
@@ -34,6 +35,7 @@ connection.once("open", () => {
 });
 
 app.use("/api/users", userRouter);
+app.use("/api/newsFeed", nfRouter);
 
 app.listen(3000, () => {
   console.log("Server is runing on port 3000");
