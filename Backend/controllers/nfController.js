@@ -1,5 +1,8 @@
 import nfPost from "../models/newsfeedModel.js";
 import mongoose from "mongoose";
+import postReport from "../models/postReportModel.js";
+
+//System manager functionalities of the newsfeed
 
 export const addPost = async (req, res) => {
 
@@ -142,5 +145,91 @@ export const deletePost = async (req, res) => {
     } catch (error) {
         console.error("Delete post error:", error);
         res.status(500).json({ error: "Server error" });
+    }
+};
+
+export const adminSearchPosts = async (req, res) => {
+    try {
+        const { search } = req.query; // Single search parameter
+
+        let filter = {};
+
+        if (search) {
+            filter.$or = [
+                // Check if the search term is a keyword (exact match)
+                { keywords: { $in: [search] } },
+                
+                // Partial match in title or content
+                { title: { $regex: search, $options: 'i' } },
+                { content: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        const posts = await nfPost.find(filter).sort({ createdAt: -1 });
+
+        res.status(200).json({
+            count: posts.length,
+            data: posts.map(post => ({
+                id: post._id,
+                title: post.title,
+                contentSnippet: post.content.substring(0, 10),
+                keywords: post.keywords,
+                createdAt: post.createdAt
+            }))
+        });
+
+    } catch (error) {
+        console.error("Search error:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+};
+
+
+//Newsfeed viewers functionalities
+
+export const reportPost = async(req, res) => {
+    try{
+        const{postID, reason} = req.body;
+
+        if(!mongoose.Types.ObjectId.isValid(postID)){
+            return res.status(400).json({message:"Invalid post ID"});
+        }
+
+        const post = await nfPost.findById(postID);
+        if(!post){
+            return res.status(404).json({message:"Post not fount"});
+        }
+
+        const newPostReport = new postReport({postID, reason});
+        await newPostReport.save();
+
+        res.status(201).json({
+            message: "Report submitted successfully",
+            data:{
+                postID: newPostReport.postID,
+                reason: newPostReport.reason
+            }
+        });
+    }catch(error){
+        console.error("Report creation error:", error);
+        res.status(500).json({ error: "Server error" });
+    }
+};
+
+export const getAllreports = async(req, res) => {
+    try{
+        const postReports = await postReport.find({}).sort({createdAt:1});
+
+        res.status(200).json({
+            count: postReports.length,
+            data: postReports.map(reports => ({
+                id: reports._id,
+                postID: reports.postID,
+                reason: reports.reason 
+            }))
+        });
+
+    }catch(error){
+
     }
 };
