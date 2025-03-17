@@ -1,13 +1,21 @@
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import userRouter from "./routes/userRouter.js";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import biRoutes from './routes/biRoutes.js';  // Buyer Inventory routes
+import userRouter from "./routes/userRouter.js";
+import nfRouter from "./routes/nfRoutes.js";
+import cors from 'cors';  // Enable Cross-Origin Resource Sharing
+import jwt from "jsonwebtoken";
+import path from 'path';  // Path utilities
+
+
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors()); // Enable CORS for all routes
 
 app.use(bodyParser.json());
 app.use((req, res, next) => {
@@ -24,6 +32,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// Serve static files for uploaded images
+app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
+
 let mongoUrl = process.env.MONGO_URL;
 
 mongoose.connect(mongoUrl);
@@ -34,6 +45,8 @@ connection.once("open", () => {
 });
 
 app.use("/api/users", userRouter);
+app.use("/api/newsFeed", nfRouter);
+app.use('/api/inventory', biRoutes);// Buyer Inventory API routes
 
 app.listen(3000, () => {
   console.log("Server is runing on port 3000");
