@@ -48,20 +48,19 @@ export function loginUser(req, res) {
           process.env.JWT_SECRET
         );
 
-        res.json({ message: "Login successful", token: token , user: user});
+        res.json({ message: "Login successful", token: token, user: user });
       } else {
         res.status(401).json({ error: "Login failed" });
       }
     }
-  }); 
+  });
 }
 
-
-export function isItAdmin(req){
+export function isItAdmin(req) {
   let isAdmin = false;
 
-  if(req.user != null){
-    if(req.user.role == "admin"){
+  if (req.user != null) {
+    if (req.user.role == "admin") {
       isAdmin = true;
     }
   }
@@ -69,14 +68,63 @@ export function isItAdmin(req){
   return isAdmin;
 }
 
-export function isItCustomer(req){
+export function isItCustomer(req) {
   let isCustomer = false;
 
-  if(req.user != null){
-    if(req.user.role == "customer"){
+  if (req.user != null) {
+    if (req.user.role == "customer") {
       isCustomer = true;
     }
   }
 
   return isCustomer;
 }
+
+export function isItFarmer(req) {
+  let isFarmer = false;
+
+  if (req.user != null) {
+    if (req.user.role == "farmer") {
+      isFarmer = true;
+    }
+  }
+
+  return isFarmer;
+}
+
+export function isItBuyer(req) {
+  let isBuyer = false;
+
+  if (req.user != null) {
+    if (req.user.role == "buyer") {
+      isBuyer = true;
+    }
+  }
+
+  return isBuyer;
+}
+
+export function isItAgriculturalInspector(req) {
+  let isAgriculturalInspector = false;
+
+  if (req.user != null) {
+    if (req.user.role == "inspector") {
+      isAgriculturalInspector = true;
+    }
+  }
+
+  return isAgriculturalInspector;
+}
+
+export function isItToolDealer(req) {
+  let isToolDealer = false;
+
+  if (req.user != null) {
+    if (req.user.role == "tooldealer") {
+      isToolDealer = true;
+    }
+  }
+
+  return isToolDealer;
+}
+
