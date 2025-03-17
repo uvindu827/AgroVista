@@ -6,15 +6,15 @@ import path from 'path';
 // Joi validation schema
 const inventorySchema = Joi.object({
   productName: Joi.string().required(),
-  price: Joi.number().min(0).required()  // Price per 100 grams
+  price: Joi.number().min(0).required()  // Price per 1 kilograms
     .messages({
       'number.min': 'Price must be a positive number.',
       'any.required': 'Price is required.'
     }),
   productPicture: Joi.string().optional(),  // Allow optional product picture
-  stock: Joi.number().min(0).required()  // Stock in grams
+  stock: Joi.number().min(0).required()  // Stock in kilograms
     .messages({
-      'number.min': 'Stock must be at least 0 grams.',
+      'number.min': 'Stock must be at least 0 kilograms.',
       'any.required': 'Stock is required.'
     }),
   expirationDate: Joi.date().required(),
