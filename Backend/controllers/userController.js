@@ -67,12 +67,10 @@ export async function updateUser(req, res) {
     const key = req.params.key;
     let data = req.body;
 
-    // If the user wants to update the password, hash it first
     if (data.password) {
       data.password = bcrypt.hashSync(data.password, 10);
     }
 
-    // Find and update user by key
     const updatedUser = await User.findOneAndUpdate({ key: key }, data, {
       new: true,
       runValidators: true,
@@ -92,6 +90,35 @@ export async function updateUser(req, res) {
     console.error("Error updating user:", e);
     res.status(500).json({
       message: "Failed to update user",
+    });
+  }
+}
+
+export async function deleteUser(req, res) {
+  try {
+    if (!req.user) {
+      return res.status(403).json({
+        message: "You are not authorized to perform this action",
+      });
+    }
+
+    const key = req.params.key;
+
+    const deletedUser = await User.findOneAndDelete({ key: key });
+
+    if (!deletedUser) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      message: "User deleted successfully",
+    });
+  } catch (e) {
+    console.error("Error deleting user:", e);
+    res.status(500).json({
+      message: "Failed to delete user",
     });
   }
 }
