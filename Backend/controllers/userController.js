@@ -56,6 +56,46 @@ export function loginUser(req, res) {
   });
 }
 
+export async function updateUser(req, res) {
+  try {
+    if (!req.user) {
+      return res.status(403).json({
+        message: "You are not authorized to perform this action",
+      });
+    }
+
+    const key = req.params.key;
+    let data = req.body;
+
+    // If the user wants to update the password, hash it first
+    if (data.password) {
+      data.password = bcrypt.hashSync(data.password, 10);
+    }
+
+    // Find and update user by key
+    const updatedUser = await User.findOneAndUpdate({ key: key }, data, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      message: "User updated successfully",
+      user: updatedUser,
+    });
+  } catch (e) {
+    console.error("Error updating user:", e);
+    res.status(500).json({
+      message: "Failed to update user",
+    });
+  }
+}
+
 export function isItAdmin(req) {
   let isAdmin = false;
 
@@ -127,4 +167,3 @@ export function isItToolDealer(req) {
 
   return isToolDealer;
 }
-
