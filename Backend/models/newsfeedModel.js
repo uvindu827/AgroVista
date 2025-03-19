@@ -30,7 +30,11 @@ const nfSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-
+    upvotedBy: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'User',
+        default: []
+    },
 })
 
 const nfPost =  mongoose.model("nfPost", nfSchema);
