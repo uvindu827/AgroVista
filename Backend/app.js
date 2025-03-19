@@ -10,6 +10,7 @@ import jwt from "jsonwebtoken";
 import path from 'path';  // Path utilities
 
 
+import staffRouter from "./routes/staffRoutes.js";
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ connection.once("open", () => {
 app.use("/api/users", userRouter);
 app.use("/api/newsFeed", nfRouter);
 app.use('/api/inventory', biRoutes);// Buyer Inventory API routes
+app.use("/api/staff", staffRouter);
 
 app.listen(3000, () => {
   console.log("Server is runing on port 3000");
