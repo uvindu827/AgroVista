@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import biRoutes from "./routes/biRoutes.js"; // Buyer Inventory routes
+import cartRouter from './routes/cCartRoutes.js'; // Cart routes
 import userRouter from "./routes/userRouter.js";
 import nfRouter from "./routes/nfRoutes.js";
 import cors from "cors"; // Enable Cross-Origin Resource Sharing
@@ -54,7 +55,7 @@ app.use("/api/inventory", biRoutes); // Buyer Inventory API routes
 app.use("/api/staff", staffRouter);
 app.use("/api/products",productRouter);
 app.use("/api/inquiries",inquiryRouter);
-
+app.use('/api/cart', cartRouter);
 
 
 app.listen(3000, () => {
