@@ -6,6 +6,7 @@ import biRoutes from "./routes/biRoutes.js"; // Buyer Inventory routes
 import cartRouter from './routes/cCartRoutes.js'; // Cart routes
 import userRouter from "./routes/userRouter.js";
 import nfRouter from "./routes/nfRoutes.js";
+import cOrderRoutes from './routes/cOrderRoutes.js';  // Import order routes
 import cors from "cors"; // Enable Cross-Origin Resource Sharing
 import jwt from "jsonwebtoken";
 import path from "path"; // Path utilities
@@ -56,6 +57,7 @@ app.use("/api/staff", staffRouter);
 app.use("/api/products",productRouter);
 app.use("/api/inquiries",inquiryRouter);
 app.use('/api/cart', cartRouter);
+app.use("/api/orders", cOrderRoutes);  // Mount routes on /api/orders
 
 
 app.listen(3000, () => {
