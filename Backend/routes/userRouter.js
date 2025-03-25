@@ -12,11 +12,11 @@ import {
 
 const userRouter = express.Router();
 
-userRouter.post("/",registerUser)
+userRouter.post("/", registerUser);
 
-userRouter.post("/login",loginUser)
+userRouter.post("/login", loginUser);
 
-userRouter.get("/all",getAllUsers)
+userRouter.get("/all", getAllUsers);
 
 userRouter.put("/block/:email", blockOrUnblockUser);
 
@@ -27,14 +27,5 @@ userRouter.get("/sendOTP", sendOTP);
 userRouter.post("/verifyEmail", verifyOTP);
 
 userRouter.get("/", getUser);
-userRouter.post("/google",loginWithGoogle)
-
-userRouter.get("/sendOTP",sendOTP)
-
-userRouter.post("/verifyEmail",verifyOTP)
-
-userRouter.get("/",getUser)
-
-
 
 export default userRouter;
