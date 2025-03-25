@@ -3,10 +3,8 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import biRoutes from "./routes/biRoutes.js"; // Buyer Inventory routes
-import biRoutes from "./routes/biRoutes.js"; // Buyer Inventory routes
 import userRouter from "./routes/userRouter.js";
 import nfRouter from "./routes/nfRoutes.js";
-import cors from "cors"; // Enable Cross-Origin Resource Sharing
 import cors from "cors"; // Enable Cross-Origin Resource Sharing
 import jwt from "jsonwebtoken";
 import path from "path"; // Path utilities
@@ -15,7 +13,6 @@ import path from "path"; // Path utilities
 import staffRouter from "./routes/staffRoutes.js";
 import productRouter from "./routes/productRouter.js";
 import inquiryRouter from "./routes/inquiryRouter.js";
-import path from "path"; // Path utilities
 
 dotenv.config();
 
@@ -59,7 +56,6 @@ app.use("/api/products",productRouter);
 app.use("/api/inquiries",inquiryRouter);
 
 
-app.use("/api/inventory", biRoutes); // Buyer Inventory API routes
 
 app.listen(3000, () => {
   console.log("Server is runing on port 3000");
