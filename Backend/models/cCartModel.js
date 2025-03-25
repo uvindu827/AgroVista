@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 // Cart Schema
 const cartSchema = new mongoose.Schema(
   {
-    customerEmail: { type: String, required: true },
-    buyerEmail: { type: String, required: true },
+    customerEmail: { type: String, required: false },
+    buyerEmail: { type: String, required: false },
     products: [
       {
         productId: {
