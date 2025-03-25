@@ -27,48 +27,48 @@ function Staff() {
     fetchData();
   }, []);
 
-  if (loading) return <div className="p-4 text-gray-500">Loading...</div>;
-  if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
+  if (loading) return <div className="p-4 text-green-600">Loading...</div>;
+  if (error) return <div className="p-4 text-yellow-700">Error: {error}</div>;
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8">
-      <div className="sm:flex sm:items-center">
+      <div className="sm:flex sm:items-center mb-8">
         <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold text-gray-900">
+          <h1 className="text-3xl font-bold text-green-800 border-b-4 border-yellow-400 pb-2">
             Staff Details
           </h1>
         </div>
       </div>
       
-      <div className="mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
+      <div className="mt-8 overflow-hidden shadow-lg ring-2 ring-green-200 rounded-xl">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-300">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-green-200">
+            <thead className="bg-green-100">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">
                   First Name
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">
                   Last Name
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">
                   Email
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">
                   Phone
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">
                   Address
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">
                   Job Title
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-gray-900">
+                <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">
                   Salary
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
+            <tbody className="bg-white divide-y divide-green-200">
               {staff.map((member, i) => (
                 <StaffMember key={i} StaffMember={member} />
               ))}
