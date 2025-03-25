@@ -7,9 +7,9 @@ import postReport from "../models/postReportModel.js";
 export const addPost = async (req, res) => {
 
     try{
-        const {title, content, image, keywords} = req.body;
+        const {title, content, image, keywords,} = req.body;
 
-        if(!title || !content || !image){
+        if(!title || !content || !image || !keywords){
             return res.status(400).json({message:"Missing required fields"});
         }
 
@@ -51,7 +51,9 @@ export const getAllPosts = async(req, res) => {
                 content: post.content,
                 image: post.image,
                 keywords: post.keywords,
-                createdAt: post.createdAt
+                createdAt: post.createdAt,
+                upvotedUsers: post.upvotedUsers,
+                upvoteCount:post.upvoteCount
             }))
         });
     } catch(error) {
@@ -64,21 +66,21 @@ export const updatePost = async (req, res) => {
     try {
         const postId = req.params.id;
 
-        // Validate post ID
+        
         if (!mongoose.Types.ObjectId.isValid(postId)) {
             return res.status(400).json({ message: "Invalid post ID" });
         }
 
-        // Find the existing post
+        
         const existingPost = await nfPost.findById(postId);
         if (!existingPost) {
             return res.status(404).json({ message: "Post not found" });
         }
 
-        // Extract fields from request body
+        
         const { title, content, image, keywords } = req.body;
 
-        // Update allowed fields if provided
+        
         if (title !== undefined) 
             existingPost.title = title;
         if (content !== undefined) 
@@ -88,13 +90,13 @@ export const updatePost = async (req, res) => {
         if (keywords !== undefined) 
             existingPost.keywords = keywords;
 
-        // Update the timestamp
+        
         existingPost.updatedAt = new Date();
 
-        // Save the updated post
+        
         await existingPost.save();
 
-        // Return the updated post data
+        
         res.status(200).json({
             data: {
                 id: existingPost._id,
@@ -108,7 +110,7 @@ export const updatePost = async (req, res) => {
         });
 
     } catch (error) {
-        // Handle validation errors
+        
         if (error.name === 'ValidationError') {
             return res.status(400).json({ message: error.message });
         }
@@ -121,19 +123,19 @@ export const deletePost = async (req, res) => {
     try {
         const postId = req.params.id;
 
-        // Validate post ID format
+        
         if (!mongoose.Types.ObjectId.isValid(postId)) {
             return res.status(400).json({ message: "Invalid post ID" });
         }
 
-        // Find and delete the post
+    
         const deletedPost = await nfPost.findByIdAndDelete(postId);
 
         if (!deletedPost) {
             return res.status(404).json({ message: "Post not found" });
         }
 
-        // Return success response with deleted post ID
+        
         res.status(200).json({
             data: {
                 id: deletedPost._id,
@@ -150,16 +152,16 @@ export const deletePost = async (req, res) => {
 
 export const adminSearchPosts = async (req, res) => {
     try {
-        const { search } = req.query; // Single search parameter
+        const { search } = req.query; 
 
         let filter = {};
 
         if (search) {
             filter.$or = [
-                // Check if the search term is a keyword (exact match)
+                
                 { keywords: { $in: [search] } },
                 
-                // Partial match in title or content
+                
                 { title: { $regex: search, $options: 'i' } },
                 { content: { $regex: search, $options: 'i' } }
             ];
@@ -232,4 +234,5 @@ export const getAllreports = async(req, res) => {
     }catch(error){
 
     }
-};
+};  
+
