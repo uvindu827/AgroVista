@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import StaffMember from "../StaffMember/StaffMember";
 
 const URL = "http://localhost:3000/api/staff/getStaff";
@@ -12,6 +13,7 @@ function Staff() {
   const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +29,20 @@ function Staff() {
     fetchData();
   }, []);
 
+  const handleAddEmployee = () => {
+    navigate("/add-employee");
+  };
+
+  const handleEdit = (employeeId) => {
+    // Implement edit functionality
+    console.log("Edit employee:", employeeId);
+  };
+
+  const handleDelete = (employeeId) => {
+    // Implement delete functionality
+    console.log("Delete employee:", employeeId);
+  };
+
   if (loading) return <div className="p-4 text-green-600">Loading...</div>;
   if (error) return <div className="p-4 text-yellow-700">Error: {error}</div>;
 
@@ -38,6 +54,14 @@ function Staff() {
             Staff Details
           </h1>
         </div>
+        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+          <button
+            onClick={handleAddEmployee}
+            className="inline-flex items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+          >
+            Add Employee
+          </button>
+        </div>
       </div>
       
       <div className="mt-8 overflow-hidden shadow-lg ring-2 ring-green-200 rounded-xl">
@@ -45,6 +69,7 @@ function Staff() {
           <table className="min-w-full divide-y divide-green-200">
             <thead className="bg-green-100">
               <tr>
+                {/* Existing headers */}
                 <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">
                   First Name
                 </th>
@@ -66,11 +91,19 @@ function Staff() {
                 <th scope="col" className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider">
                   Salary
                 </th>
+                <th scope="col" className="px-6 py-3 text-right text-sm font-semibold text-green-800 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-green-200">
-              {staff.map((member, i) => (
-                <StaffMember key={i} StaffMember={member} />
+              {staff.map((member) => (
+                <StaffMember 
+                  key={member.id} 
+                  StaffMember={member} 
+                  onEdit={() => handleEdit(member.id)}
+                  onDelete={() => handleDelete(member.id)}
+                />
               ))}
             </tbody>
           </table>
