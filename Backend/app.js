@@ -37,6 +37,7 @@ app.use((req, res, next) => {
 
 // Serve static files for uploaded images
 app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
+app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
 
 let mongoUrl = process.env.MONGO_URL;
 
