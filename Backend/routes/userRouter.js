@@ -1,9 +1,13 @@
 import express from "express";
 import {
-  deleteUser,
+  blockOrUnblockUser,
+  getAllUsers,
+  getUser,
   loginUser,
+  loginWithGoogle,
   registerUser,
-  updateUser,
+  sendOTP,
+  verifyOTP,
 } from "../controllers/userController.js";
 
 const userRouter = express.Router();
@@ -12,8 +16,16 @@ userRouter.post("/", registerUser);
 
 userRouter.post("/login", loginUser);
 
-userRouter.put("/:key", updateUser);
+userRouter.get("/all", getAllUsers);
 
-userRouter.delete("/:key", deleteUser);
+userRouter.put("/block/:email", blockOrUnblockUser);
+
+userRouter.post("/google", loginWithGoogle);
+
+userRouter.get("/sendOTP", sendOTP);
+
+userRouter.post("/verifyEmail", verifyOTP);
+
+userRouter.get("/", getUser);
 
 export default userRouter;
