@@ -46,8 +46,7 @@ export const getStaff = async(req, res) => {
         const staffMembers = await staff.find({});
 
         res.status(200).json({
-            count: staffMembers.length,
-            data:staffMembers.map(members =>({
+            staff:staffMembers.map(members =>({
                 id:members._id,
                 firstName:members.firstName,
                 lastName:members.lastName,
