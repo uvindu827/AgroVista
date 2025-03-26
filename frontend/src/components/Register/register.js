@@ -73,7 +73,7 @@ export default function RegisterPage() {
           <img
             src="/agrologo.png"
             alt="logo"
-            className="w-[120px] h-[50px] mx-auto bg-cover "
+            className="w-[80px] h-[50px] mx-auto bg-cover mb-5"
           />
           <h2 className="text-3xl font-bold text-green-900">Register</h2>
         </div>
