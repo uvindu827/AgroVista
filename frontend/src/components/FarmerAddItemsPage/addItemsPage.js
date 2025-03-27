@@ -42,7 +42,7 @@ export default function AddItemPage() {
           }
         );
         toast.success(result.data.message);
-        navigate("/farmer/items/add");
+        navigate("/farmer/items");
       } catch (err) {
         toast.error(err.response.data.error);
       }

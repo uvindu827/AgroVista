@@ -16,8 +16,16 @@ export default function RegisterPage() {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!firstName.trim()) newErrors.firstName = "First Name is required";
-    if (!lastName.trim()) newErrors.lastName = "Last Name is required";
+    if (!firstName.trim()) {
+      newErrors.firstName = "First Name is required";
+    } else if (!/^[A-Za-z]+$/.test(firstName)) {
+      newErrors.firstName = "First Name must contain only letters";
+    }
+    if (!lastName.trim()) {
+      newErrors.lastName = "Last Name is required";
+    } else if (!/^[A-Za-z]+$/.test(lastName)) {
+      newErrors.lastName = "Last Name must contain only letters";
+    }
     if (!email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
@@ -27,7 +35,15 @@ export default function RegisterPage() {
       newErrors.password = "Password is required";
     } else if (password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
+    } else if (
+      !/[A-Z]/.test(password) ||
+      !/\d/.test(password) ||
+      !/[!@#$%^&*]/.test(password)
+    ) {
+      newErrors.password =
+        "Password must contain at least 1 uppercase letter, 1 number, and 1 special character";
     }
+
     if (!address.trim()) newErrors.address = "Address is required";
     if (!phone.trim()) {
       newErrors.phone = "Phone number is required";
@@ -67,7 +83,7 @@ export default function RegisterPage() {
     >
       <form
         onSubmit={handleOnSubmit}
-        className="w-[420px] bg-white/30 backdrop-blur-lg p-8 rounded-xl shadow-xl border border-white/10"
+        className="w-[420px] bg-white/30 backdrop-blur-lg p-8 rounded-xl shadow-xl border border-white/10 flex-wrap"
       >
         <div className="text-center">
           <img
