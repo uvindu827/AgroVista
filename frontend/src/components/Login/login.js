@@ -10,13 +10,18 @@ export default function LoginPage() {
 
   function handleOnSubmit(e) {
     e.preventDefault();
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    
 
-    axios.post(`${backendUrl}/api/users/login`, { email, password })
+    axios.post(`http://localhost:3000/api/users/login`, { email, password })
       .then((res) => {
-        toast.success("Login Successful");
-        localStorage.setItem("token", res.data.token);
-        navigate("/");
+        toast.success("Login Success")
+        const user = res.data.user
+        localStorage.setItem("token",res.data.token)
+        if(user.role === "farmer"){
+          navigate("/farmer/")
+        }else{
+          navigate("/")
+        }
       })
       .catch((err) => {
         toast.error(err.response?.data?.error || "An error occurred");

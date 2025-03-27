@@ -42,7 +42,7 @@ export default function RegisterPage() {
     e.preventDefault();
     if (validateForm()) {
       axios
-        .post("http://localhost:3001/api/users/", {
+        .post("http://localhost:3000/api/users/", {
           email,
           firstName,
           lastName,
@@ -52,7 +52,7 @@ export default function RegisterPage() {
         })
         .then(() => {
           toast.success("Registration Successful");
-          navigate("/login");
+          navigate("/users/login");
         })
         .catch((err) => {
           toast.error(err?.response?.data?.error || "An error occurred");
