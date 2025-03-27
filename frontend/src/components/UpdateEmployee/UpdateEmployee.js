@@ -46,9 +46,22 @@ function UpdateEmployee() {
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+    let sanitizedValue = value;
+  
+
+    if (['firstName', 'lastName', 'jobTitle'].includes(name)) {
+      sanitizedValue = value.replace(/[^a-zA-Z\s]/g, '');
+    }
+  
+
+    if (name === "basicSalary") {
+      sanitizedValue = value === "" ? "" : Math.max(1, Number(value));
+    }
+  
     setInputs((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [name]: sanitizedValue,
     }));
   };
 

@@ -34,8 +34,6 @@ function AddEmployee() {
     }));
   };
   
-  
-
   const handleSubmit = (e) => {
     e.preventDefault();
     sendRequest().then(() => navigate("/"));
@@ -184,7 +182,7 @@ function AddEmployee() {
             </div>
           </div>
 
-          {/* Form Actions */}
+
           <div className="flex justify-end gap-4 mt-8">
             <button
               type="button"

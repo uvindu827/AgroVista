@@ -4,6 +4,7 @@ import Staff from './components/StaffDetails/Staff';
 import AddEmployee from './components/AddEmployee/AddEmployee';
 import {Route, Routes} from 'react-router';
 import UpdateEmployee from './components/UpdateEmployee/UpdateEmployee';
+import RegisterPage from "./components/Register/register";
 
 function App() {
   return (
