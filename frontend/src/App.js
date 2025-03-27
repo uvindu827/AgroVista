@@ -10,9 +10,10 @@ function App() {
     <div>
       <React.Fragment>
         <Routes>
-          <Route path="/" element={<Staff />}/>
+          <Route path="/" element={<Staff />} />
           <Route path="/add-employee" element={<AddEmployee />} />
           <Route path="/updateEmp/:id" element={<UpdateEmployee/>} />
+          <Route path="/users/" element={<RegisterPage />} />
         </Routes>
       </React.Fragment>
     </div>
