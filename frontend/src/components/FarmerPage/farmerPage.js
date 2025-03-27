@@ -1,5 +1,5 @@
 import { BsGraphDown } from "react-icons/bs";
-import { FaRegBookmark, FaRegUser} from "react-icons/fa";
+import { FaRegBookmark, FaRegUser } from "react-icons/fa";
 import { MdOutlineSpeaker } from "react-icons/md";
 import { Link, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -8,14 +8,14 @@ import axios from "axios";
 import FarmerItemsPage from "../FarmerItemsPage/farmerItemsPage";
 
 import UpdateItemPage from "../FarmerUpdateItempage/updateItemPage";
-import AddItemPage from "../FarmerAddItemsPage/addItemPage";
+import AddItemPage from "../FarmerAddItemsPage/addItemsPage";
 
 export default function FarmerPage() {
   const [userValidated, setUserValidated] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    
+
     if (!token) {
       window.location.href = "/login";
     }
@@ -41,7 +41,6 @@ export default function FarmerPage() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <aside className="w-64 bg-green-800 text-white flex flex-col p-5 shadow-lg">
         <h1 className="text-2xl font-bold text-center mb-6">
           🌱 AgriDashboard
@@ -68,7 +67,6 @@ export default function FarmerPage() {
         </nav>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-6">
         <div className="bg-white shadow-md p-5 rounded-lg">
           <h2 className="text-2xl font-semibold text-gray-700 flex items-center gap-2">
@@ -84,8 +82,8 @@ export default function FarmerPage() {
           <div className="mt-6">
             <Routes>
               <Route path="/items" element={<FarmerItemsPage />} />
-              <Route path="/items/add" element={<AddItemPage />} />
               <Route path="/items/edit" element={<UpdateItemPage />} />
+              <Route path="/items/add" element={<AddItemPage/>}/>
             </Routes>
           </div>
         )}
