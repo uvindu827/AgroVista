@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function AddEmployee() {
+const EditEmployee = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const [inputs, setInputs] = useState({
+  const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -14,47 +15,46 @@ function AddEmployee() {
     basicSalary: "",
   });
 
-  const handleChange = (e) => {
-    setInputs((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/staff/${id}/getMemberById`
+        );
+        setFormData(response.data.data);
+      } catch (err) {
+        console.error("Error fetching employee:", err);
+      }
+    };
+    fetchEmployee();
+  }, [id]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(inputs);
-    sendRequest().then(() => navigate("/"));
+    try {
+      await axios.put(
+        `http://localhost:3000/api/staff/${id}/updateStaffMember`,
+        formData
+      );
+      navigate("/");
+    } catch (err) {
+      console.error("Update failed:", err);
+    }
   };
 
-  const handleCancel = () => {
-    navigate(-1); 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  const sendRequest = async () => {
-    await axios.post("http://localhost:3000/api/staff/addStaff", {
-      firstName: String(inputs.firstName),
-      lastName: String(inputs.lastName),
-      email: String(inputs.email),
-      phoneNumber: String(inputs.phoneNumber),
-      address: String(inputs.address),
-      jobTitle: String(inputs.jobTitle),
-      basicSalary: Number(inputs.basicSalary),
-    }).then(res => res.data)
-  }
 
   return (
-    <div className="min-h-screen py-8 px-4 bg-green-50 min-h-screen" >
+    <div className="min-h-screen py-8 px-4 bg-green-50 min-h-screen">
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        {/* Form Header */}
-        <div className="bg-green-600 p-6">
+        <div className="bg-green-600 p-6 text-center">
           <h2 className="text-3xl font-bold text-yellow-400 mb-2">
-            Add New Employee
+            Update Employee Details
           </h2>
-          <p className="text-green-100">Fill in the employee details</p>
         </div>
 
-        {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* First Name */}
@@ -65,7 +65,7 @@ function AddEmployee() {
               <input
                 type="text"
                 name="firstName"
-                value={inputs.firstName}
+                value={formData.firstName}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
@@ -79,7 +79,7 @@ function AddEmployee() {
               <input
                 type="text"
                 name="lastName"
-                value={inputs.lastName}
+                value={formData.lastName}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
@@ -93,7 +93,7 @@ function AddEmployee() {
               <input
                 type="email"
                 name="email"
-                value={inputs.email}
+                value={formData.email}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
@@ -107,7 +107,7 @@ function AddEmployee() {
               <input
                 type="tel"
                 name="phoneNumber"
-                value={inputs.phoneNumber}
+                value={formData.phoneNumber}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
@@ -121,7 +121,7 @@ function AddEmployee() {
               <input
                 type="text"
                 name="address"
-                value={inputs.address}
+                value={formData.address}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
@@ -135,7 +135,7 @@ function AddEmployee() {
               <input
                 type="text"
                 name="jobTitle"
-                value={inputs.jobTitle}
+                value={formData.jobTitle}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
@@ -153,34 +153,23 @@ function AddEmployee() {
                 <input
                   type="number"
                   name="basicSalary"
-                  value={inputs.basicSalary}
+                  value={formData.basicSalary}
                   onChange={handleChange}
                   className="w-full pl-8 pr-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
                 />
               </div>
             </div>
           </div>
-
-          {/* Form Actions */}
-          <div className="flex justify-end gap-4 mt-8">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="px-6 py-2 border border-yellow-400 text-yellow-700 rounded-lg hover:bg-yellow-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
-              Add Employee
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="inline-flex justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+          >
+            Update Employee
+          </button>
         </form>
       </div>
     </div>
   );
-}
+};
 
-export default AddEmployee;
+export default EditEmployee;

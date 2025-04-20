@@ -26,14 +26,12 @@ function StaffMember({ StaffMember, onEdit, onDelete }) {
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
         <button
           onClick={onEdit}
-          className="text-yellow-700 hover:text-yellow-900 mr-4"
-        >
+          className="text-yellow-500 hover:text-yellow-900 mr-4">
           Edit
         </button>
         <button
           onClick={onDelete}
-          className="text-red-600 hover:text-red-900"
-        >
+          className="text-red-500 hover:text-red-900">
           Delete
         </button>
       </td>
