@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 function UpdateEmployee() {
@@ -67,10 +66,6 @@ function UpdateEmployee() {
     e.preventDefault();
     await sendRequest();
     navigate("/");
-  };
-
-  const handleCancel = () => {
-    navigate(-1);
   };
 
   return (
