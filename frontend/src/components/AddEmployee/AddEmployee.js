@@ -15,15 +15,27 @@ function AddEmployee() {
   });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+    let sanitizedValue = value;
+  
+
+    if (['firstName', 'lastName', 'jobTitle'].includes(name)) {
+      sanitizedValue = value.replace(/[^a-zA-Z\s]/g, '');
+    }
+  
+
+    if (name === "basicSalary") {
+      sanitizedValue = value === "" ? "" : Math.max(1, Number(value));
+    }
+  
     setInputs((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      [name]: sanitizedValue,
     }));
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(inputs);
     sendRequest().then(() => navigate("/"));
   };
 
@@ -46,7 +58,7 @@ function AddEmployee() {
   return (
     <div className="min-h-screen py-8 px-4 bg-green-50 min-h-screen" >
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        {/* Form Header */}
+       
         <div className="bg-green-600 p-6">
           <h2 className="text-3xl font-bold text-yellow-400 mb-2">
             Add New Employee
@@ -54,10 +66,10 @@ function AddEmployee() {
           <p className="text-green-100">Fill in the employee details</p>
         </div>
 
-        {/* Form Body */}
+       
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* First Name */}
+            
             <div>
               <label className="block text-sm font-medium text-green-800 mb-1">
                 First Name
@@ -69,9 +81,12 @@ function AddEmployee() {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                Letters and spaces only
+              </p>
             </div>
 
-            {/* Last Name */}
+            
             <div>
               <label className="block text-sm font-medium text-green-800 mb-1">
                 Last Name
@@ -83,9 +98,12 @@ function AddEmployee() {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                Letters and spaces only
+              </p>
             </div>
 
-            {/* Email */}
+            
             <div>
               <label className="block text-sm font-medium text-green-800 mb-1">
                 Email
@@ -99,7 +117,7 @@ function AddEmployee() {
               />
             </div>
 
-            {/* Phone Number */}
+            
             <div>
               <label className="block text-sm font-medium text-green-800 mb-1">
                 Phone
@@ -113,7 +131,7 @@ function AddEmployee() {
               />
             </div>
 
-            {/* Address */}
+            
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-green-800 mb-1">
                 Address
@@ -127,7 +145,7 @@ function AddEmployee() {
               />
             </div>
 
-            {/* Job Title */}
+            
             <div>
               <label className="block text-sm font-medium text-green-800 mb-1">
                 Job Title
@@ -139,9 +157,12 @@ function AddEmployee() {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                Letters, spaces, hyphens, and apostrophes only
+              </p>
             </div>
 
-            {/* Salary */}
+           
             <div>
               <label className="block text-sm font-medium text-green-800 mb-1">
                 Salary
@@ -161,7 +182,7 @@ function AddEmployee() {
             </div>
           </div>
 
-          {/* Form Actions */}
+
           <div className="flex justify-end gap-4 mt-8">
             <button
               type="button"

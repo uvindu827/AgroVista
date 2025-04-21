@@ -1,6 +1,24 @@
 import React from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function StaffMember({ StaffMember, onEdit, onDelete }) {
+  const navigate = useNavigate();
+
+  // // StaffMember.js
+  // const deleteHandler = async () => {
+  //   try {
+  //     await axios.delete(
+  //       `http://localhost:3000/api/staff/${StaffMember.id}/deleteStaffMember`
+  //     );
+  //     onDelete(); // Notify parent component
+  //     navigate("/"); // Refresh the list
+  //   } catch (error) {
+  //     console.error("Delete failed:", error);
+  //     alert("Failed to delete employee");
+  //   }
+  // };
+
   const {
     firstName,
     lastName,
@@ -16,7 +34,9 @@ function StaffMember({ StaffMember, onEdit, onDelete }) {
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{firstName}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{lastName}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{email}</td>
-      <td className="px-6 py-4 whitespace-nowrap text-gray-700">{phoneNumber}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-gray-700">
+        {phoneNumber}
+      </td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{address}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{jobTitle}</td>
       <td className="px-6 py-4 whitespace-nowrap text-green-600 font-medium">${basicSalary}</td>
