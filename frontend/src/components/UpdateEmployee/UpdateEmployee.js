@@ -62,12 +62,6 @@ function UpdateEmployee() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await sendRequest();
-    navigate("/");
-  };
-
   return (
     <div>
       <h2 className="text-3xl font-bold text-yellow-400 mb-2">Update Employee</h2>
