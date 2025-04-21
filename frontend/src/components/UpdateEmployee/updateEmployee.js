@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 
-const EditEmployee = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+function UpdateEmployee() {
+  const [inputs, setInputs] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -16,160 +13,159 @@ const EditEmployee = () => {
   });
 
   useEffect(() => {
-    const fetchEmployee = async () => {
+    const fetchHandler = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/staff/${id}/getMemberById`
-        );
-        setFormData(response.data.data);
-      } catch (err) {
-        console.error("Error fetching employee:", err);
+        const res = await axios.get(`http://localhost:3000/api/staff/${id}/getMemberById`);
+        setInputs(res.data); 
+        console.log("API Response:", res.data);
+        setInputs(res.data.data);
+      } catch (error) {
+        console.error("Error fetching employee data:", error);
       }
     };
-    fetchEmployee();
+    fetchHandler();
   }, [id]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const sendRequest = async () => {
     try {
-      await axios.put(
-        `http://localhost:3000/api/staff/${id}/updateStaffMember`,
-        formData
-      );
-      navigate("/");
-    } catch (err) {
-      console.error("Update failed:", err);
+      await axios.put(`http://localhost:3000/api/staff/${id}/updateStaffMember`, {
+        firstName: inputs.firstName,
+        lastName: inputs.lastName,
+        email: inputs.email,
+        phoneNumber: inputs.phoneNumber,
+        address: inputs.address,
+        jobTitle: inputs.jobTitle,
+        basicSalary: Number(inputs.basicSalary),
+      });
+    } catch (error) {
+      console.error("Error updating employee:", error);
     }
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    let sanitizedValue = value;
+  
+
+    if (['firstName', 'lastName', 'jobTitle'].includes(name)) {
+      sanitizedValue = value.replace(/[^a-zA-Z\s]/g, '');
+    }
+  
+
+    if (name === "basicSalary") {
+      sanitizedValue = value === "" ? "" : Math.max(1, Number(value));
+    }
+  
+    setInputs((prevState) => ({
+      ...prevState,
+      [name]: sanitizedValue,
+    }));
   };
 
   return (
-    <div className="min-h-screen py-8 px-4 bg-green-50 min-h-screen">
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="bg-green-600 p-6 text-center">
-          <h2 className="text-3xl font-bold text-yellow-400 mb-2">
-            Update Employee Details
-          </h2>
-        </div>
+    <div>
+      <h2 className="text-3xl font-bold text-yellow-400 mb-2">Update Employee</h2>
+      <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              value={inputs.firstName || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
+            />
+          </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* First Name */}
-            <div>
-              <label className="block text-sm font-medium text-green-800 mb-1">
-                First Name
-              </label>
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              value={inputs.lastName || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={inputs.email || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">Phone</label>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={inputs.phoneNumber || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-green-800 mb-1">Address</label>
+            <input
+              type="text"
+              name="address"
+              value={inputs.address || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">Job Title</label>
+            <input
+              type="text"
+              name="jobTitle"
+              value={inputs.jobTitle || ""}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-green-800 mb-1">Salary</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-green-600">$</span>
               <input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
+                type="number"
+                name="basicSalary"
+                value={inputs.basicSalary || ""}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
+                className="w-full pl-8 pr-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
               />
-            </div>
-
-            {/* Last Name */}
-            <div>
-              <label className="block text-sm font-medium text-green-800 mb-1">
-                Last Name
-              </label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-green-800 mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
-              />
-            </div>
-
-            {/* Phone Number */}
-            <div>
-              <label className="block text-sm font-medium text-green-800 mb-1">
-                Phone
-              </label>
-              <input
-                type="tel"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
-              />
-            </div>
-
-            {/* Address */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-green-800 mb-1">
-                Address
-              </label>
-              <input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
-              />
-            </div>
-
-            {/* Job Title */}
-            <div>
-              <label className="block text-sm font-medium text-green-800 mb-1">
-                Job Title
-              </label>
-              <input
-                type="text"
-                name="jobTitle"
-                value={formData.jobTitle}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
-              />
-            </div>
-
-            {/* Salary */}
-            <div>
-              <label className="block text-sm font-medium text-green-800 mb-1">
-                Salary
-              </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-green-600">
-                  $
-                </span>
-                <input
-                  type="number"
-                  name="basicSalary"
-                  value={formData.basicSalary}
-                  onChange={handleChange}
-                  className="w-full pl-8 pr-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-green-600"
-                />
-              </div>
             </div>
           </div>
+        </div>
+
+        <div className="flex justify-end gap-4 mt-8">
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="px-6 py-2 border border-yellow-400 text-yellow-700 rounded-lg hover:bg-yellow-50"
+          >
+            Cancel
+          </button>
           <button
             type="submit"
-            className="inline-flex justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700"
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
           >
             Update Employee
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
-};
+}
 
-export default EditEmployee;
+export default UpdateEmployee;
