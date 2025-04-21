@@ -7,9 +7,11 @@ import postReport from "../models/postReportModel.js";
 export const addPost = async (req, res) => {
 
     try{
-        const {title, content, image, keywords,} = req.body;
+        const {title, content,} = req.body;
+        const image = req.file?.path; // Assuming the image is uploaded and its path is available in req.file.path
+        const keywords = req.body.keywords?.split(',').map(k => k.trim()) || [];
 
-        if(!title || !content || !image || !keywords){
+        if(!title || !content || !image || keywords.length === 0){
             return res.status(400).json({message:"Missing required fields"});
         }
 
@@ -27,14 +29,15 @@ export const addPost = async (req, res) => {
                 id: newPost._id,
                 title: newPost.title,
                 content: newPost.content,
+                image: newPost.image,
                 keyword: newPost.keywords,
                 createdAt: newPost.createdAt
             }
         });
-    }catch(error){
-        console.error("Post creation error:", error);
-        res.status(500).json({ error: "Server error" });
-    }   
+    } catch (err) {
+        console.error("Submit Error:", err.response?.data || err.message);
+        setError(err.response?.data?.error || 'Failed to create post');
+      }   
 };
 
 export const getAllPosts = async(req, res) => {
@@ -52,6 +55,7 @@ export const getAllPosts = async(req, res) => {
                 image: post.image,
                 keywords: post.keywords,
                 createdAt: post.createdAt,
+                updatedAt: post.updatedAt,
                 upvotedUsers: post.upvotedUsers,
                 upvoteCount:post.upvoteCount
             }))
@@ -64,60 +68,45 @@ export const getAllPosts = async(req, res) => {
 
 export const updatePost = async (req, res) => {
     try {
-        const postId = req.params.id;
-
-        
-        if (!mongoose.Types.ObjectId.isValid(postId)) {
-            return res.status(400).json({ message: "Invalid post ID" });
+      const postId = req.params.id;
+      const { title, content } = req.body;
+      const image = req.file?.path;
+      const keywords = req.body.keywords?.split(',').map(k => k.trim());
+  
+      const updateData = {
+        ...(title && { title }),
+        ...(content && { content }),
+        ...(image && { image }),
+        ...(keywords && { keywords }),
+        updatedAt: new Date()
+      };
+  
+      const updatedPost = await nfPost.findByIdAndUpdate(
+        postId,
+        updateData,
+        { new: true }
+      );
+  
+      if (!updatedPost) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+  
+      res.status(200).json({
+        data: {
+          id: updatedPost._id,
+          title: updatedPost.title,
+          content: updatedPost.content,
+          image: updatedPost.image,
+          keywords: updatedPost.keywords,
+          createdAt: updatedPost.createdAt,
+          updatedAt: updatedPost.updatedAt
         }
-
-        
-        const existingPost = await nfPost.findById(postId);
-        if (!existingPost) {
-            return res.status(404).json({ message: "Post not found" });
-        }
-
-        
-        const { title, content, image, keywords } = req.body;
-
-        
-        if (title !== undefined) 
-            existingPost.title = title;
-        if (content !== undefined) 
-            existingPost.content = content;
-        if (image !== undefined) 
-            existingPost.image = image;
-        if (keywords !== undefined) 
-            existingPost.keywords = keywords;
-
-        
-        existingPost.updatedAt = new Date();
-
-        
-        await existingPost.save();
-
-        
-        res.status(200).json({
-            data: {
-                id: existingPost._id,
-                title: existingPost.title,
-                content: existingPost.content,
-                image: existingPost.image,
-                keywords: existingPost.keywords,
-                createdAt: existingPost.createdAt,
-                updatedAt: existingPost.updatedAt
-            }
-        });
-
+      });
     } catch (error) {
-        
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({ message: error.message });
-        }
-        console.error("Update post error:", error);
-        res.status(500).json({ error: "Server error" });
+      console.error("Update post error:", error);
+      res.status(500).json({ error: "Server error" });
     }
-};
+  };
 
 export const deletePost = async (req, res) => {
     try {

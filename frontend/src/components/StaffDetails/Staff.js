@@ -34,29 +34,30 @@ function Staff() {
   };
 
   const handleEdit = (employeeId) => {
-    navigate(`/updateEmp/${employeeId}`);
+    navigate(`/update_employee/${employeeId}`);
   };
 
-  // const handleDelete = async (employeeId) => {
-  //   if (window.confirm("Are you sure you want to delete this employee?")) {
-  //     try {
-  //       await axios.delete(
-  //         `http://localhost:3000/api/staff/${employeeId}/deleteStaffMember`
-  //       );
-  //       // Update local state to remove deleted employee
-  //       setStaff((prev) => prev.filter((member) => member.id !== employeeId));
-  //     } catch (error) {
-  //       console.error("Delete error:", error);
-  //       alert("Failed to delete employee");
-  //     }
-  //   }
-  // };
+  const handleDelete = async (employeeId) => {
+    if (!window.confirm("Are you sure you want to delete this employee?")) {
+      return;
+    }
+
+    try {
+      await axios.delete(
+        `http://localhost:3000/api/staff/${employeeId}/deleteStaffMember`
+      );
+      setStaff((prev) => prev.filter((member) => member.id !== employeeId));
+    } catch (err) {
+      console.error("Delete failed:", err);
+      setError("Failed to delete employee");
+    }
+  };
 
   if (loading) return <div className="p-4 text-green-600">Loading...</div>;
   if (error) return <div className="p-4 text-yellow-700">Error: {error}</div>;
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-8">
+    <div className="px-4 sm:px-6 lg:px-8 py-8 bg-green-50 min-h-screen">
       <div className="sm:flex sm:items-center mb-8">
         <div className="sm:flex-auto">
           <h1 className="text-3xl font-bold text-green-800 border-b-4 border-yellow-400 pb-2">
