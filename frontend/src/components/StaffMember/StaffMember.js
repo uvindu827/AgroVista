@@ -13,7 +13,6 @@ function StaffMember({ StaffMember, onEdit, onDelete }) {
 
   return (
     <tr className="hover:bg-yellow-50 transition-colors">
-      {/* Existing columns */}
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{firstName}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{lastName}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{email}</td>
@@ -22,7 +21,6 @@ function StaffMember({ StaffMember, onEdit, onDelete }) {
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{jobTitle}</td>
       <td className="px-6 py-4 whitespace-nowrap text-green-600 font-medium">${basicSalary}</td>
       
-      {/* Action buttons */}
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
         <button
           onClick={onEdit}
