@@ -12,8 +12,6 @@ function UpdateEmployee() {
     jobTitle: "",
     basicSalary: "",
   });
-  const navigate = useNavigate();
-  const { id } = useParams();
 
   useEffect(() => {
     const fetchHandler = async () => {
