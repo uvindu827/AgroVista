@@ -36,7 +36,7 @@ function AddEmployee() {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    sendRequest().then(() => navigate("/"));
+    sendRequest().then(() => navigate("/staff"));
   };
 
   const handleCancel = () => {
