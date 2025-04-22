@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AddPost() {
   const [inputs, setInputs] = useState({
@@ -11,6 +12,7 @@ function AddPost() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,6 +44,7 @@ function AddPost() {
           keywords: '',
         });
       }
+      navigate("/nf-management");
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create post');
     } finally {

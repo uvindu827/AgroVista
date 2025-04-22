@@ -29,6 +29,25 @@ function NFManagement() {
     navigate('/add-post');
   };
 
+  const handleDeletePost = async( postId ) => {
+    if(!window.confirm('Are you sure you want to delete this post?'))
+      return;
+
+    try{
+      await axios.delete(`http://localhost:3000/api/newsFeed/${postId}`);
+      setPosts((prev) => prev.filter((post) => post.id !== postId));
+    }catch(err){
+      console.error('Delete failed:', err);
+      setError('Failed to delete post');
+    }
+  }
+
+  const handleEditPost = (postId) => {
+    navigate(`/update_post/${postId}`);
+
+  }
+
+
   if (loading) return <div className="text-center p-8 text-lg text-red-600">Loading posts...</div>;
   if (error) return <div className="text-center p-8 text-lg text-red-600">{error}</div>;
 
@@ -49,7 +68,12 @@ function NFManagement() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
           {posts.map((post) => (
-            <NFPost key={post.id} post={post} />
+            <NFPost 
+            key={post.id} 
+            post={post}
+            onDeletePost = {() => handleDeletePost(post.id)}
+            onEditPost = {() => handleEditPost(post.id)} 
+            />
           ))}
         </div>
       </div>

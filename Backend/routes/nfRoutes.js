@@ -1,5 +1,5 @@
 import express from 'express';
-import { addPost, adminSearchPosts, deletePost, getAllPosts, getAllreports, reportPost, updatePost } from '../controllers/nfController.js';
+import { addPost, adminSearchPosts, deletePost, getAllPosts, getAllreports, reportPost, updatePost, getPostById } from '../controllers/nfController.js';
 import { parser } from '../config/cloudinary.js';
 
 
@@ -9,6 +9,7 @@ nfRouter.post("/addPost", parser.single('image'), addPost);
 nfRouter.post("/getAllPosts", getAllPosts);
 nfRouter.put("/:id", parser.single('image'), updatePost);
 nfRouter.delete("/:id", deletePost);
+nfRouter.get("/:id/getPostById",getPostById);
 nfRouter.get("/admin/posts/search", adminSearchPosts);
 nfRouter.post("/post/report", reportPost);
 nfRouter.post("/getAllReports", getAllreports);
