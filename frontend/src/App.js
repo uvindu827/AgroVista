@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import AddEmployee from "./components/AddEmployee/AddEmployee";
 import Staff from "./components/StaffDetails/Staff";
-import UpdateEmployee from "./components/UpdateEmployee/updateEmployee";
+import UpdateEmployee from "./components/UpdateEmployee/UpdateEmployee";
 import AdminDashboard from "./components/Admin_dashboard/adminDashboard";
 import NFManagement from "./components/NewsFeedManagement/NFManagement";
 import AddPost from "./components/NewsFeedManagement/AddPost";
