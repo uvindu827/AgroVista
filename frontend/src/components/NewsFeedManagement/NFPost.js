@@ -22,7 +22,7 @@ function NFPost({ post }) {
         <p className="text-sm text-gray-600 mb-4">
           Updated at -{new Date(post.updatedAt).toLocaleDateString()}
         </p>
-        <p className="text-slate-700 mb-6 leading-relaxed">{post.content}</p>
+        {/* <p className="text-slate-700 mb-6 leading-relaxed">{post.content}</p> */}
 
         <div className="flex flex-wrap gap-2 mb-6">
           {post.keywords?.map((keyword, index) => (
