@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios"; 
 
-function AddEmployee() {
-  const navigate = useNavigate();
+function UpdateEmployee() {
+  const { id } = useParams(); 
+  const navigate = useNavigate(); 
   const [inputs, setInputs] = useState({
     firstName: "",
     lastName: "",
@@ -14,60 +15,67 @@ function AddEmployee() {
     basicSalary: "",
   });
 
+  useEffect(() => {
+    const fetchHandler = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/api/staff/${id}/getMemberById`);
+        console.log("API Response:", res.data);
+        setInputs(res.data.data);
+      } catch (error) {
+        console.error("Error fetching employee data:", error);
+      }
+    };
+    fetchHandler();
+  }, [id]); 
+
+  const sendRequest = async () => {
+    try {
+      await axios.put(`http://localhost:3000/api/staff/${id}/updateStaffMember`, {
+        firstName: inputs.firstName,
+        lastName: inputs.lastName,
+        email: inputs.email,
+        phoneNumber: inputs.phoneNumber,
+        address: inputs.address,
+        jobTitle: inputs.jobTitle,
+        basicSalary: Number(inputs.basicSalary),
+      });
+      navigate("/staff");
+    } catch (error) {
+      console.error("Error updating employee:", error);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendRequest();
+  };
+
+  const handleCancel = () => {
+    navigate("/staff");
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     let sanitizedValue = value;
-  
 
     if (['firstName', 'lastName', 'jobTitle'].includes(name)) {
       sanitizedValue = value.replace(/[^a-zA-Z\s]/g, '');
     }
-  
 
     if (name === "basicSalary") {
       sanitizedValue = value === "" ? "" : Math.max(1, Number(value));
     }
-  
+
     setInputs((prevState) => ({
       ...prevState,
       [name]: sanitizedValue,
     }));
   };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    sendRequest().then(() => navigate("/staff"));
-  };
-
-  const handleCancel = () => {
-    navigate(-1); 
-  };
-
-  const sendRequest = async () => {
-    await axios.post("http://localhost:3000/api/staff/addStaff", {
-      firstName: String(inputs.firstName),
-      lastName: String(inputs.lastName),
-      email: String(inputs.email),
-      phoneNumber: String(inputs.phoneNumber),
-      address: String(inputs.address),
-      jobTitle: String(inputs.jobTitle),
-      basicSalary: Number(inputs.basicSalary),
-    }).then(res => res.data)
-  }
 
   return (
-    <div className="min-h-screen py-8 px-4 bg-green-50 min-h-screen" >
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-       
-        <div className="bg-green-600 p-6">
-          <h2 className="text-3xl font-bold text-yellow-400 mb-2">
-            Add New Employee
-          </h2>
-          <p className="text-green-100">Fill in the employee details</p>
-        </div>
-
-       
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+    <div>
+      <h2 className="text-3xl font-bold text-yellow-400 mb-2">Update Employee</h2>
+      <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             <div>
@@ -181,27 +189,24 @@ function AddEmployee() {
               </div>
             </div>
           </div>
-
-
-          <div className="flex justify-end gap-4 mt-8">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="px-6 py-2 border border-yellow-400 text-yellow-700 rounded-lg hover:bg-yellow-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
-              Add Employee
-            </button>
-          </div>
-        </form>
-      </div>
+        <div className="flex justify-end gap-4 mt-8">
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="px-6 py-2 border border-yellow-400 text-yellow-700 rounded-lg hover:bg-yellow-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            Update Employee
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
 
-export default AddEmployee;
+export default UpdateEmployee;
