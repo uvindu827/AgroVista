@@ -1,0 +1,24 @@
+import express from 'express';
+import { 
+  createInventory, getInventories, getInventoryById, updateInventory, deleteInventory 
+} from '../controllers/biController.js';
+import multer from 'multer';
+
+const router = express.Router();
+
+// Multer config for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),  // Upload directory
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)  // Unique filename
+});
+
+const upload = multer({ storage });  // Initialize multer
+
+// CRUD routes
+router.post('/', upload.single('productPicture'), createInventory);  // Create
+router.get('/', getInventories);  // Get all items
+router.get('/:id', getInventoryById);  // Get by ID
+router.put('/:id', upload.single('productPicture'), updateInventory);  // Update
+router.delete('/:id', deleteInventory);  // Delete
+
+export default router;
