@@ -15,12 +15,12 @@ function App() {
           <Route path="/" element={<Staff />} />
           <Route path="/add-employee" element={<AddEmployee />} />
           <Route path="/users/" element={<RegisterPage />} />
-          <Route path="/users/login/" element={<LoginPage/>}/>
+          <Route path="/users/login/" element={<LoginPage />} />
           <Route path="/farmer/*" element={<FarmerPage />} />
         </Routes>
       </React.Fragment>
     </div>
   );
 }
-
+//
 export default App;

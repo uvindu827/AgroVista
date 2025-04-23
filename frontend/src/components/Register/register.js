@@ -90,7 +90,7 @@ export default function RegisterPage() {
         <div className="absolute inset-0 bg-cover bg-center animate-[backgroundScroll_30s_linear_infinite]" 
              style={{ backgroundImage: "url('/bg.jpg')" }}></div>
         
-        {/* Floating elements */}
+        {/* Floating elements*/}
         <div className="absolute top-20 left-20 w-24 h-24 bg-yellow-200/20 rounded-full blur-xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-32 h-32 bg-green-300/20 rounded-full blur-xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-amber-300/20 rounded-full blur-xl animate-pulse delay-500"></div>
