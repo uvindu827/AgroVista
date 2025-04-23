@@ -20,7 +20,7 @@ export function registerUser(req, res) {
 	const data = req.body;
 
 	data.password = bcrypt.hashSync(data.password, 10);
-	//#
+	//
 	const newUser = new User(data);
 
 	newUser
@@ -327,4 +327,104 @@ export async function verifyOTP(req,res){
     res.status(200).json({message : "Email verified successfully"})
   }
   
+}
+
+// New profile management APIs
+
+export async function getProfile(req, res) {
+  if (req.user == null) {
+    res.status(403).json({ error: "Unauthorized" });
+    return;
+  }
+  try {
+    const user = await User.findById(req.user.userId).select("-password");
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    res.json(user);
+  } catch (e) {
+    res.status(500).json({ error: "Failed to get profile" });
+  }
+}
+
+export async function updateProfile(req, res) {
+  if (req.user == null) {
+    res.status(403).json({ error: "Unauthorized" });
+    return;
+  }
+  const updates = req.body;
+  if (updates.password) {
+    updates.password = bcrypt.hashSync(updates.password, 10);
+  }
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.userId,
+      updates,
+      { new: true, runValidators: true }
+    ).select("-password");
+    if (!updatedUser) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    res.json({ message: "Profile updated successfully", user: updatedUser });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to update profile" });
+  }
+}
+
+export async function deleteAccount(req, res) {
+  if (req.user == null) {
+    res.status(403).json({ error: "Unauthorized" });
+    return;
+  }
+  try {
+    await User.findByIdAndDelete(req.user.userId);
+    res.json({ message: "Account deleted successfully" });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to delete account" });
+  }
+}
+
+export async function updateUser(req, res) {
+  if (!isItAdmin(req)) {
+    res.status(403).json({ error: "Unauthorized" });
+    return;
+  }
+  const userId = req.params.id;
+  const updates = req.body;
+  if (updates.password) {
+    updates.password = bcrypt.hashSync(updates.password, 10);
+  }
+  try {
+    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
+    if (!updatedUser) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    res.json({ message: "User updated successfully", user: updatedUser });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to update user" });
+  }
+}
+
+export async function deleteUser(req, res) {
+  if (!isItAdmin(req)) {
+    res.status(403).json({ error: "Unauthorized" });
+    return;
+  }
+  const userId = req.params.id;
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    res.json({ message: "User deleted successfully" });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to delete user" });
+  }
 }
