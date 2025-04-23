@@ -39,6 +39,5 @@ userRouter.get("/sendOTP", sendOTP);
 userRouter.post("/verifyEmail", verifyOTP);
 
 userRouter.get("/", getUser);
-//
 
 export default userRouter;

@@ -20,7 +20,7 @@ export function registerUser(req, res) {
   const data = req.body;
 
   data.password = bcrypt.hashSync(data.password, 10);
-  //
+  
   const newUser = new User(data);
 
   newUser

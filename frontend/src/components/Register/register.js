@@ -87,14 +87,16 @@ export default function RegisterPage() {
       <div className="flex-grow flex justify-center items-center bg-cover bg-center relative overflow-hidden py-10">
         {/* Background with overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-green-900/70 to-green-800/70 z-10"></div>
-        <div className="absolute inset-0 bg-cover bg-center animate-[backgroundScroll_30s_linear_infinite]" 
-             style={{ backgroundImage: "url('/bg.jpg')" }}></div>
-        
-        {/* Floating elements*/}
+        <div
+          className="absolute inset-0 bg-cover bg-center animate-[backgroundScroll_30s_linear_infinite]"
+          style={{ backgroundImage: "url('/bg.jpg')" }}
+        ></div>
+
+        {/* Floating elements */}
         <div className="absolute top-20 left-20 w-24 h-24 bg-yellow-200/20 rounded-full blur-xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-32 h-32 bg-green-300/20 rounded-full blur-xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-amber-300/20 rounded-full blur-xl animate-pulse delay-500"></div>
-        
+
         {/* Register form */}
         <div className="z-20 w-full max-w-md px-4">
           <form
@@ -103,16 +105,16 @@ export default function RegisterPage() {
           >
             <div className="text-center mb-6">
               <div className="flex justify-center mb-4">
-                <img
-                  src="/agrologo.png"
-                  alt="logo"
-                  className="w-24 h-auto"
-                />
+                <img src="/agrologo.png" alt="logo" className="w-24 h-auto" />
               </div>
-              <h2 className="text-4xl font-bold text-white mb-2">Join AgroVista</h2>
-              <p className="text-green-100">Create your account to get started</p>
+              <h2 className="text-4xl font-bold text-white mb-2">
+                Join AgroVista
+              </h2>
+              <p className="text-green-100">
+                Create your account to get started
+              </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 {
@@ -121,10 +123,21 @@ export default function RegisterPage() {
                   setValue: setFirstName,
                   error: errors.firstName,
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-black"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
                   label: "Last Name",
@@ -132,10 +145,21 @@ export default function RegisterPage() {
                   setValue: setLastName,
                   error: errors.lastName,
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-black"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
                   label: "Email",
@@ -144,10 +168,21 @@ export default function RegisterPage() {
                   type: "email",
                   error: errors.email,
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-black"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
                   label: "Password",
@@ -156,10 +191,21 @@ export default function RegisterPage() {
                   type: "password",
                   error: errors.password,
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-black"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
                   label: "Address",
@@ -167,11 +213,27 @@ export default function RegisterPage() {
                   setValue: setAddress,
                   error: errors.address,
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-black"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
                     </svg>
-                  )
+                  ),
                 },
                 {
                   label: "Phone",
@@ -179,33 +241,54 @@ export default function RegisterPage() {
                   setValue: setPhone,
                   error: errors.phone,
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-black"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                      />
                     </svg>
-                  )
+                  ),
                 },
-              ].map(({ label, value, setValue, type = "text", error, icon }, idx) => (
-                <div key={idx} className={`${idx >= 4 ? "md:col-span-2" : ""}`}>
-                  <div className="relative">
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                      {icon}
+              ].map(
+                (
+                  { label, value, setValue, type = "text", error, icon },
+                  idx
+                ) => (
+                  <div
+                    key={idx}
+                    className={`${idx >= 4 ? "md:col-span-2" : ""}`}
+                  >
+                    <div className="relative">
+                      <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                        {icon}
+                      </div>
+                      <input
+                        type={type}
+                        placeholder={label}
+                        value={value}
+                        onChange={(e) => setValue(e.target.value)}
+                        className={`w-full p-3 pl-10 rounded-lg bg-white/30 text-white placeholder-green-100 outline-none border ${
+                          error ? "border-red-500" : "border-white/30"
+                        } focus:border-green-300 focus:ring-2 focus:ring-green-300/50 transition-all`}
+                        required
+                      />
                     </div>
-                    <input
-                      type={type}
-                      placeholder={label}
-                      value={value}
-                      onChange={(e) => setValue(e.target.value)}
-                      className={`w-full p-3 pl-10 rounded-lg bg-white/30 text-white placeholder-green-100 outline-none border ${
-                        error ? "border-red-500" : "border-white/30"
-                      } focus:border-green-300 focus:ring-2 focus:ring-green-300/50 transition-all`}
-                      required
-                    />
+                    {error && (
+                      <p className="text-red-300 text-sm mt-1">{error}</p>
+                    )}
                   </div>
-                  {error && <p className="text-red-300 text-sm mt-1">{error}</p>}
-                </div>
-              ))}
+                )
+              )}
             </div>
-            
+
             <div className="mt-6">
               <button
                 type="submit"
@@ -214,9 +297,25 @@ export default function RegisterPage() {
               >
                 {isLoading ? (
                   <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Creating account...
                   </span>
@@ -225,11 +324,14 @@ export default function RegisterPage() {
                 )}
               </button>
             </div>
-            
+
             <div className="mt-6 text-center">
               <p className="text-green-100">
                 Already have an account?{" "}
-                <Link to="/users/login/" className="text-white font-semibold hover:text-green-300 transition-colors">
+                <Link
+                  to="/users/login/"
+                  className="text-white font-semibold hover:text-green-300 transition-colors"
+                >
                   Sign in here
                 </Link>
               </p>
@@ -238,7 +340,7 @@ export default function RegisterPage() {
         </div>
       </div>
       <Footer />
-      
+
       <style>
         {`
           @keyframes backgroundScroll {
