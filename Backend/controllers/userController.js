@@ -57,6 +57,7 @@ export function loginUser(req, res) {
 			if (isPasswordCorrect) {
 				const token = jwt.sign(
 					{
+						userId: user._id,
 						firstName: user.firstName,
 						lastName: user.lastName,
 						email: user.email,
@@ -98,6 +99,52 @@ export function isItCustomer(req) {
 	}
 
 	return isCustomer;
+}
+
+export function isItFarmer(req) {
+	let isFarmer = false;
+
+	if (req.user != null) {
+		if (req.user.role == "farmer") {
+			isFarmer = true;
+		}
+	}
+
+	return isFarmer;
+}
+
+export function isItBuyer(req) {
+	let isBuyer = false;
+
+	if (req.user != null) {
+		if (req.user.role == "buyer") {
+			isBuyer = true;
+		}
+	}
+
+	return isBuyer;
+}
+export function isItAgriculturalInspector(req) {
+	let isAgriculturalInspector = false;
+
+	if (req.user != null) {
+		if (req.user.role == "agricultural inspector") {
+			isAgriculturalInspector = true;
+		}
+	}
+
+	return isAgriculturalInspector;
+}
+export function isItToolDealer(req) {
+	let isItToolDealer = false;
+
+	if (req.user != null) {
+		if (req.user.role == "tool dealer") {
+			isItToolDealer = true;
+		}
+	}
+
+	return isItToolDealer;
 }
 
 export async function getAllUsers(req, res) {
