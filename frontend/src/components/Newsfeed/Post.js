@@ -1,10 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Post({ post }) {
+  const navigate = useNavigate();
 
   const handleCardClick = () => {
     console.log("Post clicked:", post.id);
-  }
+    navigate(`/postDetails`);
+    }
   return (
     <div
     onClick={handleCardClick} 

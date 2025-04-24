@@ -8,6 +8,7 @@ import NFManagement from "./components/NewsFeedManagement/NFManagement";
 import AddPost from "./components/NewsFeedManagement/AddPost";
 import UpdateNFPost from "./components/NewsFeedManagement/UpdateNFPost";
 import NewsFeed from "./components/Newsfeed/UserNewsfeed";
+import PostDetails from "./components/Newsfeed/PostDetails";
 import { Route, Routes } from "react-router";
 import RegisterPage from "./components/Register/register";
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/nf-management" element={<NFManagement/>} />
           <Route path="/add-post" element={<AddPost />} />
           <Route path="update_post/:id" element={<UpdateNFPost />} />
+          <Route path="/postDetails" element={<PostDetails />} />
           <Route path="/newsfeed" element={<NewsFeed/>} />
           <Route path="/users/" element={<RegisterPage />} />
         </Routes>
