@@ -7,7 +7,7 @@ export default function AddItemPage() {
   const [productKey, setProductKey] = useState("");
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState(0);
-  const [productCategory, setProductCategory] = useState("audio");
+  const [productCategory, setProductCategory] = useState("friuts");
   const [productDimensions, setProductDimensions] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const navigate = useNavigate();
