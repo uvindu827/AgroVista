@@ -39,7 +39,7 @@ const inventorySchema = Joi.object({
 
   manufactureDate: Joi.date()
   .iso()  // Ensures the date is in ISO 8601 format
-  .max('now') // Only today’s date is valid
+  .max(today) // Only today’s date is valid
   .required()  // Ensures the date is required
   .messages({
     'date.base': 'Manufacture date must be a valid date.',
@@ -77,21 +77,51 @@ export const createInventory = async (req, res) => {
   }
 };
 
-// Get all inventory items with pagination and sorting
+// Get buyer-specific inventory items with pagination and sorting
 export const getInventories = async (req, res) => {
   try {
-    const { page = 1, limit = 20, sortBy = 'createdAt', order = 'desc' } = req.query;
-    
-    const inventories = await BuyerInventory.find()
+    const { 
+      page = 1, 
+      limit = 20, 
+      sortBy = 'createdAt', 
+      order = 'desc',
+      buyerID 
+    } = req.query;
+
+    // Validate buyerID
+    if (!buyerID) {
+      return res.status(400).json({ error: 'BuyerID is required' });
+    }
+
+    // Create query object
+    const query = { buyerID: buyerID };
+
+    // Get paginated and sorted results
+    const inventories = await BuyerInventory.find(query)
       .sort({ [sortBy]: order === 'desc' ? -1 : 1 })
-      .skip((page - 1) * limit)
+      .skip((page - 1) * parseInt(limit))
       .limit(parseInt(limit));
 
-    const count = await BuyerInventory.countDocuments();
+    // Get total count for this buyer
+    const count = await BuyerInventory.countDocuments(query);
     
-    res.json({ total: count, page, inventories });
+    // Calculate total pages
+    const totalPages = Math.ceil(count / parseInt(limit));
+
+    res.json({ 
+      total: count, 
+      currentPage: parseInt(page), 
+      totalPages,
+      itemsPerPage: parseInt(limit),
+      inventories 
+    });
+
   } catch (err) {
-    res.status(500).json({ error: 'Server error.' });
+    console.error('Error fetching inventories:', err);
+    res.status(500).json({ 
+      error: 'Server error.',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined 
+    });
   }
 };
 
@@ -171,4 +201,4 @@ export const deleteInventory = async (req, res) => {
       res.status(500).json({ error: `Server error: ${err.message}` });  // Return detailed error
     }
   };
-  
+
