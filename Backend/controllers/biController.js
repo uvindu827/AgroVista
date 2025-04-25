@@ -85,35 +85,42 @@ export const getInventories = async (req, res) => {
       limit = 20, 
       sortBy = 'createdAt', 
       order = 'desc',
-      buyerID 
+      buyerID,
+      search,
+      category 
     } = req.query;
 
-    // Validate buyerID
-    if (!buyerID) {
-      return res.status(400).json({ error: 'BuyerID is required' });
+    // Create query object
+    let query = { buyerID };
+
+    // Add search functionality
+    if (search) {
+      query.productName = { $regex: search, $options: 'i' };
     }
 
-    // Create query object
-    const query = { buyerID: buyerID };
+    // Add category filter
+    if (category && category !== 'All') {
+      query.category = category;
+    }
 
-    // Get paginated and sorted results
+    // Get paginated and filtered results
     const inventories = await BuyerInventory.find(query)
       .sort({ [sortBy]: order === 'desc' ? -1 : 1 })
       .skip((page - 1) * parseInt(limit))
       .limit(parseInt(limit));
 
-    // Get total count for this buyer
+    // Get total count for this query
     const count = await BuyerInventory.countDocuments(query);
     
     // Calculate total pages
     const totalPages = Math.ceil(count / parseInt(limit));
 
     res.json({ 
-      total: count, 
-      currentPage: parseInt(page), 
+      inventories,
+      total: count,
+      currentPage: parseInt(page),
       totalPages,
-      itemsPerPage: parseInt(limit),
-      inventories 
+      itemsPerPage: parseInt(limit)
     });
 
   } catch (err) {
