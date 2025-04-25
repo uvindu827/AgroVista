@@ -16,6 +16,9 @@ function BuyerManageProducts() {
   const [sortOrder, setSortOrder] = useState('desc');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Add debounce for search
+  const [searchTimeout, setSearchTimeout] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,8 +34,7 @@ function BuyerManageProducts() {
           return;
         }
 
-        const response = await axios.get(
-          `http://localhost:3000/api/inventory`, {
+        const response = await axios.get(`http://localhost:3000/api/inventory`, {
           params: {
             page: currentPage,
             limit: itemsPerPage,
@@ -88,6 +90,30 @@ function BuyerManageProducts() {
     navigate(`/update-product/${id}`);
   };
 
+  // Handle search with debounce
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    
+    // Clear existing timeout
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+    
+    // Set new timeout
+    const timeoutId = setTimeout(() => {
+      setCurrentPage(1); // Reset to first page when searching
+    }, 500); // Wait 500ms after user stops typing
+    
+    setSearchTimeout(timeoutId);
+  };
+
+  // Handle category change
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setCurrentPage(1); // Reset to first page when changing category
+  };
+
   return (
     <div className="flex">
       <BuyerNavBar />
@@ -101,17 +127,20 @@ function BuyerManageProducts() {
             className="border px-4 py-2 rounded flex-1"
             placeholder="Search by product name"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearch}
           />
           <select
             className="border px-4 py-2 rounded"
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            onChange={handleCategoryChange}
           >
             <option value="All">All Categories</option>
+            <option value="Rice">Rice</option>
             <option value="Fruits">Fruits</option>
             <option value="Vegetables">Vegetables</option>
             <option value="Grains">Grains</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Other">Other</option>
           </select>
         </div>
 
