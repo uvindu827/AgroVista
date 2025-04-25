@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-// import BuyerHomePage from './components/BuyerHomePage/BuyerHomePage';
+import BuyerHomePage from './components/BuyerHomePage/BuyerHomePage';
 import AddEmployee from "./components/AddEmployee/AddEmployee";
 import Staff from "./components/StaffDetails/Staff";
 import UpdateEmployee from './components/UpdateEmployee/UpdateEmployee';
