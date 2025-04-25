@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function PostDetails() {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPostDetails = async () => {
@@ -32,7 +34,7 @@ function PostDetails() {
 
   const handleReportPost = (e) => {
     e.stopPropagation();
-    console.log("Report clicked for post:", post.id);
+    navigate(`/postReport/${postId}`);
   };
 
   if (loading) return <div className="text-center mt-20 text-lg font-semibold">Loading...</div>;

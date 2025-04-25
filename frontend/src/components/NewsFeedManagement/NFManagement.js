@@ -47,6 +47,11 @@ function NFManagement() {
 
   }
 
+  const handleReportedPosts = (postId) => {
+    navigate('/report_list');
+
+  }
+
 
   if (loading) return <div className="text-center p-8 text-lg text-red-600">Loading posts...</div>;
   if (error) return <div className="text-center p-8 text-lg text-red-600">{error}</div>;
@@ -57,12 +62,21 @@ function NFManagement() {
         <h1 className="text-4xl font-bold text-center text-slate-900 mb-8">
           News Feed Management
         </h1>
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end">
           <button
             onClick={handleAddPost}
             className="inline-flex items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
           >
             Add Post
+          </button>
+        </div>
+
+        <div className="flex justify-start">
+          <button
+            onClick={handleReportedPosts}
+            className="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          >
+            Reported Posts
           </button>
         </div>
 
