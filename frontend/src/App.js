@@ -3,13 +3,15 @@ import "./App.css";
 import BuyerHomePage from './components/BuyerHomePage/BuyerHomePage';
 import AddEmployee from "./components/AddEmployee/AddEmployee";
 import Staff from "./components/StaffDetails/Staff";
-import UpdateEmployee from './components/UpdateEmployee/updateEmployee';
+import UpdateEmployee from './components/UpdateEmployee/UpdateEmployee';
 import AdminDashboard from "./components/Admin_dashboard/adminDashboard";
 import NFManagement from "./components/NewsFeedManagement/NFManagement";
 import AddPost from "./components/NewsFeedManagement/AddPost";
 import UpdateNFPost from "./components/NewsFeedManagement/UpdateNFPost";
 import NewsFeed from "./components/Newsfeed/UserNewsfeed";
 import PostDetails from "./components/Newsfeed/PostDetails";
+import PostReportPage from "./components/Newsfeed/postReportPage";
+import ReportsList from "./components/NewsFeedManagement/ReportsList";
 import { Route, Routes } from "react-router";
 import RegisterPage from "./components/Register/register";
 import BuyerAddProducts from './components/BuyerAddProducts/BuyerAddProducts';
@@ -34,7 +36,9 @@ function App() {
           <Route path="/nf-management" element={<NFManagement/>} />
           <Route path="/add-post" element={<AddPost />} />
           <Route path="update_post/:id" element={<UpdateNFPost />} />
-          <Route path="/postDetails" element={<PostDetails />} />
+          <Route path="/postDetails/:postId" element={<PostDetails />} />
+          <Route path="/postReport/:postId" element={<PostReportPage />} />
+          <Route path="/report_list" element={< ReportsList/>} />
           <Route path="/newsfeed" element={<NewsFeed/>} />
           <Route path="/users/" element={<RegisterPage />} />
           <Route path="/update-product/:id" element={<BuyerUpdateProducts />} />

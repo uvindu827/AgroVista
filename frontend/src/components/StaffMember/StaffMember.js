@@ -1,7 +1,6 @@
 import React from "react";
 
 function StaffMember({ StaffMember, onEdit, onDelete }) {
-
   const {
     firstName,
     lastName,
@@ -22,17 +21,18 @@ function StaffMember({ StaffMember, onEdit, onDelete }) {
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{address}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{jobTitle}</td>
-      <td className="px-6 py-4 whitespace-nowrap text-green-600 font-medium">${basicSalary}</td>
-      
+      <td className="px-6 py-4 whitespace-nowrap text-green-600 font-medium">
+        ${basicSalary}
+      </td>
+
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
         <button
           onClick={onEdit}
-          className="text-yellow-500 hover:text-yellow-900 mr-4">
+          className="text-yellow-500 hover:text-yellow-900 mr-4"
+        >
           Edit
         </button>
-        <button
-          onClick={onDelete}
-          className="text-red-500 hover:text-red-900">
+        <button onClick={onDelete} className="text-red-500 hover:text-red-900">
           Delete
         </button>
       </td>
