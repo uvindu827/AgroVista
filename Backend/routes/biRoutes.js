@@ -17,10 +17,8 @@ const upload = multer({ storage });  // Initialize multer
 // CRUD routes
 router.post('/', upload.single('productPicture'), createInventory);  // Create
 router.get('/', getInventories);  // Get all items
-//router.get('/:buyerID', getInventories);
 router.get('/:id', getInventoryById);  // Get by ID
-//router.put('/:id', updateInventory);  // Update
-router.put('/:id', upload.single('productPicture'), updateInventory);  // Update with file upload
+router.put('/:id', upload.single('productPicture'), updateInventory);  // Update
 router.delete('/:id', deleteInventory);  // Delete
 
 export default router;

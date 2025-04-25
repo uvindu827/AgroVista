@@ -1,27 +1,16 @@
 import express from 'express';
-import { addPost, 
-    adminSearchPosts, 
-    deletePost, 
-    getAllPosts, 
-    getAllreports, 
-    reportPost, 
-    updatePost, 
-    getPostById,
-    deleteReport} from '../controllers/nfController.js';
-import { parser } from '../config/cloudinary.js';
+import { addPost, adminSearchPosts, deletePost, getAllPosts, getAllreports, reportPost, updatePost } from '../controllers/nfController.js';
 
 
 const nfRouter = express.Router();
 
-nfRouter.post("/addPost", parser.single('image'), addPost);
+nfRouter.post("/addPost", addPost);
 nfRouter.post("/getAllPosts", getAllPosts);
-nfRouter.put("/:id", parser.single('image'), updatePost);
+nfRouter.put("/:id", updatePost);
 nfRouter.delete("/:id", deletePost);
-nfRouter.get("/:id/getPostById",getPostById);
 nfRouter.get("/admin/posts/search", adminSearchPosts);
 nfRouter.post("/post/report", reportPost);
 nfRouter.post("/getAllReports", getAllreports);
-nfRouter.delete("/deleteReport/:id", deleteReport);
 
 
 export default nfRouter;

@@ -37,9 +37,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve uploaded images statically
-app.use("/uploads", express.static(path.join(path.resolve(), "uploads"))); // Only needed once
-
 // Serve static files for uploaded images
 app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
 app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
