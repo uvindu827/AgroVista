@@ -4,7 +4,12 @@ import { FaSignOutAlt, FaPlus, FaList, FaShoppingCart, FaUser } from "react-icon
 import { MdDashboard } from "react-icons/md";
 import { BsBoxSeam } from "react-icons/bs";
 
+
 function BuyerNavBar() {
+
+    
+
+
   return (
     
 
