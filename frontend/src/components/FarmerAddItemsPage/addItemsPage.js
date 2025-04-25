@@ -26,7 +26,7 @@ export default function AddItemPage() {
     if (token) {
       try {
         const result = await axios.post(
-          "http://localhost:3000/api/products",
+          'http://localhost:3000/api/products',
           {
             key: productKey,
             name: productName,
