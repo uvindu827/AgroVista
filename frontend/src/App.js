@@ -24,7 +24,7 @@ function App() {
           <Route path="/nf-management" element={<NFManagement/>} />
           <Route path="/add-post" element={<AddPost />} />
           <Route path="update_post/:id" element={<UpdateNFPost />} />
-          <Route path="/postDetails" element={<PostDetails />} />
+          <Route path="/postDetails/:postId" element={<PostDetails />} />
           <Route path="/newsfeed" element={<NewsFeed/>} />
           <Route path="/users/" element={<RegisterPage />} />
         </Routes>

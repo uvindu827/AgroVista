@@ -201,6 +201,7 @@ export const getPostById = async (req, res) => {
         keywords: foundPost.keywords,
         createdAt: foundPost.createdAt,
         updatedAt: foundPost.updatedAt,
+        upvoteCount: foundPost.upvoteCount,
       },
     });
   } catch (error) {
