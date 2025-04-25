@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 // Buyer Inventory Schema
 const buyerInventorySchema = new mongoose.Schema({
+
+  buyerID:{
+    type:String,
+    required:true
+  },
   productName: {  // Product name
     type: String,
     required: true,
@@ -12,10 +17,7 @@ const buyerInventorySchema = new mongoose.Schema({
     required: true,
     min: 0
   },
-  productPicture: {  // Image path (optional)
-    type: String,
-    required: false
-  },
+  
   stock: {  // Stock in grams
     type: Number,
     required: true,
