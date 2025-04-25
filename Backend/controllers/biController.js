@@ -3,9 +3,18 @@ import Joi from 'joi';
 import fs from 'fs';
 import path from 'path';
 
+
+const today = new Date();
+const formattedDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+console.log(formattedDate);
+
 // Joi validation schema
 const inventorySchema = Joi.object({
-  productName: Joi.string().required(),
+  buyerID:Joi.string().required(),
+  productName: Joi.string().pattern(/^[A-Za-z\s]+$/).required().messages({
+    'string.pattern.base': 'Product Name should contain only letters and spaces.',
+    'string.empty': 'Product Name is required.',
+  }),
   price: Joi.number().min(0).required()  // Price per 1 kilograms
     .messages({
       'number.min': 'Price must be a positive number.',
@@ -17,11 +26,36 @@ const inventorySchema = Joi.object({
       'number.min': 'Stock must be at least 0 kilograms.',
       'any.required': 'Stock is required.'
     }),
-  expirationDate: Joi.date().required(),
-  manufactureDate: Joi.date().required(),
-  category: Joi.string().required(),
-  description: Joi.string().optional()
+
+    expirationDate: Joi.date()
+  .min(formattedDate)
+  .max(new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)) // 1 year from now
+  .required()
+  .messages({
+    'date.min': 'Expiration date must be today or future (Within one year).',
+    'date.max': 'Expiration date must be within one year from today.',
+    'any.required': 'Expiration date is required.'
+  }),
+
+  manufactureDate: Joi.date()
+  .iso()  // Ensures the date is in ISO 8601 format
+  .max('now') // Only today’s date is valid
+  .required()  // Ensures the date is required
+  .messages({
+    'date.base': 'Manufacture date must be a valid date.',
+    'any.required': 'Manufacture date is required.',
+    'date.max': 'Manufacture date - Only today\'s date is allowed.',
+  }),
+
+  category: Joi.string().pattern(/^[A-Za-z\s]+$/).required().messages({
+    'string.pattern.base': 'Category should contain only letters and spaces.',
+    'string.empty': 'Category is required.',
+  }),
+
+  description: Joi.string().optional(),
 });
+
+
 
 // Create inventory item
 export const createInventory = async (req, res) => {
@@ -46,7 +80,7 @@ export const createInventory = async (req, res) => {
 // Get all inventory items with pagination and sorting
 export const getInventories = async (req, res) => {
   try {
-    const { page = 1, limit = 10, sortBy = 'createdAt', order = 'desc' } = req.query;
+    const { page = 1, limit = 20, sortBy = 'createdAt', order = 'desc' } = req.query;
     
     const inventories = await BuyerInventory.find()
       .sort({ [sortBy]: order === 'desc' ? -1 : 1 })
@@ -61,6 +95,7 @@ export const getInventories = async (req, res) => {
   }
 };
 
+
 // Get inventory by ID
 export const getInventoryById = async (req, res) => {
   try {
@@ -74,32 +109,39 @@ export const getInventoryById = async (req, res) => {
 };
 
 // Update inventory item
-export const updateInventory = async (req, res) => {
+export const updateInventory = async (req, res, next) => {
+  const id = req.params.id;
+  const { productName, price, stock, expirationDate, manufactureDate, category, description } = req.body;
+
+  let updatedInventory;
+
   try {
-    const { error } = inventorySchema.validate(req.body);
-    if (error) return res.status(400).json({ error: error.details[0].message });
+    updatedInventory = await BuyerInventory.findByIdAndUpdate(
+      id,
+      {
+        productName,
+        price,
+        stock,
+        expirationDate,
+        manufactureDate,
+        category,
+        description
+      },
+      { new: true } // Return the updated document
+    );
 
-    const inventory = await BuyerInventory.findById(req.params.id);
-    if (!inventory) return res.status(404).json({ error: 'Item not found.' });
-
-    // Handle optional picture update
-    if (req.file) {
-      if (inventory.productPicture) {  // Delete old picture
-        fs.unlinkSync(path.resolve(inventory.productPicture));
-      }
-      inventory.productPicture = req.file.path;
+    if (!updatedInventory) {
+      return res.status(404).send({ message: "Inventory item not found" });
     }
 
-    // Update other details
-    Object.assign(inventory, req.body);
-    
-    await inventory.save();
-    
-    res.json(inventory);
+    return res.status(200).send({ inventory: updatedInventory });
+
   } catch (err) {
-    res.status(500).json({ error: 'Server error.' });
+    console.error(err);
+    return res.status(500).send({ message: "Error updating inventory item" });
   }
 };
+
 
 // Delete inventory item
 export const deleteInventory = async (req, res) => {
