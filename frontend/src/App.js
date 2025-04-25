@@ -3,7 +3,7 @@ import "./App.css";
 import BuyerHomePage from './components/BuyerHomePage/BuyerHomePage';
 import AddEmployee from "./components/AddEmployee/AddEmployee";
 import Staff from "./components/StaffDetails/Staff";
-import UpdateEmployee from './components/UpdateEmployee/UpdateEmployee';
+import UpdateEmployee from './components/UpdateEmployee/updateEmployee';
 import AdminDashboard from "./components/Admin_dashboard/adminDashboard";
 import NFManagement from "./components/NewsFeedManagement/NFManagement";
 import AddPost from "./components/NewsFeedManagement/AddPost";
@@ -18,6 +18,7 @@ import BuyerAddProducts from './components/BuyerAddProducts/BuyerAddProducts';
 import BuyerManageProducts from './components/BuyerManageProducts/BuyerManageProducts';
 import Login from './components/Login/login'; 
 import BuyerUpdateProducts from './components/BuyerUpdateProducts/BuyerUpdateProducts';
+import UserManagementDashboard from "./components/UsersManagement/UserManagementDashboard";
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/newsfeed" element={<NewsFeed/>} />
           <Route path="/users/" element={<RegisterPage />} />
           <Route path="/update-product/:id" element={<BuyerUpdateProducts />} />
+          <Route path="/users_management" element={<UserManagementDashboard />} />
           
 
 
