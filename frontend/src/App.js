@@ -16,8 +16,8 @@ import { Route, Routes } from "react-router";
 import RegisterPage from "./components/Register/register";
 import BuyerAddProducts from './components/BuyerAddProducts/BuyerAddProducts';
 import BuyerManageProducts from './components/BuyerManageProducts/BuyerManageProducts';
-
-
+import Login from './components/Login/login'; 
+import BuyerUpdateProducts from './components/BuyerUpdateProducts/BuyerUpdateProducts';
 
 
 function App() {
@@ -25,10 +25,11 @@ function App() {
     <div>
       <React.Fragment>
         <Routes>
-          {/* <Route path="/" element={<BuyerHomePage />} /> */}
+          <Route path="/" element={<Login/>}/>
+          <Route path="/buyerHome" element={<BuyerHomePage />} />
           <Route path="/add-product" element={<BuyerAddProducts />} />
           <Route path="/manage-products" element={<BuyerManageProducts/>} />
-          <Route path="/" element={<AdminDashboard />} />
+          <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path="/staff" element={<Staff />} />
           <Route path="/add-employee" element={<AddEmployee />} />
           <Route path="/update_employee/:id" element={<UpdateEmployee />} />
@@ -40,6 +41,10 @@ function App() {
           <Route path="/report_list" element={< ReportsList/>} />
           <Route path="/newsfeed" element={<NewsFeed/>} />
           <Route path="/users/" element={<RegisterPage />} />
+          <Route path="/update-product/:id" element={<BuyerUpdateProducts />} />
+          
+
+
         </Routes>
       </React.Fragment>
     </div>

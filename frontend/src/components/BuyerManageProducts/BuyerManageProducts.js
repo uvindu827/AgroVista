@@ -97,6 +97,8 @@ function BuyerManageProducts() {
               <th className="py-2 px-4 border-b">Product Name</th>
               <th className="py-2 px-4 border-b">Price (per KG)</th>
               <th className="py-2 px-4 border-b">Stock (KG)</th>
+              <th className="py-2 px-4 border-b">Manufacture Date</th>
+              <th className="py-2 px-4 border-b">Expiration Date</th>
               <th className="py-2 px-4 border-b">Category</th>
               <th className="py-2 px-4 border-b">Actions</th>
             </tr>
@@ -107,6 +109,8 @@ function BuyerManageProducts() {
                 <td className="py-2 px-4 border-b">{item.productName}</td>
                 <td className="py-2 px-4 border-b">{item.price}</td>
                 <td className="py-2 px-4 border-b">{item.stock}</td>
+                <td className="py-2 px-4 border-b">{item.manufactureDate}</td>
+                <td className="py-2 px-4 border-b">{item.expirationDate}</td>
                 <td className="py-2 px-4 border-b">{item.category}</td>
                 <td className="py-2 px-4 border-b">
                   <button
