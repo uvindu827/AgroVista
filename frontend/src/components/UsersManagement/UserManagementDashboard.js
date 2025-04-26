@@ -1,4 +1,7 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import {ToastContainer, toast} from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function UserManagementDashboard() {
   const [users, setUsers] = useState([]);
@@ -24,9 +27,34 @@ function UserManagementDashboard() {
     }
   };
 
+  const onDeletePost = async (userId) => {
+    if(!window.confirm('Are you sure you want to delete this user?'))
+      return;
+    console.log(userId);
+    try {
+      await axios.delete(`http://localhost:3000/api/users/delete/${userId}`);
+      setUsers((prev) => prev.filter((user) => user._id !== userId));
+      toast.success("User deleted successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Could not delete user");
+    }
+  };
+
   return (
     <div className="p-8 max-w-7xl mx-auto">
       <div className="flex flex-wrap gap-4 mb-8">
+        <ToastContainer
+                  position="top-center"
+                  autoClose={3000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                />
         {/* Role Selection Buttons */}
         <button
           onClick={() => fetchUsers("farmer")}
@@ -94,6 +122,14 @@ function UserManagementDashboard() {
                     <span className="text-green-600 font-medium">
                       {user.status || "Active"}
                     </span>
+                  </div>
+                  <div className="flex justify-end mt-4 space-x-4">
+                    <button
+                      onClick={() => onDeletePost(user._id)}
+                      className="text-red-500 hover:text-red-900"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>
