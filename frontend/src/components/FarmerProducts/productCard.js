@@ -13,10 +13,14 @@ export default function ProductCard({ item }) {
         <p className="text-gray-600 text-sm mt-2">{item.category}</p>
         <p className="text-gray-700 mt-4">{item.description}</p>
         <div className="flex justify-between items-center mt-4">
-          <span className="text-lg font-bold text-green-500">LKR.{item.price}</span>
+          <span className="text-lg font-bold text-green-500">
+            LKR.{item.price}
+          </span>
           <span
             className={`px-3 py-1 text-sm rounded-full ${
-              item.availability ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+              item.availability
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
             }`}
           >
             {item.availability ? "In Stock" : "Out of Stock"}
@@ -28,7 +32,10 @@ export default function ProductCard({ item }) {
       </div>
       <br></br>
       <div className=" flex justify-end h-full p-4 border-t border-gray-200">
-        <Link  to={"/product/"+item.key} className="text-center w-[90%] h-[40px] bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200 absolute mx-auto  bottom-3">
+        <Link
+          to={"/product/" + item.key}
+          className="text-center w-[90%] h-[40px] bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200 absolute mx-auto  bottom-3"
+        >
           View Details
         </Link>
       </div>

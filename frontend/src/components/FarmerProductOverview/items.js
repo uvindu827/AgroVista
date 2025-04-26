@@ -9,7 +9,8 @@ export default function Items() {
 
   useEffect(() => {
     if (state === "loading") {
-      axios.get(`http://localhost:3000/api/products`)
+      axios
+        .get(`http://localhost:3000/api/products`)
         .then((res) => {
           console.log(res.data);
           setItems(res.data);
@@ -30,10 +31,7 @@ export default function Items() {
         </div>
       )}
       {state === "success" &&
-        items.map((item) => (
-          <ProductCard key={item.key} item={item} />
-        ))
-      }
+        items.map((item) => <ProductCard key={item.key} item={item} />)}
     </div>
   );
 }

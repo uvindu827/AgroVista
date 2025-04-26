@@ -8,12 +8,11 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function mediaUpload(file) {
   return new Promise((resolve, reject) => {
-
-    if(file==null){
-      reject("No File selected")
+    if (file == null) {
+      reject("No File selected");
     }
 
-    const timestamp = new Date().geteTime();
+    const timestamp = new Date().getTime();
     const fileName = timestamp + file.name;
     supabase.storage
       .from("images")
@@ -25,8 +24,9 @@ export default function mediaUpload(file) {
         const publicUrl = supabase.storage.from("images").getPublicUrl(fileName)
           .data.publicUrl;
         resolve(publicUrl);
-      }).catch(()=>{
-        reject("Error uploading file")
       })
+      .catch(() => {
+        reject("Error uploading file");
+      });
   });
 }
