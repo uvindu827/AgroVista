@@ -423,7 +423,6 @@ export async function getProfile(req, res) {
   }
 
   export async function getUsersByRole(req, res) {
-	console.log(`Received request for users with role: ${req.params.role}`);
 	try {
 	  const { role } = req.params;
 	  

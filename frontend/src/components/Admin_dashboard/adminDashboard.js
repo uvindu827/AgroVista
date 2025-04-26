@@ -16,7 +16,7 @@ function AdminDashboard() {
     navigate("/newsfeed");
   };
   
-  const handleUsersManagement = (role) => {
+  const handleUsersManagement = () => {
     navigate("/users_management");
   };
 
