@@ -370,48 +370,49 @@ export const downloadPayslip = async (req, res) => {
 
 export const listEmployeePayslips = async (req, res) => {
   try {
-    const memberId = req.params.id;
+      const memberId = req.params.id;
+      
+      if (!mongoose.Types.ObjectId.isValid(memberId)) {
+          return res.status(400).json({ message: "Invalid member ID" });
+      }
 
-    if (!mongoose.Types.ObjectId.isValid(memberId)) {
-      return res.status(400).json({ message: "Invalid member ID" });
-    }
+      const foundMember = await staff.findById(memberId);
 
-    const foundMember = await staff.findById(memberId);
-
-    if (!foundMember) {
-      return res.status(400).json({ message: "Staff member not found" });
-    }
-
-    const payslipsDir = path.join(process.cwd(), "payslips");
-    const filePrefix = `${foundMember.lastName}_${foundMember.firstName}_`;
-
-    try {
-      await fs.access(payslipsDir);
-    } catch (error) {
-      return res.status(200).json({ payslips: [] });
-    }
-
-    const files = await fs.readdir(payslipsDir);
-    const payslips = files
-      .filter((file) => file.startsWith(filePrefix) && file.endsWith(".pdf"))
-      .map((file) => {
-        const payPeriod = file.replace(filePrefix, "").replace(".pdf", "");
-        return {
-          filename: file,
-          payPeriod: payPeriod,
-          downloadPath: `/api/staff/download-payslip/${file}`,
-        };
+      if (!foundMember) {
+          return res.status(400).json({ message: "Staff member not found" });
+      }
+      
+      const payslipsDir = path.join(process.cwd(), "payslips");
+      const filePrefix = `${foundMember.lastName}_${foundMember.firstName}_`;
+      
+      try {
+          await fs.access(payslipsDir);
+      } catch (error) {
+          return res.status(200).json({ payslips: [] });
+      }
+      
+      const files = await fs.readdir(payslipsDir);
+      const payslips = files
+          .filter(file => file.startsWith(filePrefix) && file.endsWith('.pdf'))
+          .map(file => {
+              const payPeriod = file.replace(filePrefix, '').replace('.pdf', '');
+              return {
+                  filename: file,
+                  payPeriod: payPeriod,
+                  downloadPath: `/download-payslip/${file}`
+              };
+          });
+      
+      res.status(200).json({
+          data: {
+              employeeId: foundMember._id,
+              employeeName: `${foundMember.firstName} ${foundMember.lastName}`,
+              payslips: payslips
+          }
       });
-
-    res.status(200).json({
-      data: {
-        employeeId: foundMember._id,
-        employeeName: `${foundMember.firstName} ${foundMember.lastName}`,
-        payslips: payslips,
-      },
-    });
+      
   } catch (error) {
-    console.error("Error listing payslips:", error);
-    res.status(500).json({ error: "Server error" });
+      console.error("Error listing payslips:", error);
+      res.status(500).json({ error: "Server error" });
   }
 };

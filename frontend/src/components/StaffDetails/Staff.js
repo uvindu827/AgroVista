@@ -56,22 +56,26 @@ function Staff() {
   const handleDownloadPayslip = async (employeeId) => {
     const payPeriod = prompt("Enter pay period (e.g., April-2024):");
     if (!payPeriod) return;
-
+  
     try {
-      // Generate the payslip
+      
       const generateResponse = await axios.post(
-        `http://localhost:3000/api/staff/${employeeId}/generate-payslip`,
+        `http://localhost:3000/api/staff/${employeeId}/payslip`,
         { payPeriod }
       );
       
-      // Trigger download
-      const downloadUrl = generateResponse.data.data.downloadPath;
+      const downloadUrl = `http://localhost:3000${generateResponse.data.data.downloadPath}`;
+            
+      const response = await fetch(downloadUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.setAttribute('download', '');
+      link.href = url;
+      link.download = generateResponse.data.data.employeeName + '_' + payPeriod + '.pdf';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    
     } catch (error) {
       console.error("Download error:", error);
       alert(error.response?.data?.error || "Failed to download payslip");
