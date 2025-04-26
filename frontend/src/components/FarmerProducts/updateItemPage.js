@@ -8,7 +8,7 @@ export default function UpdateItemPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [productKey, setProductKey] = useState(location.state.key);
+  const [productKey] = useState(location.state.key);
   const [productName, setProductName] = useState(location.state.name);
   const [productPrice, setProductPrice] = useState(location.state.price);
   const [productCategory, setProductCategory] = useState(
