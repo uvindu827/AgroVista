@@ -409,9 +409,6 @@ export async function getProfile(req, res) {
   }
   
   export async function deleteUser(req, res) {
-	  res.status(403).json({ error: "Unauthorized" });
-	  return;
-	}
 	const userId = req.params.id;
 	try {
 	  const deletedUser = await User.findByIdAndDelete(userId);
@@ -422,6 +419,7 @@ export async function getProfile(req, res) {
 	  res.json({ message: "User deleted successfully" });
 	} catch (e) {
 	  res.status(500).json({ error: "Failed to delete user" });
+	}
   }
 
   export async function getUsersByRole(req, res) {
