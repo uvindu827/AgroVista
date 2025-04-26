@@ -409,10 +409,6 @@ export async function getProfile(req, res) {
   }
   
   export async function deleteUser(req, res) {
-	if (!isItAdmin(req)) {
-	  res.status(403).json({ error: "Unauthorized" });
-	  return;
-	}
 	const userId = req.params.id;
 	try {
 	  const deletedUser = await User.findByIdAndDelete(userId);

@@ -1,6 +1,6 @@
 import express from 'express';
 import { addPost, 
-    adminSearchPosts, 
+    SearchPosts, 
     deletePost, 
     getAllPosts, 
     getAllreports, 
@@ -18,7 +18,7 @@ nfRouter.post("/getAllPosts", getAllPosts);
 nfRouter.put("/:id", parser.single('image'), updatePost);
 nfRouter.delete("/:id", deletePost);
 nfRouter.get("/:id/getPostById",getPostById);
-nfRouter.get("/admin/posts/search", adminSearchPosts);
+nfRouter.get("/admin/posts/search", parser.single('image'), SearchPosts);
 nfRouter.post("/post/report", reportPost);
 nfRouter.post("/getAllReports", getAllreports);
 nfRouter.delete("/deleteReport/:id", deleteReport);

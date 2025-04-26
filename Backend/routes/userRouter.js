@@ -17,8 +17,6 @@ import {
 
 const userRouter = express.Router();
 
-// Log the initialization of the router
-console.log("Initializing user router");
 
 userRouter.post("/", registerUser);
 userRouter.post("/login", loginUser);
@@ -31,7 +29,7 @@ userRouter.delete("/profile", deleteAccount);
 userRouter.post("/google", loginWithGoogle);
 userRouter.get("/sendOTP", sendOTP);
 userRouter.post("/verifyEmail", verifyOTP);
-userRouter.get("/getUsersByRole/:role", getUsersByRole); // Define this before the catch-all '/'
-userRouter.get("/", getUser); // Catch-all route comes last
+userRouter.get("/getUsersByRole/:role", getUsersByRole);
+userRouter.get("/", getUser);
 
 export default userRouter;
