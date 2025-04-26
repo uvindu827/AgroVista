@@ -17,7 +17,12 @@ const buyerInventorySchema = new mongoose.Schema({
     required: true,
     min: 0
   },
-  
+
+  productPicture: {  // Image path (optional)
+    type: String,
+    required: false,
+  },
+
   stock: {  // Stock in grams
     type: Number,
     required: true,

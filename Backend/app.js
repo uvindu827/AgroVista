@@ -61,6 +61,7 @@ app.use("/api/products",productRouter);
 app.use("/api/inquiries",inquiryRouter);
 app.use('/api/cart', cartRouter);
 app.use("/api/orders", cOrderRoutes);  // Mount routes on /api/orders
+app.use('/uploads', express.static('public/uploads'));
 
 
 app.listen(3000, () => {

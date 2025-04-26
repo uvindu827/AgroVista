@@ -162,15 +162,23 @@ function BuyerAddProducts() {
             required
           />
 
-          <input
-            type="text"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full p-1.5 border rounded placeholder-green-600"
-            placeholder="Category"
-            required
-          />
+              <div>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="w-full p-1.5 border rounded placeholder-green-600"
+                  required
+                >
+                  <option value="">Select Category</option>
+                  <option value="Rice">Rice</option>
+                  <option value="Fruits">Fruits</option>
+                  <option value="Vegetables">Vegetables</option>
+                  <option value="Grains">Grains</option>
+                  <option value="Dairy">Dairy</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
 
           <textarea
             name="description"

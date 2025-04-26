@@ -1,6 +1,7 @@
 import Cart from '../models/cCartModel.js';
 import BuyerInventory from '../models/biModel.js';
 
+
 // Create or update a cart
 export const createOrUpdateCart = async (req, res) => {
   try {
@@ -70,17 +71,15 @@ export const getCart = async (req, res) => {
   };
   
 
-// Remove product from cart by cart ID or customer email and buyer email
-export const removeProductFromCart = async (req, res) => {
+  // Remove product from cart by cart ID or customer email and buyer email
+  export const removeProductFromCart = async (req, res) => {
     try {
       const { cartId, customerId, buyerId, productId } = req.params;
   
       let cart;
       if (cartId) {
-        // If cartId is provided, find the cart by ID
         cart = await Cart.findById(cartId);
       } else if (customerId && buyerId) {
-        // Otherwise, find the cart using customerEmail and buyerEmail
         const decodedCustomerId = decodeURIComponent(customerId);
         const decodedBuyerId = decodeURIComponent(buyerId);
         cart = await Cart.findOne({ customerId: decodedCustomerId, buyerId: decodedBuyerId });
@@ -110,20 +109,21 @@ export const removeProductFromCart = async (req, res) => {
   };
   
 
-// Checkout (Dummy implementation for now)
-export const checkoutCart = async (req, res) => {
-  try {
-    const { customerId, buyerEmail } = req.body;
-    const cart = await Cart.findOne({ customerId, buyerId });
-
-    if (!cart) {
-      return res.status(404).json({ error: 'Cart not found' });
+  export const checkoutCart = async (req, res) => {
+    try {
+      const { customerId, buyerId } = req.body; // Changed from buyerId
+      const cart = await Cart.findOne({ customerId, buyerId });
+  
+      if (!cart) {
+        return res.status(404).json({ error: 'Cart not found' });
+      }
+  
+      // Perform checkout logic (e.g., order creation, payment processing)
+      res.status(200).json({ message: 'Checkout successful', cart });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Server error' });
     }
+  };
 
-    // Perform checkout logic here (e.g., order creation, payment processing)
-    res.status(200).json({ message: 'Checkout successful', cart });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
-};
+  

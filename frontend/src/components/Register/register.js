@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
-//import Footer from "../footer";
+import Footer from "../Footer/Footer";
 
 export default function RegisterPage() {
   const [firstName, setFirstName] = useState("");
@@ -367,7 +367,7 @@ export default function RegisterPage() {
           </form>
         </div>
       </div>
-      {/*<Footer />*/}
+      
 
       <style>
         {`
@@ -383,6 +383,7 @@ export default function RegisterPage() {
           }
         `}
       </style>
+      <Footer />
     </div>
   );
 }

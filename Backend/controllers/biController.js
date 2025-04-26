@@ -57,6 +57,7 @@ const inventorySchema = Joi.object({
 
 
 
+
 // Create inventory item
 export const createInventory = async (req, res) => {
   try {
@@ -133,6 +134,7 @@ export const getInventories = async (req, res) => {
 };
 
 
+
 // Get inventory by ID
 export const getInventoryById = async (req, res) => {
   try {
@@ -148,7 +150,7 @@ export const getInventoryById = async (req, res) => {
 // Update inventory item
 export const updateInventory = async (req, res, next) => {
   const id = req.params.id;
-  const { productName, price, stock, expirationDate, manufactureDate, category, description } = req.body;
+  const { productName, price, stock, expirationDate, manufactureDate, category, description,productPicture } = req.body;
 
   let updatedInventory;
 
@@ -162,7 +164,8 @@ export const updateInventory = async (req, res, next) => {
         expirationDate,
         manufactureDate,
         category,
-        description
+        description,
+        productPicture
       },
       { new: true } // Return the updated document
     );
@@ -208,4 +211,3 @@ export const deleteInventory = async (req, res) => {
       res.status(500).json({ error: `Server error: ${err.message}` });  // Return detailed error
     }
   };
-

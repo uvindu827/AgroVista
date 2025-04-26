@@ -36,7 +36,7 @@ export default function LoginPage() {
         } else if (user.role === "agricultural inspector") {
           navigate("/"); // Navigate to agricultural inspector home page
         } else if (user.role === "customer") {
-          navigate("/"); // Navigate to customer home page
+          navigate(`/buyer/:buyerId`); // Navigate to customer home page
         }
         else {
           navigate("/"); // Default fallback route if no role matches
@@ -196,7 +196,7 @@ export default function LoginPage() {
           </form>
         </div>
       </div>
-      <Footer />
+      
 
       <style>
         {`
@@ -212,6 +212,9 @@ export default function LoginPage() {
           }
         `}
       </style>
+        
+      <Footer />
+
     </div>
   );
 }
