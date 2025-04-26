@@ -47,7 +47,8 @@ function PostDetails() {
     
     setSummarizing(true);
     try {
-      // Using the backend endpoint we just created
+      console.log("Sending content for summarization:", post.content.substring(0, 100) + "...");
+      
       const response = await fetch("http://localhost:3000/api/newsFeed/summarize", {
         method: "POST",
         headers: {
@@ -58,11 +59,8 @@ function PostDetails() {
         })
       });
       
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      
       const data = await response.json();
+      console.log("Summarization response:", data);
       
       if (data.success && data.summary) {
         setSummary(data.summary);
@@ -71,12 +69,12 @@ function PostDetails() {
       }
     } catch (err) {
       console.error("Summarization failed:", err);
-      setSummary("Failed to generate summary. Please try again later.");
+      setSummary(`Failed to generate summary: ${err.message}`);
     } finally {
       setSummarizing(false);
     }
   };
-
+  
   if (loading) return <div className="text-center mt-20 text-lg font-semibold">Loading...</div>;
   if (error) return <div className="text-center mt-20 text-red-600">{error}</div>;
 
