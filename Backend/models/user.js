@@ -40,9 +40,9 @@ const userSchema = new mongoose.Schema({
   },
   profilePicture: {
     type: String,
-    required: true,
-    default:
-      "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg",
+    required: false,
+    //default:
+      //"https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg",
   },
   emailVerified: {
     type: Boolean,

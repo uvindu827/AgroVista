@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import axios from "axios";
 import nodemailer from "nodemailer";
 import OTP from "../models/otp.js";
+
+
 dotenv.config();
 const transport = nodemailer.createTransport({
   service: "gmail",
@@ -423,5 +425,98 @@ export async function getProfile(req, res) {
 	  res.json({ message: "User deleted successfully" });
 	} catch (e) {
 	  res.status(500).json({ error: "Failed to delete user" });
+	}
+  }
+
+
+
+  
+
+  export async function getAllBuyers(req, res) {
+	try {
+	  const { page = 1, limit = 12, search = '' } = req.query;
+	  const query = {
+		role: 'buyer',
+		...(search && {
+		  $or: [
+			{ firstName: { $regex: search, $options: 'i' } },
+			{ lastName: { $regex: search, $options: 'i' } },
+			{ email: { $regex: search, $options: 'i' } },
+		  ],
+		}),
+	  };
+  
+	  const buyers = await User.find(query)
+		.select('-password')
+		.skip((page - 1) * limit)
+		.limit(parseInt(limit))
+		.lean();
+  
+	  const total = await User.countDocuments(query);
+  
+	  const defaultProfilePicture = 'http://localhost:3000/images/default-profile.jpg';
+  
+	  res.status(200).json({
+		success: true,
+		data: {
+		  buyers: buyers.map(buyer => ({
+			...buyer,
+			buyerId: buyer._id,
+			profilePicture: buyer.profilePicture && !buyer.profilePicture.includes('exampleadmin.com')
+			  ? buyer.profilePicture
+			  : defaultProfilePicture,
+		  })),
+		  pagination: {
+			total,
+			totalPages: Math.ceil(total / limit),
+			currentPage: parseInt(page),
+		  },
+		},
+	  });
+	} catch (error) {
+	  console.error('Error in getAllBuyers:', error);
+	  res.status(500).json({
+		success: false,
+		message: 'Error fetching buyers',
+		error: error.message,
+	  });
+	}
+  }
+  
+  export async function getBuyerById(req, res) {
+	try {
+	  const { id } = req.params;
+  
+	  const buyer = await User.findOne({
+		_id: id,
+		role: 'buyer',
+	  }).select('-password');
+  
+	  if (!buyer) {
+		return res.status(404).json({
+		  success: false,
+		  message: 'Buyer not found',
+		});
+	  }
+  
+	  const defaultProfilePicture = 'http://localhost:3000/images/default-profile.jpg';
+  
+	  res.status(200).json({
+		success: true,
+		data: {
+		  ...buyer._doc,
+		  buyerId: buyer._id,
+		  profilePicture: buyer.profilePicture && !buyer.profilePicture.includes('exampleadmin.com')
+			? buyer.profilePicture
+			: defaultProfilePicture,
+		},
+	  });
+	} catch (error) {
+	  console.error('Error in getBuyerById:', error);
+	  res.status(500).json({
+		success: false,
+		message: 'Error fetching buyer details',
+		error: error.message,
+	  });
 	}
   }

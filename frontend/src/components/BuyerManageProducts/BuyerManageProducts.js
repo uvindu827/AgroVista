@@ -151,7 +151,7 @@ function BuyerManageProducts() {
           <>
             {/* Inventory Table */}
             <table className="min-w-full bg-white shadow-md rounded-lg">
-              <thead>
+              <thead>   
                 <tr>
                   <th 
                     className="py-2 px-4 border-b cursor-pointer hover:bg-gray-50"

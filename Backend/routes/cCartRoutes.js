@@ -6,6 +6,8 @@ import {
   checkoutCart,
 } from '../controllers/cCartController.js';
 
+
+
 const router = express.Router();
 
 // Create or update a cart
@@ -22,5 +24,9 @@ router.delete('/:customerId/:buyerId/product/:productId', removeProductFromCart)
 
 // Checkout cart
 router.post('/checkout', checkoutCart);
+
+;
+
+
 
 export default router;

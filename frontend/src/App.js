@@ -16,6 +16,10 @@ import BuyerAddProducts from './components/BuyerAddProducts/BuyerAddProducts';
 import BuyerManageProducts from './components/BuyerManageProducts/BuyerManageProducts';
 import Login from './components/Login/login'; 
 import BuyerUpdateProducts from './components/BuyerUpdateProducts/BuyerUpdateProducts';
+import BuyersList from "./components/BuyersList/BuyersList";
+import BuyerInventoryList from "./components/BuyerInventoryList/BuyerInventoryList";
+import CartPage from "./components/CartPage/CartPage";
+
 
 
 function App() {
@@ -38,9 +42,12 @@ function App() {
           <Route path="/newsfeed" element={<NewsFeed/>} />
           <Route path="/users/" element={<RegisterPage />} />
           <Route path="/update-product/:id" element={<BuyerUpdateProducts />} />
+          <Route path="/buyer/:buyerId" element={<BuyersList/>} />
+          <Route path="/buyer/:buyerId/inventory" element={<BuyerInventoryList />} />
+          <Route path="/cart" element={<CartPage />} />
+      
           
-
-
+          
         </Routes>
       </React.Fragment>
     </div>

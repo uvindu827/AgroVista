@@ -12,7 +12,10 @@ import {
   deleteUser,
   updateProfile,
   deleteAccount,
+  getAllBuyers, // Add new import
+  getBuyerById, // Add new import
 } from "../controllers/userController.js";
+
 
 const userRouter = express.Router();
 
@@ -39,5 +42,11 @@ userRouter.get("/sendOTP", sendOTP);
 userRouter.post("/verifyEmail", verifyOTP);
 
 userRouter.get("/", getUser);
+
+// New routes for buyers
+userRouter.get("/buyers", getAllBuyers); // GET /api/users/buyers
+userRouter.get("/buyers/:id", getBuyerById); // GET /api/users/buyers/:id
+
+
 
 export default userRouter;
