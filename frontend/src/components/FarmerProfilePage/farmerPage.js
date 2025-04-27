@@ -1,4 +1,3 @@
-import { BsGraphDown } from "react-icons/bs";
 import { FaRegBookmark, FaRegUser } from "react-icons/fa";
 import { MdOutlineSpeaker } from "react-icons/md";
 import { Link, Route, Routes } from "react-router-dom";
@@ -59,31 +58,38 @@ export default function FarmerPage() {
             <MdOutlineSpeaker size={20} /> Items
           </Link>
           <Link
-            to="/farmer/users"
+            to="/farmer/inquiries"
             className="flex items-center gap-2 text-lg font-medium p-3 rounded-lg hover:bg-green-700 transition duration-300"
           >
-            <FaRegUser size={20} /> Users
+            <FaRegUser size={20} /> Inquiries
+          </Link>
+          <Link
+            to="/farmer/newsfeed"
+            className="flex items-center gap-2 text-lg font-medium p-3 rounded-lg hover:bg-green-700 transition duration-300"
+          >
+            <FaRegUser size={20} /> NewsFeed
           </Link>
         </nav>
       </aside>
 
-      <main className="flex-1 p-6">
-        <div className="bg-white shadow-md p-5 rounded-lg">
-          <h2 className="text-2xl font-semibold text-gray-700 flex items-center gap-2">
-            <BsGraphDown size={28} className="text-green-600" /> Farmer
-            Dashboard
-          </h2>
-          <p className="text-gray-500 mt-1">
-            Manage products, users, and orders efficiently.
-          </p>
+      <main className="flex-1 p-6 relative">
+        {/* Rent Tools Button */}
+        <div className="absolute top-6 right-6">
+          <Link
+            to="/farmer/rent-tools"
+            className="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition duration-300"
+          >
+            Rent Tools
+          </Link>
         </div>
 
+        {/* Routes */}
         {userValidated && (
           <div className="mt-6">
             <Routes>
               <Route path="/items" element={<FarmerItemsPage />} />
               <Route path="/items/edit" element={<UpdateItemPage />} />
-              <Route path="/items/add" element={<AddItemPage/>}/>
+              <Route path="/items/add" element={<AddItemPage />} />
             </Routes>
           </div>
         )}

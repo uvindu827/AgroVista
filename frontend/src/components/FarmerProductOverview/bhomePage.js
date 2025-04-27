@@ -5,6 +5,7 @@ import Items from "./items";
 import Gallery from "./gallery";
 import Contact from "./contact";
 import ErrorNotFound from "./error";
+import ProductOverview from "./productOverview";
 
 export default function BHomePage() {
   return (
@@ -18,6 +19,7 @@ export default function BHomePage() {
           <Route path="/items" element={<Items />} />
           <Route path="/" element={<Home />} />
           <Route path="/*" element={<ErrorNotFound />} />
+          <Route path="/product/*" element={<ProductOverview/>}/>
         </Routes>
       </div>
     </>

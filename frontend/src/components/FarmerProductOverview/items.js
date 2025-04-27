@@ -21,17 +21,27 @@ export default function Items() {
           setState("error");
         });
     }
-  }, [state]); // added 'state' as a dependency
+  }, [state]);
 
   return (
-    <div className="w-full h-full flex flex-wrap justify-center pt-[50px]">
+    <div
+      className="min-h-screen w-full bg-cover bg-center flex flex-wrap justify-center items-start gap-6 pt-16 px-4"
+      style={{ backgroundImage: "url('/listingbg.jpg')" }}
+    >
       {state === "loading" && (
-        <div className="w-full h-full flex justify-center items-center">
-          <div className="w-[50px] h-[50px] border-4 rounded-full border-t-green-500 animate-spin"></div>
+        <div className="flex justify-center items-center min-h-screen w-full">
+          <div className="w-12 h-12 border-4 border-t-green-500 border-gray-300 rounded-full animate-spin"></div>
         </div>
       )}
+
       {state === "success" &&
         items.map((item) => <ProductCard key={item.key} item={item} />)}
+
+      {state === "error" && (
+        <div className="text-red-500 text-lg font-semibold mt-8">
+          Failed to load products.
+        </div>
+      )}
     </div>
   );
 }
