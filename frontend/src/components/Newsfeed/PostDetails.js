@@ -94,19 +94,19 @@ function PostDetails() {
   );
 
   return (
-    <div className="bg-green-100 min-h-screen pb-12">
+    <div className="bg-gradient-to-b from-green-900 to-green-800 min-h-screen pb-12">
       {/* Header */}
-      <header className="bg-green-100 py-5">
+      <header className="bg-green-900 py-5">
         <div className="max-w-4xl mx-auto px-4 items-center text-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-green-800">Post Details</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-white">Post Details</h1>
         </div>
       </header>
   
       {/* Post Details Card */}
       <div className="max-w-4xl mx-auto mt-8 px-4">
-        <div className="bg-yellow-50 rounded-2xl shadow-lg overflow-hidden border border-green-100">
+        <div className="bg-white bg-opacity-60 backgrop-blur-lg rounded-2xl shadow-lg overflow-hidden border border-green-100">
           {/* Title Section */}
-          <div className="p-6 md:p-8 bg-yellow-50">
+          <div className="p-6 md:p-8 bg-white bg-opacity-60 backgrop-blur-lg">
             <h2 className="text-2xl md:text-3xl font-bold text-green-800">{post?.title || "N/A"}</h2>
           </div>
   

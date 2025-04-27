@@ -47,9 +47,9 @@ const PostReportPage = () => {
   };
 
   return (
-    <div className="bg-green-200 min-h-screen flex flex-col">
+    <div className="bg-gradient-to-b from-green-900 to-green-800 min-h-screen flex flex-col">
       {/* Header - Matched with page background color */}
-      <header className="bg-green-200 text-green-800 py-5 sticky top-0 z-10 border-b border-green-100">
+      <header className="bg-green-900 text-white py-5 sticky top-0 z-10 border-b border-green-100">
         <div className="max-w-4xl mx-auto px-4 flex items-center justify-center">
           <h1 className="text-2xl md:text-3xl font-bold text-center">
             Report Post
@@ -60,7 +60,7 @@ const PostReportPage = () => {
       {/* Main content */}
       <div className="flex-grow flex items-start justify-center px-4 py-8">
         <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-green-100 overflow-hidden">
-          <div className="bg-yellow-50 p-6 border-b border-yellow-200">
+          <div className="bg-yellow-50 bg-opacity-40 backdeop-blur-lg p-6 border-b border-yellow-200">
             <h2 className="text-2xl font-bold text-green-800 text-center">
               Report Content
             </h2>
@@ -158,8 +158,8 @@ const PostReportPage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-green-100 py-4 border-t border-green-200 mt-auto">
-        <div className="max-w-4xl mx-auto px-4 text-center text-green-800 text-sm">
+      <footer className="bg-green-800 py-4 border-t border-green-200 mt-auto">
+        <div className="max-w-4xl mx-auto px-4 text-center text-white text-sm">
           Thank you for helping keep our community safe and respectful.
         </div>
       </footer>
