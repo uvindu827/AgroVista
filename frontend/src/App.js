@@ -57,7 +57,7 @@ function App() {
           <Route path="/users/" element={<RegisterPage />} />
           <Route path="/jyhg" element={<DisplayT/>} />
           <Route path="/e" element={<Atool />} />
-          <Route path="/" element={<Welcome />} />
+          <Route path="/welcome" element={<Welcome />} />
           <Route path="/update-product/:id" element={<BuyerUpdateProducts />} />
           <Route path="/users_management" element={<UserManagementDashboard />} />
           <Route path="/testing" element={<Test />} />
