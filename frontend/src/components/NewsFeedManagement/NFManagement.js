@@ -25,70 +25,71 @@ function NFManagement() {
     fetchPosts();
   }, []);
 
-  const handleAddPost =() => {
+  const handleAddPost = () => {
     navigate('/add-post');
   };
 
-  const handleDeletePost = async( postId ) => {
-    if(!window.confirm('Are you sure you want to delete this post?'))
-      return;
+  const handleDeletePost = async (postId) => {
+    if (!window.confirm('Are you sure you want to delete this post?')) return;
 
-    try{
+    try {
       await axios.delete(`http://localhost:3000/api/newsFeed/${postId}`);
       setPosts((prev) => prev.filter((post) => post.id !== postId));
-    }catch(err){
+    } catch (err) {
       console.error('Delete failed:', err);
       setError('Failed to delete post');
     }
-  }
+  };
 
   const handleEditPost = (postId) => {
     navigate(`/update_post/${postId}`);
+  };
 
-  }
-
-  const handleReportedPosts = (postId) => {
+  const handleReportedPosts = () => {
     navigate('/report_list');
+  };
 
-  }
-
-
-  if (loading) return <div className="text-center p-8 text-lg text-red-600">Loading posts...</div>;
-  if (error) return <div className="text-center p-8 text-lg text-red-600">{error}</div>;
+  if (loading) return <div className="text-center p-8 text-lg text-green-600">Loading posts...</div>;
+  if (error) return <div className="text-center p-8 text-lg text-red-500">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-slate-900 mb-8">
+    <div className="min-h-screen bg-green-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-5xl font-extrabold text-center text-green-700 mb-10">
           News Feed Management
         </h1>
-        <div className="flex justify-end">
+
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
           <button
             onClick={handleAddPost}
-            className="inline-flex items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            className="w-full md:w-auto inline-flex items-center justify-center rounded-lg bg-green-600 px-6 py-3 text-base font-semibold text-white hover:bg-green-700 transition shadow-md"
           >
-            Add Post
+            ➕ Add New Post
           </button>
-        </div>
 
-        <div className="flex justify-start">
           <button
             onClick={handleReportedPosts}
-            className="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            className="w-full md:w-auto inline-flex items-center justify-center rounded-lg bg-rose-600 px-6 py-3 text-base font-semibold text-white hover:bg-rose-700 transition shadow-md"
           >
-            Reported Posts
+            🚩 View Reported Posts
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
-          {posts.map((post) => (
-            <NFPost 
-            key={post.id} 
-            post={post}
-            onDeletePost = {() => handleDeletePost(post.id)}
-            onEditPost = {() => handleEditPost(post.id)} 
-            />
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <NFPost
+                key={post.id}
+                post={post}
+                onDeletePost={() => handleDeletePost(post.id)}
+                onEditPost={() => handleEditPost(post.id)}
+              />
+            ))
+          ) : (
+            <div className="col-span-3 text-center text-gray-500 text-xl">
+              No posts available.
+            </div>
+          )}
         </div>
       </div>
     </div>
