@@ -25,10 +25,6 @@ function NFPost({ post, onDeletePost, onEditPost }) {
         </div>
 
         <div className="flex flex-col gap-4 mt-4">
-          <div className="bg-green-100 text-green-900 px-4 py-2 rounded-full font-semibold text-sm flex items-center justify-center gap-1">
-            ⬆️ {post.upvoteCount} upvotes
-          </div>
-
           <div className="flex justify-center gap-4">
             <button
               onClick={onEditPost}
