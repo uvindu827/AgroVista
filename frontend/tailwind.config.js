@@ -5,6 +5,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors:{
+      primary:"#E1EEBC",
+      secondary:"#90C67C",
+      accent:"#328E6E",
+    }
+
       colors: {
         darkGreen: '#006400',
         fernGreen: '#4F7942',
