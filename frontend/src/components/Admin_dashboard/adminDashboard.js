@@ -21,7 +21,7 @@ function AdminDashboard() {
   };
 
   return (
-    <nav className="bg-fernGreen p-4 ">
+    <nav className="p-4">
       <div className="flex flex-wrap justify-center gap-4">
         <button
           onClick={handleStaffManagement}
