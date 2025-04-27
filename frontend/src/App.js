@@ -19,8 +19,10 @@ import BuyerUpdateProducts from './components/BuyerUpdateProducts/BuyerUpdatePro
 import BuyersList from "./components/BuyersList/BuyersList";
 import BuyerInventoryList from "./components/BuyerInventoryList/BuyerInventoryList";
 import CartPage from "./components/CartPage/CartPage";
-
-
+import CustomerPaymentPage from "./components/CustomerPaymentPage/CustomerPaymentPage"; 
+import OrderSuccessPage from "./components/OrderSuccessPage/OrderSuccessPage";
+import BuyerOrders from "./components/BuyerOrders/BuyerOrders";
+import ChartDashboard from "./components/ChartDashboard/ChartDashboard";
 
 function App() {
   return (
@@ -45,7 +47,11 @@ function App() {
           <Route path="/buyer/:buyerId" element={<BuyersList/>} />
           <Route path="/buyer/:buyerId/inventory" element={<BuyerInventoryList />} />
           <Route path="/cart" element={<CartPage />} />
-      
+          <Route path="/customer-order" element={<CustomerPaymentPage />} />
+          <Route path="/ordersuccess" element={<OrderSuccessPage />} />
+          <Route path="/manage-purchases" element={<BuyerOrders />} />
+          <Route path="/dashboard" element={<ChartDashboard />} />
+
           
           
         </Routes>

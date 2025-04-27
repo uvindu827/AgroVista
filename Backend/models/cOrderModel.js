@@ -1,9 +1,11 @@
-import mongoose from "mongoose";  // Import mongoose
+import mongoose from 'mongoose';
 
 const nameValidator = (value) => /^[a-zA-Z\s]+$/.test(value);
 const contactNumberValidator = (value) => /^[0-9]{10}$/.test(value);
 
 const cOrderSchema = new mongoose.Schema({
+  customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
+  buyerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Buyer', required: true },
   customerName: { 
     type: String, 
     required: true, 
@@ -20,7 +22,7 @@ const cOrderSchema = new mongoose.Schema({
     required: true, 
     validate: {
       validator: function(value) {
-        return /\S+@\S+\.\S+/.test(value);  // Basic email validation
+        return /\S+@\S+\.\S+/.test(value);
       },
       message: "Please provide a valid email address"
     }
@@ -39,8 +41,16 @@ const cOrderSchema = new mongoose.Schema({
       },
       message: "Order date must be within the last 3 months and not in the future."
     }
-  }
+  },
+  products: [
+    {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'BuyerInventory', required: true },
+      productName: { type: String, required: true },
+      quantity: { type: Number, required: true },
+      totalPrice: { type: Number, required: true }
+    }
+  ],
 }, { timestamps: true });
 
-const cOrder = mongoose.model("customerOrder", cOrderSchema);
+const cOrder = mongoose.model('customerOrder', cOrderSchema);
 export default cOrder;

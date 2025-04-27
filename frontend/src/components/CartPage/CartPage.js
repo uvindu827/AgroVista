@@ -70,14 +70,12 @@ function Cart() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setCart(response.data); // Update the cart state after removing the product
-      calculateTotalAmount(response.data.products); // Recalculate total
+      setCart(response.data);
+      calculateTotalAmount(response.data.products);
 
       if (response.data.products.length === 0) {
-        // Navigate to inventory page if cart is empty
         navigate(`/buyer/${buyerId}/inventory`);
       } else {
-        // Stay in the cart page if there are other products
         toast.success('Product removed from cart', {
           position: 'top-right',
           autoClose: 3000,
@@ -96,10 +94,11 @@ function Cart() {
     }
   };
 
-  const handleQuantityChange = (productId, newQuantity) => {
+  const handleQuantityChange = async (productId, newQuantity) => {
     if (newQuantity <= 0) {
-      return; // Prevent quantity from going to 0 or below
+      return;
     }
+
     const updatedProducts = cart.products.map((item) => {
       if (item.productId._id === productId) {
         const updatedItem = { ...item, quantity: newQuantity };
@@ -110,7 +109,32 @@ function Cart() {
     });
 
     setCart({ ...cart, products: updatedProducts });
-    calculateTotalAmount(updatedProducts); // Recalculate total
+    calculateTotalAmount(updatedProducts);
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.put(
+        `${API_URL}/api/cart/${encodeURIComponent(customerId)}/${encodeURIComponent(buyerId)}/product/${productId}`,
+        { quantity: newQuantity },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      toast.success('Cart updated successfully', {
+        position: 'top-right',
+        autoClose: 3000,
+        className: 'bg-green-500 text-white font-semibold p-4 rounded-lg shadow-lg',
+        progressClassName: 'bg-white',
+      });
+    } catch (error) {
+      console.error('Error updating product quantity:', error);
+      toast.error('Error updating cart', {
+        position: 'top-right',
+        autoClose: 3000,
+        className: 'bg-red-500 text-white font-semibold p-4 rounded-lg shadow-lg',
+        progressClassName: 'bg-white',
+      });
+    }
   };
 
   const handleCheckout = () => {
@@ -118,8 +142,28 @@ function Cart() {
   };
 
   const handlePay = () => {
-    navigate('/order-success'); // Navigate to the next page (e.g., order confirmation page)
+    // Create an array of product details (including ID and other necessary details)
+    const productDetails = cart.products.map((product) => ({
+      productId: product.productId._id,
+      productName: product.productName,
+      quantity: product.quantity,
+      pricePerKg: product.pricePerKg,
+      totalPrice: product.totalPrice,
+    }));
+
+    // Navigate to the payment page, passing the product details and other necessary data
+    navigate('/customer-order', {
+      state: {
+        totalAmount,
+        customerId,
+        buyerId,
+        cartId: cart._id,
+        productDetails, // Passing the product details for the payment process
+      },
+    });
   };
+
+  
 
   if (isLoading) {
     return (
@@ -129,19 +173,18 @@ function Cart() {
     );
   }
 
-  // Ensure that cart.products is always defined as an array
   const products = Array.isArray(cart.products) ? cart.products : [];
 
   if (products.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-green-300 text-center text-xl font-bold text-green-900">
-        Your product was successfully removed or the cart is empty.! <br /> Continue shopping to add products to your cart.
+        Your cart is empty! Continue shopping to add products to your cart.
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-100 to-white py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-green-300 to-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-extrabold text-green-900 text-center mb-8">Your Cart</h2>
         
@@ -201,7 +244,7 @@ function Cart() {
               onClick={handlePay}
               className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-all duration-200"
             >
-              Pay
+              Proceed to Pay
             </button>
           </div>
         </div>

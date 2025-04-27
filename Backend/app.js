@@ -16,6 +16,7 @@ import staffRouter from "./routes/staffRoutes.js";
 import productRouter from "./routes/productRouter.js";
 import inquiryRouter from "./routes/inquiryRouter.js";
 
+
 dotenv.config();
 
 const app = express();
@@ -59,9 +60,10 @@ app.use("/api/inventory", biRoutes); // Buyer Inventory API routes
 app.use("/api/staff", staffRouter);
 app.use("/api/products",productRouter);
 app.use("/api/inquiries",inquiryRouter);
-app.use('/api/cart', cartRouter);
+app.use("/api/cart", cartRouter);
 app.use("/api/orders", cOrderRoutes);  // Mount routes on /api/orders
-app.use('/uploads', express.static('public/uploads'));
+app.use("/uploads", express.static('public/uploads'));
+
 
 
 app.listen(3000, () => {

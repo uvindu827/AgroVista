@@ -1,9 +1,11 @@
 import express from 'express';
-import { createOrderFromCart } from '../controllers/cOrderController.js'; // Import controller
+import { createOrderFromCart, getOrderById } from '../controllers/cOrderController.js';
+
 
 const router = express.Router();
 
-// Route to place an order from the cart
-router.post('/placeOrder', createOrderFromCart);  // Ensure it's set correctly
+router.post('/placeOrder', createOrderFromCart);
+router.get('/:id', getOrderById);
+
 
 export default router;
