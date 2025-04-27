@@ -1,5 +1,5 @@
 import React from "react";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 import "./App.css";
 import BuyerHomePage from "./components/BuyerHomePage/BuyerHomePage";
@@ -23,6 +23,8 @@ import BuyerUpdateProducts from "./components/BuyerUpdateProducts/BuyerUpdatePro
 import Test from "./components/Test/Testingp4";
 import FarmerPage from "./components/FarmerProfilePage/farmerPage";
 import BHomePage from "./components/FarmerProductOverview/bhomePage";
+import ProductOverview from "./components/FarmerProductOverview/productOverview";
+import PurchasePage from "./components/FarmerProductOverview/purchasePage";
 
 function App() {
   return (
@@ -50,6 +52,9 @@ function App() {
           <Route path="/testing" element={<Test />} />
           <Route path="/farmer/*" element={<FarmerPage />} />
           <Route path="/*" element={<BHomePage />} />
+          <Route path="/product/:key" element={<ProductOverview />} />
+          <Route path="/cart" element={<PurchasePage/>} />
+
         </Routes>
       </React.Fragment>
     </div>
