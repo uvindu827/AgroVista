@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";  // Import back icon from react-icons
 import StaffMember from "../StaffMember/StaffMember";
 
 const URL = "http://localhost:3000/api/staff/getStaff";
@@ -54,7 +55,6 @@ function Staff() {
   };
 
   const handleDownloadPayslip = async (employeeId) => {
-    // Get current month and year for automatic pay period
     const date = new Date();
     const monthNames = [
       "January", "February", "March", "April", "May", "June",
@@ -88,6 +88,10 @@ function Staff() {
     }
   };
 
+  const handleBack = () => {
+    navigate("/users_management"); 
+  };
+
   if (loading) return <div className="p-4 text-green-600">Loading...</div>;
   if (error) return <div className="p-4 text-yellow-700">Error: {error}</div>;
 
@@ -109,12 +113,22 @@ function Staff() {
         </div>
       </div>
 
+      {/* Back Button */}
+      <div className="mb-4">
+        <button
+          onClick={handleBack}
+          className="inline-flex items-center text-green-600 hover:text-green-800"
+        >
+          <IoArrowBack className="mr-2" />
+          Back to Newsfeed Management
+        </button>
+      </div>
+
       <div className="mt-8 overflow-hidden shadow-lg ring-2 ring-green-200 rounded-xl">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-green-200">
             <thead className="bg-green-100">
               <tr>
-                {/* Existing headers */}
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-sm font-semibold text-green-800 uppercase tracking-wider"

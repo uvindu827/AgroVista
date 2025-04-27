@@ -3,7 +3,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminDashboard from "../Admin_dashboard/adminDashboard";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+// Remove Next.js router import
+// Using window.location for navigation instead
 
 function UserManagementDashboard() {
   const [users, setUsers] = useState([]);
@@ -11,6 +13,7 @@ function UserManagementDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     fetchUsers("farmer");
@@ -46,27 +49,105 @@ function UserManagementDashboard() {
     }
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  // Logout function - updated to use window.location
+  const handleLogout = async () => {
+    try {
+      // Clear local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      
+      // Show success message
+      toast.success("Logged out successfully");
+      
+      // Redirect to login page using window.location instead of router
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
+    } catch (err) {
+      console.error("Logout error:", err);
+      toast.error("Logout failed. Please try again.");
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-green-50">
-      <header className="w-full bg-darkGreen/90 backdrop-blur-md text-white flex items-center justify-between px-8 py-3 shadow-md sticky top-0 z-50">
+      {/* Modern Header */}
+      <header className="w-full bg-gradient-to-r from-darkGreen to-fernGreen text-white flex items-center justify-between px-6 py-4 shadow-lg sticky top-0 z-50">
         <div className="flex items-center space-x-3">
-          <img
-            src="/agrologo.png"
-            alt="AgroVista Logo"
-            className="w-12 h-12 rounded-full border-2 border-white object-cover"
-          />
-          <div className="flex flex-col">
-            <span className="text-xl font-semibold tracking-wide">
-              AgroVista
-            </span>
-            <span className="text-xs font-light text-gray-200 hidden sm:block">
-              Admin Dashboard
-            </span>
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 rounded-full hover:bg-white/20 transition-all"
+          >
+            {sidebarOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+          </button>
+          
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              <img
+                src="/agrologo.png"
+                alt="AgroVista Logo"
+                className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-md"
+              />
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
+            </div>
+            
+            <div className="flex flex-col">
+              <span className="text-xl font-bold tracking-wide flex items-center">
+                AgroVista
+                <span className="ml-2 text-xs font-normal bg-white/20 px-2 py-0.5 rounded-full">Admin</span>
+              </span>
+              <span className="text-xs font-light text-gray-100">
+                User Management Dashboard
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
-          {/* Future: Add user avatar or logout button here if needed */}
+        <div className="flex items-center space-x-3">
+          <div className="hidden md:flex items-center space-x-1">
+            <span className="bg-white/10 rounded-lg px-3 py-1 text-sm">
+              {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+            </span>
+          </div>
+          
+          {/* Logout Button */}
+          <button 
+            onClick={handleLogout}
+            className="flex items-center space-x-1 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-md transition-all text-sm"
+          >
+            <FaSignOutAlt size={16} />
+            <span className="hidden sm:inline">Logout</span>
+          </button>
+          
+          <div className="relative">
+            <button 
+              onClick={toggleDropdown}
+              className="flex items-center space-x-2 p-1 rounded-full hover:bg-white/20 transition-all"
+            >
+              <FaUserCircle size={20} />
+              <span className="hidden md:block text-sm font-medium">Admin</span>
+            </button>
+            
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                  <FaUserCircle className="mr-2" size={14} />
+                  Profile
+                </a>
+                <button 
+                  onClick={handleLogout}
+                  className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                >
+                  <FaSignOutAlt className="mr-2" size={14} />
+                  Sign out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -77,13 +158,7 @@ function UserManagementDashboard() {
         </aside>
 
         <div className="flex-1 p-4">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="mb-4 px-4 py-2 bg-darkGreen hover:bg-fernGreen text-white rounded shadow transition-colors flex items-center justify-center"
-          >
-            {sidebarOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-          </button>
-
+          {/* Content area */}
           <div className="p-4 max-w-7xl mx-auto">
             <ToastContainer
               position="top-center"

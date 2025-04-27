@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Post from './Post';
+import { useNavigate } from 'react-router-dom';
+import { HiArrowLeft } from 'react-icons/hi'; // Importing back arrow icon
 
 function UserNewsfeed() {
   const [posts, setPosts] = useState([]);
@@ -8,6 +10,7 @@ function UserNewsfeed() {
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const navigate = useNavigate(); // Initialize navigate hook
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -58,58 +61,73 @@ function UserNewsfeed() {
     setSearchTerm('');
   };
 
+  const handleBack = () => {
+    navigate('/farmer/*'); // Navigate to the farmer dashboard
+  };
+
   if (loading) return <div className="text-center p-8 text-lg text-slate-600">Loading posts...</div>;
   if (error) return <div className="text-center p-8 text-lg text-red-500">{error}</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 p-6">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-4xl font-semibold text-center text-white mb-6">
-          News Feed
-        </h1>
+        <div className="mb-6">
+          {/* Back button */}
+          <button
+            onClick={handleBack}
+            className="text-white flex items-center space-x-2 mb-4"
+          >
+            <HiArrowLeft className="w-6 h-6" />
+            <span>Back to Farmer Dashboard</span>
+          </button>
 
-        <div className="mb-6 max-w-md mx-auto">
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="Search posts..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="w-full px-4 py-2 border border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 placeholder-slate-800"
-            />
+          <h1 className="text-4xl font-semibold text-center text-white mb-6">
+            News Feed
+          </h1>
+
+          <div className="mb-6 max-w-md mx-auto">
+            <div className="relative flex items-center">
+              <input
+                type="text"
+                placeholder="Search posts..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="w-full px-4 py-2 border border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 placeholder-slate-800"
+              />
+              {searchTerm && (
+                <button 
+                  onClick={clearSearch}
+                  className="absolute right-3 text-slate-500 hover:text-slate-700"
+                >
+                  ×
+                </button>
+              )}
+            </div>
             {searchTerm && (
-              <button 
-                onClick={clearSearch}
-                className="absolute right-3 text-slate-500 hover:text-slate-700"
-              >
-                ×
-              </button>
+              <p className="mt-2 text-sm text-slate-600">
+                Found {posts.length} results for "{searchTerm}"
+              </p>
             )}
           </div>
-          {searchTerm && (
-            <p className="mt-2 text-sm text-slate-600">
-              Found {posts.length} results for "{searchTerm}"
-            </p>
+
+          {isSearching && (
+            <div className="text-center p-4">
+              <p className="text-yellow-600">Searching...</p>
+            </div>
+          )}
+
+          {!isSearching && posts.length === 0 ? (
+            <div className="text-center p-8 text-lg text-gray-500">
+              No posts found matching your search.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {posts.map((post) => (
+                <Post key={post.id} post={post} />
+              ))}
+            </div>
           )}
         </div>
-
-        {isSearching && (
-          <div className="text-center p-4">
-            <p className="text-yellow-600">Searching...</p>
-          </div>
-        )}
-
-        {!isSearching && posts.length === 0 ? (
-          <div className="text-center p-8 text-lg text-gray-500">
-            No posts found matching your search.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {posts.map((post) => (
-              <Post key={post.id} post={post} />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

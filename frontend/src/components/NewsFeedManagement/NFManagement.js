@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import NFPost from './NFPost';
 import { useNavigate } from 'react-router-dom';
+import { Search, Plus, Flag, X, ArrowLeft } from 'lucide-react';
 
 function NFManagement() {
   const [posts, setPosts] = useState([]);
@@ -27,6 +28,10 @@ function NFManagement() {
 
     fetchPosts();
   }, []);
+
+  const handleBackToDashboard = () => {
+    navigate('/users_management');
+  };
 
   const handleAddPost = () => {
     navigate('/add-post');
@@ -97,77 +102,96 @@ function NFManagement() {
   if (error) return <div className="text-center p-8 text-lg text-red-500">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-green-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-5xl font-extrabold text-center text-green-700 mb-10">
-          News Feed Management
-        </h1>
-
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <button
-            onClick={handleAddPost}
-            className="w-full md:w-auto inline-flex items-center justify-center rounded-lg bg-green-600 px-6 py-3 text-base font-semibold text-white hover:bg-green-700 transition shadow-md"
+    <div className="flex min-h-screen bg-green-50">
+      {/* Sidebar */}
+      <div className="w-64 bg-green-700 text-white p-6 flex flex-col gap-6">
+        <div className="flex items-center mb-6">
+          <button 
+            onClick={handleBackToDashboard}
+            className="p-2 mr-2 rounded-full hover:bg-green-600 transition-colors"
+            title="Back to Dashboard"
           >
-            ➕ Add New Post
+            <ArrowLeft size={20} />
           </button>
-
-          <button
-            onClick={handleReportedPosts}
-            className="w-full md:w-auto inline-flex items-center justify-center rounded-lg bg-rose-600 px-6 py-3 text-base font-semibold text-white hover:bg-rose-700 transition shadow-md"
-          >
-            🚩 View Reported Posts
-          </button>
+          <div className="text-2xl font-bold">News Feed</div>
         </div>
+        
+        <button
+          onClick={handleAddPost}
+          className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-3 text-base font-semibold text-white hover:bg-green-800 transition shadow-md w-full"
+        >
+          <Plus size={20} />
+          <span>Add New Post</span>
+        </button>
 
-        {/* Search Bar */}
-        <div className="mb-8 bg-white rounded-lg shadow-md p-4">
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-grow">
-              <input
-                type="text"
-                value={searchId}
-                onChange={(e) => setSearchId(e.target.value)}
-                placeholder="Search by Post ID"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
+        <button
+          onClick={handleReportedPosts}
+          className="flex items-center gap-2 rounded-lg bg-rose-600 px-4 py-3 text-base font-semibold text-white hover:bg-rose-700 transition shadow-md w-full"
+        >
+          <Flag size={20} />
+          <span>Reported Posts</span>
+        </button>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-center mb-10">
+            <h1 className="text-4xl font-extrabold text-green-700">
+              News Feed Management
+            </h1>
+
+            {/* Search Bar - Right Corner */}
+            <div className="relative">
+              <form onSubmit={handleSearch} className="flex items-center">
+                <input
+                  type="text"
+                  value={searchId}
+                  onChange={(e) => setSearchId(e.target.value)}
+                  placeholder="Search by Post ID"
+                  className="w-64 px-4 py-2 pr-20 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <div className="absolute right-0 flex">
+                  <button
+                    type="submit"
+                    disabled={searchLoading}
+                    className="p-2 text-green-600 hover:text-green-800"
+                    title="Search"
+                  >
+                    <Search size={20} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleClearSearch}
+                    className="p-2 text-gray-500 hover:text-gray-700"
+                    title="Clear search"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </form>
               {searchError && (
-                <p className="text-red-500 text-sm mt-1">{searchError}</p>
+                <p className="absolute text-red-500 text-sm mt-1">{searchError}</p>
               )}
             </div>
-            <div className="flex gap-2">
-              <button
-                type="submit"
-                disabled={searchLoading}
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
-              >
-                {searchLoading ? 'Searching...' : 'Search'}
-              </button>
-              <button
-                type="button"
-                onClick={handleClearSearch}
-                className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition"
-              >
-                Clear
-              </button>
-            </div>
-          </form>
-        </div>
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.length > 0 ? (
-            posts.map((post) => (
-              <NFPost
-                key={post.id}
-                post={post}
-                onDeletePost={() => handleDeletePost(post.id)}
-                onEditPost={() => handleEditPost(post.id)}
-              />
-            ))
-          ) : (
-            <div className="col-span-3 text-center text-gray-500 text-xl">
-              No posts available.
-            </div>
-          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.length > 0 ? (
+              posts.map((post) => (
+                <NFPost
+                  key={post.id}
+                  post={post}
+                  onDeletePost={() => handleDeletePost(post.id)}
+                  onEditPost={() => handleEditPost(post.id)}
+                />
+              ))
+            ) : (
+              <div className="col-span-3 text-center text-gray-500 text-xl">
+                No posts available.
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -37,6 +37,10 @@ function PostDetails() {
     navigate(`/postReport/${postId}`);
   };
 
+  const handleBackToFeed = () => {
+    navigate("/newsFeed"); // Navigate back to the news feed
+  };
+
   const handleSummarizePost = async () => {
     if (!post?.content || summarizing) return;
     
@@ -97,8 +101,18 @@ function PostDetails() {
     <div className="bg-gradient-to-b from-slate-900 to-slate-800 min-h-screen pb-12">
       {/* Header */}
       <header className="bg-slate-900 py-5">
-        <div className="max-w-4xl mx-auto px-4 items-center text-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-white border-b border-white py-2">Post Details</h1>
+        <div className="max-w-4xl mx-auto px-4 flex items-center justify-between">
+          <button 
+            onClick={handleBackToFeed}
+            className="flex items-center text-white hover:text-blue-300 transition duration-300"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Feed
+          </button>
+          <h1 className="text-2xl md:text-3xl font-bold text-white">Post Details</h1>
+          <div className="w-24"></div> {/* Empty div for balance */}
         </div>
       </header>
   
@@ -162,8 +176,6 @@ function PostDetails() {
       </div>
     </div>
   );
-  
-  
 }
 
 export default PostDetails;
