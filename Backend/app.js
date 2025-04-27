@@ -14,7 +14,9 @@ import path from "path"; // Path utilities
 import staffRouter from "./routes/staffRoutes.js";
 import productRouter from "./routes/productRouter.js";
 import inquiryRouter from "./routes/inquiryRouter.js";
+import TsRoutes from "./routes/TsRoutes.js"; 
 import orderRouter from "./routes/orderRouter.js";
+
 
 dotenv.config();
 
@@ -57,11 +59,13 @@ app.use("/api/users", userRouter);
 app.use("/api/newsFeed", nfRouter);
 app.use("/api/inventory", biRoutes); // Buyer Inventory API routes
 app.use("/api/staff", staffRouter);
-app.use("/api/products", productRouter);
-app.use("/api/inquiries", inquiryRouter);
-app.use("/api/cart", cartRouter);
-app.use("/api/orders", cOrderRoutes); // Mount routes on /api/orders
+app.use("/api/products",productRouter);
+app.use("/api/inquiries",inquiryRouter);
+app.use('/api/cart', cartRouter);
+app.use("/api/orders", cOrderRoutes);  // Mount routes on /api/orders
+app.use("/api/tools", TsRoutes);
 app.use("/api/buyerorders", orderRouter);
+
 
 app.listen(3000, () => {
   console.log("Server is runing on port 3000");
