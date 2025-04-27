@@ -71,10 +71,10 @@ function PostDetails() {
   };
 
   if (loading) return (
-    <div className="flex items-center justify-center min-h-screen bg-green-50">
+    <div className="flex items-center justify-center min-h-screen bg-slate-50">
       <div className="text-center p-8 rounded-lg bg-white shadow-md">
-        <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-lg font-medium text-green-800">Loading post details...</p>
+        <div className="w-16 h-16 border-4 border-slate-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-lg font-medium text-slate-800">Loading post details...</p>
       </div>
     </div>
   );
@@ -94,20 +94,20 @@ function PostDetails() {
   );
 
   return (
-    <div className="bg-gradient-to-b from-green-900 to-green-800 min-h-screen pb-12">
+    <div className="bg-gradient-to-b from-slate-900 to-slate-800 min-h-screen pb-12">
       {/* Header */}
-      <header className="bg-green-900 py-5">
+      <header className="bg-slate-900 py-5">
         <div className="max-w-4xl mx-auto px-4 items-center text-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-white">Post Details</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-white border-b border-white py-2">Post Details</h1>
         </div>
       </header>
   
       {/* Post Details Card */}
-      <div className="max-w-4xl mx-auto mt-8 px-4">
-        <div className="bg-white bg-opacity-60 backgrop-blur-lg rounded-2xl shadow-lg overflow-hidden border border-green-100">
+      <div className="max-w-4xl mx-auto mt-8 px-4 ">
+        <div className="bg-white bg-opacity-60 backgrop-blur-lg rounded-2xl shadow-lg overflow-hidden border border-slate-100">
           {/* Title Section */}
           <div className="p-6 md:p-8 bg-white bg-opacity-60 backgrop-blur-lg">
-            <h2 className="text-2xl md:text-3xl font-bold text-green-800">{post?.title || "N/A"}</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-800">{post?.title || "N/A"}</h2>
           </div>
   
           {/* Image Section */}
@@ -122,16 +122,16 @@ function PostDetails() {
           {/* Content Section */}
           <div className="p-6 md:p-8 mt-6"> {/* Added margin-top */}
             <div className="prose max-w-none">
-              <p className="text-gray-700 leading-relaxed whitespace-pre-line">{post?.content || "No content available"}</p>
+              <p className="text-gray-950 leading-relaxed whitespace-pre-line">{post?.content || "No content available"}</p>
             </div>
   
             {/* Summary Section */}
             {summary && (
               <div className="mt-8">
-                <h3 className="flex items-center text-xl font-semibold text-green-800 mb-3">
+                <h3 className="flex items-center text-xl font-semibold text-teal-800 mb-3">
                   <span className="mr-2">📝</span> Summary
                 </h3>
-                <div className="bg-white p-5 rounded-xl border border-yellow-200">
+                <div className="bg-white p-5 rounded-xl border-4 border-teal-600">
                   <p className="italic text-gray-700">{summary}</p>
                 </div>
               </div>
@@ -142,7 +142,7 @@ function PostDetails() {
               <button
                 onClick={handleSummarizePost}
                 disabled={summarizing}
-                className={`flex items-center bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-medium transition duration-300 shadow ${
+                className={`flex items-center bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg font-medium transition duration-300 shadow ${
                   summarizing ? "opacity-60 cursor-not-allowed" : ""
                 }`}
               >

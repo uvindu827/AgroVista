@@ -54,11 +54,17 @@ function Staff() {
   };
 
   const handleDownloadPayslip = async (employeeId) => {
-    const payPeriod = prompt("Enter pay period (e.g., April-2024):");
-    if (!payPeriod) return;
+    // Get current month and year for automatic pay period
+    const date = new Date();
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const currentMonth = monthNames[date.getMonth()];
+    const currentYear = date.getFullYear();
+    const payPeriod = `${currentMonth}-${currentYear}`;
   
     try {
-      
       const generateResponse = await axios.post(
         `http://localhost:3000/api/staff/${employeeId}/payslip`,
         { payPeriod }

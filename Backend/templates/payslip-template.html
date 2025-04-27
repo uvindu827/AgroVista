@@ -27,12 +27,10 @@
                 <tr class="bg-gray-100">
                     <th class="p-2 text-left border-b border-gray-300">Pay Period</th>
                     <th class="p-2 text-left border-b border-gray-300">Issue Date</th>
-                    <th class="p-2 text-left border-b border-gray-300">Employee ID</th>
                 </tr>
                 <tr>
                     <td class="p-2 border-b border-gray-200">{{payPeriod}}</td>
                     <td class="p-2 border-b border-gray-200">{{issueDate}}</td>
-                    <td class="p-2 border-b border-gray-200">{{employeeId}}</td>
                 </tr>
             </table>
         </div>
@@ -70,11 +68,11 @@
                 </tr>
                 <tr>
                     <td class="p-2 border-b border-gray-200">Basic Salary</td>
-                    <td class="p-2 text-right border-b border-gray-200">{{basicSalary}}</td>
+                    <td class="p-2 text-right border-b border-gray-200">Rs.{{basicSalary}}</td>
                 </tr>
                 <tr>
                     <td class="p-2 border-b border-gray-200">Gross Salary</td>
-                    <td class="p-2 text-right border-b border-gray-200">{{grossSalary}}</td>
+                    <td class="p-2 text-right border-b border-gray-200">Rs.{{grossSalary}}</td>
                 </tr>
             </table>
             
@@ -86,11 +84,11 @@
                 </tr>
                 <tr>
                     <td class="p-2 border-b border-gray-200">EPF Employee Contribution (8%)</td>
-                    <td class="p-2 text-right border-b border-gray-200">{{deductions.epfEmployee}}</td>
+                    <td class="p-2 text-right border-b border-gray-200">Rs.{{deductions.epfEmployee}}</td>
                 </tr>
                 <tr class="bg-gray-50 font-bold">
                     <td class="p-2 border-b border-gray-200">Total Deductions</td>
-                    <td class="p-2 text-right border-b border-gray-200">{{deductions.epfEmployee}}</td>
+                    <td class="p-2 text-right border-b border-gray-200">Rs.{{deductions.epfEmployee}}</td>
                 </tr>
             </table>
             
@@ -102,15 +100,15 @@
                 </tr>
                 <tr>
                     <td class="p-2 border-b border-gray-200">EPF Employer Contribution (12%)</td>
-                    <td class="p-2 text-right border-b border-gray-200">{{contributions.epfEmployer}}</td>
+                    <td class="p-2 text-right border-b border-gray-200">Rs.{{contributions.epfEmployer}}</td>
                 </tr>
                 <tr>
                     <td class="p-2 border-b border-gray-200">ETF (3%)</td>
-                    <td class="p-2 text-right border-b border-gray-200">{{contributions.etf}}</td>
+                    <td class="p-2 text-right border-b border-gray-200">Rs.{{contributions.etf}}</td>
                 </tr>
                 <tr class="bg-gray-50 font-bold">
                     <td class="p-2 border-b border-gray-200">Total Employer Contributions</td>
-                    <td class="p-2 text-right border-b border-gray-200">{{totalEmployerContributions}}</td>
+                    <td class="p-2 text-right border-b border-gray-200">Rs.{{totalEmployerContributions}}</td>
                 </tr>
             </table>
             
@@ -118,7 +116,7 @@
             <table class="w-full border-collapse mb-4 table-fixed">
                 <tr class="bg-gray-50 font-bold">
                     <td class="w-3/4 p-2 border-b border-gray-200">Net Pay</td>
-                    <td class="w-1/4 p-2 text-right border-b border-gray-200">{{netSalary}}</td>
+                    <td class="w-1/4 p-2 text-right border-b border-gray-200">Rs.{{netSalary}}</td>
                 </tr>
             </table>
         </div>

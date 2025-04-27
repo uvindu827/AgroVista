@@ -47,9 +47,9 @@ const PostReportPage = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-green-900 to-green-800 min-h-screen flex flex-col">
+    <div className="bg-gradient-to-b from-slate-900 to-slate-800 min-h-screen flex flex-col">
       {/* Header - Matched with page background color */}
-      <header className="bg-green-900 text-white py-5 sticky top-0 z-10 border-b border-green-100">
+      <header className="bg-slate-900 text-white py-5 sticky top-0 z-10 border-b border-slate-100">
         <div className="max-w-4xl mx-auto px-4 flex items-center justify-center">
           <h1 className="text-2xl md:text-3xl font-bold text-center">
             Report Post
@@ -59,12 +59,12 @@ const PostReportPage = () => {
 
       {/* Main content */}
       <div className="flex-grow flex items-start justify-center px-4 py-8">
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-green-100 overflow-hidden">
-          <div className="bg-yellow-50 bg-opacity-40 backdeop-blur-lg p-6 border-b border-yellow-200">
-            <h2 className="text-2xl font-bold text-green-800 text-center">
+        <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+          <div className="bg-white bg-opacity-40 backdrop-blur-lg p-6 border-b-2 border-slate-500">
+            <h2 className="text-2xl font-bold text-slate-800 text-center">
               Report Content
             </h2>
-            <p className="text-gray-700 text-center mt-2">
+            <p className="text-slate-700 text-center mt-2">
               Please provide a reason for reporting this post. Your report will
               be reviewed by our team.
             </p>
@@ -88,7 +88,7 @@ const PostReportPage = () => {
               <div className="space-y-3">
                 <label
                   htmlFor="reason"
-                  className="block text-sm font-medium text-green-800"
+                  className="block text-sm font-medium text-slate-800"
                 >
                   Reason for Reporting <span className="text-red-500">*</span>
                 </label>
@@ -101,7 +101,7 @@ const PostReportPage = () => {
                   rows="6"
                   required
                   disabled={isLoading}
-                  className="w-full p-3 border border-green-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed resize-none"
+                  className="w-full p-3 border placeholder-slate-300 border-slate-400 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-slate-500 bg-slate-50 bg-opacity-20 disabled:opacity-20 disabled:cursor-not-allowed resize-none"
                 />
                 <p className="text-xs text-gray-500 text-center">
                   Your report will remain anonymous. We take all reports
@@ -158,7 +158,7 @@ const PostReportPage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-green-800 py-4 border-t border-green-200 mt-auto">
+      <footer className="bg-slate-800 py-4 border-t border-slate-200 mt-auto">
         <div className="max-w-4xl mx-auto px-4 text-center text-white text-sm">
           Thank you for helping keep our community safe and respectful.
         </div>
