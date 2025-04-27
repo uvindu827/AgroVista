@@ -71,11 +71,10 @@ function UserManagementDashboard() {
       </header>
 
       <div className="flex flex-1 mt-1 mb-1">
-        {sidebarOpen && (
-          <div className="w-64 bg-[rgba(79,121,66,0.8)] min-h-[90vh] my-4 p-4 shadow-md rounded-lg border border-green-200">
-            <AdminDashboard />
-          </div>
-        )}
+        {/* Sidebar with proper styling */}
+        <aside className={`${sidebarOpen ? 'block' : 'hidden'} bg-[rgba(79,121,66,0.8)] min-h-[90vh] my-4 p-6 shadow-md rounded-lg border border-green-200`}>
+          <AdminDashboard />
+        </aside>
 
         <div className="flex-1 p-4">
           <button
