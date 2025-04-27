@@ -145,7 +145,7 @@ export const deletePost = async (req, res) => {
   }
 };
 
-export const adminSearchPosts = async (req, res) => {
+export const SearchPosts = async (req, res) => {
   try {
     const { search } = req.query;
 
@@ -168,6 +168,7 @@ export const adminSearchPosts = async (req, res) => {
         id: post._id,
         title: post.title,
         contentSnippet: post.content.substring(0, 10),
+        image: post.image,
         keywords: post.keywords,
         createdAt: post.createdAt,
       })),

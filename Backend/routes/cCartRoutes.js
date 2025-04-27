@@ -13,12 +13,12 @@ router.post('/', createOrUpdateCart);
 
 // Get cart by either cart ID or customer email and buyer email
 router.get('/:cartId?', getCart);
-router.get('/:customerEmail/:buyerEmail', getCart);
+router.get('/:customerId/:buyerId', getCart);
 
 
 // Remove product from cart by either cart ID or customer email and buyer email
 router.delete('/:cartId/product/:productId', removeProductFromCart);  // By Cart ID
-router.delete('/:customerEmail/:buyerEmail/product/:productId', removeProductFromCart);  // By Customer & Buyer Email
+router.delete('/:customerId/:buyerId/product/:productId', removeProductFromCart);  // By Customer & Buyer Id
 
 // Checkout cart
 router.post('/checkout', checkoutCart);
