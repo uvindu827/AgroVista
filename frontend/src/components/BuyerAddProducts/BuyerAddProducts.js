@@ -91,7 +91,7 @@ function BuyerAddProducts() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex h-screen bg-gradient-to-b from-green-200">
       <BuyerNavBar />
       <div className="flex-1 p-6">
         <h2 className="text-2xl font-bold text-green-900 mb-4">Add New Product</h2>

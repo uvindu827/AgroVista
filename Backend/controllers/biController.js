@@ -211,3 +211,17 @@ export const deleteInventory = async (req, res) => {
       res.status(500).json({ error: `Server error: ${err.message}` });  // Return detailed error
     }
   };
+
+
+
+  export const getBuyerInventoryForCharts = async (req, res) => {
+    try {
+      const buyerId = req.user._id; // You must have authentication middleware that sets req.user
+  
+      const inventory = await BuyerInventory.find({ user: buyerId });
+  
+      res.status(200).json(inventory);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch buyer inventory data.' });
+    }
+  };

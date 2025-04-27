@@ -25,7 +25,6 @@ router.delete('/:customerId/:buyerId/product/:productId', removeProductFromCart)
 // Checkout cart
 router.post('/checkout', checkoutCart);
 
-;
 
 
 

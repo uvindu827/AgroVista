@@ -1,8 +1,11 @@
 import express from 'express';
 import { 
-  createInventory, getInventories, getInventoryById, updateInventory, deleteInventory 
+  createInventory, getInventories, getInventoryById, updateInventory, deleteInventory , getBuyerInventoryForCharts 
 } from '../controllers/biController.js';
 import multer from 'multer';
+
+
+
 
 const router = express.Router();
 
@@ -22,5 +25,7 @@ router.get('/:id', getInventoryById);  // Get by ID
 //router.put('/:id', updateInventory);  // Update
 router.put('/:id', upload.single('productPicture'), updateInventory);  // Update with file upload
 router.delete('/:id', deleteInventory);  // Delete
+
+router.get('/buyer/charts', getBuyerInventoryForCharts);
 
 export default router;
