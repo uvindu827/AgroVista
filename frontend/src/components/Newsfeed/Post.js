@@ -11,7 +11,7 @@ function Post({ post }) {
   return (
     <div
       onClick={handleCardClick}
-      className="bg-white bg-opacity-20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-green-700 transform hover:scale-105"
+      className="bg-white bg-opacity-20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-500 transform hover:scale-105"
     >
       {post.image && (
         <div className="relative">

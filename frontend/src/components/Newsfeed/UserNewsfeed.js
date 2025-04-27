@@ -58,11 +58,11 @@ function UserNewsfeed() {
     setSearchTerm('');
   };
 
-  if (loading) return <div className="text-center p-8 text-lg text-green-600">Loading posts...</div>;
+  if (loading) return <div className="text-center p-8 text-lg text-slate-600">Loading posts...</div>;
   if (error) return <div className="text-center p-8 text-lg text-red-500">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-900 to-green-800 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 p-6">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl font-semibold text-center text-white mb-6">
           News Feed
@@ -75,19 +75,19 @@ function UserNewsfeed() {
               placeholder="Search posts..."
               value={searchTerm}
               onChange={handleSearchChange}
-              className="w-full px-4 py-2 border border-green-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-green-800"
+              className="w-full px-4 py-2 border border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 placeholder-slate-800"
             />
             {searchTerm && (
               <button 
                 onClick={clearSearch}
-                className="absolute right-3 text-green-500 hover:text-green-700"
+                className="absolute right-3 text-slate-500 hover:text-slate-700"
               >
                 ×
               </button>
             )}
           </div>
           {searchTerm && (
-            <p className="mt-2 text-sm text-green-600">
+            <p className="mt-2 text-sm text-slate-600">
               Found {posts.length} results for "{searchTerm}"
             </p>
           )}
