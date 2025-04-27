@@ -16,6 +16,9 @@ import PostReportPage from "./components/Newsfeed/postReportPage";
 import ReportsList from "./components/NewsFeedManagement/ReportsList";
 import { Route, Routes } from "react-router";
 import RegisterPage from "./components/Register/register";
+import DisplayT from "./components/Tools/DisplayT";
+import Atool from "./components/Tools/Atool";
+import Welcome from "./components/Tools/welcome";
 import BuyerAddProducts from "./components/BuyerAddProducts/BuyerAddProducts";
 import BuyerManageProducts from "./components/BuyerManageProducts/BuyerManageProducts";
 import Login from "./components/Login/login";
@@ -27,6 +30,7 @@ import BHomePage from "./components/FarmerProductOverview/bhomePage";
 import ProductOverview from "./components/FarmerProductOverview/productOverview";
 import PurchasePage from "./components/FarmerProductOverview/purchasePage";
 import UserManagementDashboard from "./components/UsersManagement/UserManagementDashboard";
+
 
 
 function App() {
@@ -51,6 +55,9 @@ function App() {
           <Route path="/report_list" element={<ReportsList />} />
           <Route path="/newsfeed" element={<NewsFeed />} />
           <Route path="/users/" element={<RegisterPage />} />
+          <Route path="/jyhg" element={<DisplayT/>} />
+          <Route path="/e" element={<Atool />} />
+          <Route path="/" element={<Welcome />} />
           <Route path="/update-product/:id" element={<BuyerUpdateProducts />} />
           <Route path="/users_management" element={<UserManagementDashboard />} />
           <Route path="/testing" element={<Test />} />
@@ -58,7 +65,6 @@ function App() {
           <Route path="/*" element={<BHomePage />} />
           <Route path="/product/:key" element={<ProductOverview />} />
           <Route path="/cart" element={<PurchasePage/>} />
-
         </Routes>
       </React.Fragment>
     </div>
