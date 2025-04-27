@@ -15,10 +15,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  // new implementatio
   role: {
     type: String,
+    enum: ['customer', 'buyer', 'farmer', 'tool dealer', 'agricultural inspector','admin'],
     required: true,
-    default: "customer",
+    //default: "customer",
   },
   firstName: {
     type: String,

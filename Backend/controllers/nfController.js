@@ -145,7 +145,7 @@ export const deletePost = async (req, res) => {
   }
 };
 
-export const adminSearchPosts = async (req, res) => {
+export const SearchPosts = async (req, res) => {
   try {
     const { search } = req.query;
 
@@ -168,6 +168,7 @@ export const adminSearchPosts = async (req, res) => {
         id: post._id,
         title: post.title,
         contentSnippet: post.content.substring(0, 10),
+        image: post.image,
         keywords: post.keywords,
         createdAt: post.createdAt,
       })),
@@ -201,6 +202,7 @@ export const getPostById = async (req, res) => {
         keywords: foundPost.keywords,
         createdAt: foundPost.createdAt,
         updatedAt: foundPost.updatedAt,
+        upvoteCount: foundPost.upvoteCount,
       },
     });
   } catch (error) {
@@ -232,6 +234,7 @@ export const reportPost = async (req, res) => {
       data: {
         postID: newPostReport.postID,
         reason: newPostReport.reason,
+        createdAt: newPostReport.createdAt,
       },
     });
   } catch (error) {
@@ -250,7 +253,35 @@ export const getAllreports = async (req, res) => {
         id: reports._id,
         postID: reports.postID,
         reason: reports.reason,
+        createdAt: reports.createdAt,
       })),
     });
   } catch (error) {}
+};
+
+export const deleteReport = async (req, res) => {
+  try {
+    const reportId = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(reportId)) {
+      return res.status(400).json({ message: "Invalid report ID" });
+    }
+
+    const resolvedReport = await postReport.findByIdAndDelete(reportId);
+
+    if (!resolvedReport) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    res.status(200).json({
+      data: {
+        id: resolvedReport._id,
+        message: "Report Resolved",
+        timestamp: new Date(),
+      },
+    });
+  } catch (error) {
+    console.error("Resolve report error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
 };

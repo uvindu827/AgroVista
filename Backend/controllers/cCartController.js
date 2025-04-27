@@ -4,7 +4,7 @@ import BuyerInventory from '../models/biModel.js';
 // Create or update a cart
 export const createOrUpdateCart = async (req, res) => {
   try {
-    const { customerEmail, buyerEmail, products } = req.body;
+    const { customerId, buyerId, products } = req.body;
 
     let totalAmount = 0;
     const updatedProducts = [];
@@ -29,8 +29,8 @@ export const createOrUpdateCart = async (req, res) => {
     }
 
     const cart = await Cart.findOneAndUpdate(
-      { customerEmail, buyerEmail },
-      { customerEmail, buyerEmail, products: updatedProducts, totalAmount },
+      { customerId, buyerId },
+      { customerId, buyerId, products: updatedProducts, totalAmount },
       { new: true, upsert: true, runValidators: true }
     );
 
@@ -44,17 +44,17 @@ export const createOrUpdateCart = async (req, res) => {
 // Get cart by cart ID or customer email and buyer email
 export const getCart = async (req, res) => {
     try {
-      const { cartId, customerEmail, buyerEmail } = req.params;
+      const { cartId, customerId, buyerId } = req.params;
   
       let cart;
       if (cartId) {
         cart = await Cart.findById(cartId).populate('products.productId');
-      } else if (customerEmail && buyerEmail) {
-        const decodedCustomerEmail = decodeURIComponent(customerEmail);
-        const decodedBuyerEmail = decodeURIComponent(buyerEmail);
+      } else if (customerId && buyerId) {
+        const decodedCustomerId = decodeURIComponent(customerId);
+        const decodedBuyerId = decodeURIComponent(buyerId);
         cart = await Cart.findOne({
-          customerEmail: decodedCustomerEmail,
-          buyerEmail: decodedBuyerEmail
+          customerId: decodedCustomerId,
+          buyerId: decodedBuyerId
         }).populate('products.productId');
       }
   
@@ -73,17 +73,17 @@ export const getCart = async (req, res) => {
 // Remove product from cart by cart ID or customer email and buyer email
 export const removeProductFromCart = async (req, res) => {
     try {
-      const { cartId, customerEmail, buyerEmail, productId } = req.params;
+      const { cartId, customerId, buyerId, productId } = req.params;
   
       let cart;
       if (cartId) {
         // If cartId is provided, find the cart by ID
         cart = await Cart.findById(cartId);
-      } else if (customerEmail && buyerEmail) {
+      } else if (customerId && buyerId) {
         // Otherwise, find the cart using customerEmail and buyerEmail
-        const decodedCustomerEmail = decodeURIComponent(customerEmail);
-        const decodedBuyerEmail = decodeURIComponent(buyerEmail);
-        cart = await Cart.findOne({ customerEmail: decodedCustomerEmail, buyerEmail: decodedBuyerEmail });
+        const decodedCustomerId = decodeURIComponent(customerId);
+        const decodedBuyerId = decodeURIComponent(buyerId);
+        cart = await Cart.findOne({ customerId: decodedCustomerId, buyerId: decodedBuyerId });
       }
   
       if (!cart) {
@@ -113,8 +113,8 @@ export const removeProductFromCart = async (req, res) => {
 // Checkout (Dummy implementation for now)
 export const checkoutCart = async (req, res) => {
   try {
-    const { customerEmail, buyerEmail } = req.body;
-    const cart = await Cart.findOne({ customerEmail, buyerEmail });
+    const { customerId, buyerEmail } = req.body;
+    const cart = await Cart.findOne({ customerId, buyerId });
 
     if (!cart) {
       return res.status(404).json({ error: 'Cart not found' });
