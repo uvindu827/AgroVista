@@ -15,6 +15,7 @@ import path from "path"; // Path utilities
 import staffRouter from "./routes/staffRoutes.js";
 import productRouter from "./routes/productRouter.js";
 import inquiryRouter from "./routes/inquiryRouter.js";
+import TsRoutes from "./routes/TsRoutes.js"; 
 
 dotenv.config();
 
@@ -58,6 +59,8 @@ app.use("/api/products",productRouter);
 app.use("/api/inquiries",inquiryRouter);
 app.use('/api/cart', cartRouter);
 app.use("/api/orders", cOrderRoutes);  // Mount routes on /api/orders
+app.use("/api/tools", TsRoutes);
+
 
 
 app.listen(3000, () => {
