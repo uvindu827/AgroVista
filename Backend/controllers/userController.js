@@ -409,10 +409,6 @@ export async function getProfile(req, res) {
   }
   
   export async function deleteUser(req, res) {
-	if (!isItAdmin(req)) {
-	  res.status(403).json({ error: "Unauthorized" });
-	  return;
-	}
 	const userId = req.params.id;
 	try {
 	  const deletedUser = await User.findByIdAndDelete(userId);
@@ -423,5 +419,29 @@ export async function getProfile(req, res) {
 	  res.json({ message: "User deleted successfully" });
 	} catch (e) {
 	  res.status(500).json({ error: "Failed to delete user" });
+	}
+  }
+
+  export async function getUsersByRole(req, res) {
+	try {
+	  const { role } = req.params;
+	  
+	  // Handle URL-friendly role conversions
+	  let queryRole = role;
+	  if (role === "tool-dealer") queryRole = "tool dealer";
+	  else if (role === "agricultural-inspector") queryRole = "agricultural inspector";
+	  
+	  // Validate role (fixed syntax)
+	  const validRoles = ['customer', 'buyer', 'farmer', 'tool dealer', 'agricultural inspector', 'admin'];
+	  if (!validRoles.includes(queryRole)) {
+		console.log(`Invalid role: ${queryRole}`);
+		return res.status(400).json({ error: "Invalid role" });
+	  }
+	  
+	  const users = await User.find({ role: queryRole });
+	  res.json(users);
+	} catch (e) {
+	  console.error(`Error: ${e.message}`);
+	  res.status(500).json({ error: "Failed to fetch users" });
 	}
   }

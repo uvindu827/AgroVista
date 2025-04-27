@@ -3,6 +3,43 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useParams, useNavigate } from 'react-router-dom';
 
+const validateForm = (data) => {
+  const errors = {};
+
+  // Product Name validation
+  if (!data.productName.trim()) {
+    errors.productName = 'Product name is required';
+  } else if (!/^[A-Za-z\s]{3,50}$/.test(data.productName)) {
+    errors.productName = 'Product name must be 3-50 characters long and contain only letters';
+  }
+
+  // Price validation
+  if (!data.price) {
+    errors.price = 'Price is required';
+  } else if (parseFloat(data.price) <= 0) {
+    errors.price = 'Price must be greater than 0';
+  }
+
+  // Stock validation
+  if (!data.stock) {
+    errors.stock = 'Stock is required';
+  } else if (parseInt(data.stock) < 0) {
+    errors.stock = 'Stock cannot be negative';
+  }
+
+  // Category validation
+  if (!data.category) {
+    errors.category = 'Category is required';
+  }
+
+  // Description validation
+  if (data.description && data.description.length > 500) {
+    errors.description = 'Description must be less than 500 characters';
+  }
+
+  return errors;
+};
+
 function BuyerUpdateProducts() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,13 +57,20 @@ function BuyerUpdateProducts() {
   const [productPicture, setProductPicture] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`Field changed: ${name} = ${value}`);
-    setFormData((prev) => {
+    
+    setFormData(prev => {
       const newData = { ...prev, [name]: value };
-      console.log('Updated formData:', newData);
+      
+      // Clear the specific error when field is changed
+      setValidationErrors(prev => ({
+        ...prev,
+        [name]: undefined
+      }));
+      
       return newData;
     });
   };
@@ -90,8 +134,13 @@ function BuyerUpdateProducts() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.productName || !formData.price || !formData.stock || !formData.buyerID) {
-      toast.error('Please fill in all required fields');
+    // Perform validation
+    const errors = validateForm(formData);
+    setValidationErrors(errors);
+
+    // If there are errors, stop submission
+    if (Object.keys(errors).length > 0) {
+      toast.error('Please fix the errors before submitting');
       return;
     }
 
@@ -199,19 +248,29 @@ function BuyerUpdateProducts() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Product Name *</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Product Name *
+                </label>
                 <input
                   type="text"
                   name="productName"
                   value={formData.productName}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                  className={`mt-1 block w-full rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 
+                  ${validationErrors.productName ? 'border-red-300' : 'border-gray-300'}`}
                   required
                 />
+                {validationErrors.productName && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {validationErrors.productName}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Price (per kg) *</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Price (per kg) *
+                </label>
                 <input
                   type="number"
                   name="price"
@@ -219,9 +278,15 @@ function BuyerUpdateProducts() {
                   onChange={handleChange}
                   step="0.01"
                   min="0"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                  className={`mt-1 block w-full rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 
+                  ${validationErrors.price ? 'border-red-300' : 'border-gray-300'}`}
                   required
                 />
+                {validationErrors.price && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {validationErrors.price}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -247,6 +312,7 @@ function BuyerUpdateProducts() {
                   required
                 >
                   <option value="">Select Category</option>
+                  <option value="Rice">Rice</option>
                   <option value="Fruits">Fruits</option>
                   <option value="Vegetables">Vegetables</option>
                   <option value="Grains">Grains</option>
@@ -255,7 +321,7 @@ function BuyerUpdateProducts() {
                 </select>
               </div>
 
-              <div>
+              {/*<div>
                 <label className="block text-sm font-medium text-gray-700">Expiration Date *</label>
                 <input
                   type="date"
@@ -277,8 +343,8 @@ function BuyerUpdateProducts() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
                   required
                 />
-              </div>
-            </div>
+              </div> */}
+            </div> 
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Description</label>

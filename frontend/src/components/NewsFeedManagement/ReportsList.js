@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ReportDetails from "./ReportDetails";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const URL = "http://localhost:3000/api/newsFeed/getAllReports";
 
@@ -23,7 +25,6 @@ function ReportsList() {
     const fetchData = async () => {
       try {
         const data = await fetchHandler();
-        // The API returns data.data as the array of reports
         setReports(data.data || []);
       } catch (err) {
         setError(err.message);
@@ -41,6 +42,7 @@ function ReportsList() {
       try{
         await axios.delete(`http://localhost:3000/api/newsFeed/deleteReport/${reportId}`);
         setReports((prev) => prev.filter((report) => report.id !== reportId));
+        toast.success("Report resolved successfully!");
       }catch(err){
         console.error('Resolving failed:', err);
         setError('Failed to resolve post');
@@ -62,7 +64,17 @@ function ReportsList() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Reported Posts</h1>
-      
+      <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+              />
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
