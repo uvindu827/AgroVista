@@ -32,7 +32,7 @@ export default function Welcome() {
           {/* Card 1 */}
           <div
             className="cursor-pointer p-6 rounded-3xl bg-white bg-opacity-20 border border-green-300 backdrop-blur-lg shadow-xl hover:shadow-2xl transition transform hover:scale-105 hover:-translate-y-2"
-            onClick={() => navigate('/add')}
+            onClick={() => navigate('/e')}
           >
             <img
               src="https://img.icons8.com/ios-filled/100/ffffff/add--v1.png"
@@ -50,7 +50,7 @@ export default function Welcome() {
           {/* Card 2 */}
           <div
             className="cursor-pointer p-6 rounded-3xl bg-white bg-opacity-20 border border-green-300 backdrop-blur-lg shadow-xl hover:shadow-2xl transition transform hover:scale-105 hover:-translate-y-2"
-            onClick={() => navigate('/display')}
+            onClick={() => navigate('/jyhg')}
           >
             <img
               src="https://img.icons8.com/ios-filled/100/ffffff/toolbox.png"
