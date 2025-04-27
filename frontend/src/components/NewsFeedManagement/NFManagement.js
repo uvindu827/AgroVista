@@ -7,6 +7,9 @@ function NFManagement() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchId, setSearchId] = useState('');
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,6 +52,47 @@ function NFManagement() {
     navigate('/report_list');
   };
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    
+    if (!searchId.trim()) {
+      setSearchError('Please enter a post ID');
+      return;
+    }
+
+    setSearchLoading(true);
+    setSearchError('');
+    
+    try {
+      const response = await axios.get(`http://localhost:3000/api/newsFeed/${searchId}/getPostById`);
+      const foundPost = response.data.data;
+      
+      setPosts([foundPost]);
+      setSearchLoading(false);
+    } catch (err) {
+      console.error('Search failed:', err);
+      setSearchError(err.response?.data?.message || 'Failed to find post with this ID');
+      setSearchLoading(false);
+    }
+  };
+
+  const handleClearSearch = async () => {
+    setSearchId('');
+    setSearchError('');
+    
+    // Reset to show all posts
+    setLoading(true);
+    try {
+      const response = await axios.post('http://localhost:3000/api/newsFeed/getAllPosts');
+      setPosts(response.data.data);
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to fetch posts');
+      setLoading(false);
+      console.error(err);
+    }
+  };
+
   if (loading) return <div className="text-center p-8 text-lg text-green-600">Loading posts...</div>;
   if (error) return <div className="text-center p-8 text-lg text-red-500">{error}</div>;
 
@@ -73,6 +117,40 @@ function NFManagement() {
           >
             🚩 View Reported Posts
           </button>
+        </div>
+
+        {/* Search Bar */}
+        <div className="mb-8 bg-white rounded-lg shadow-md p-4">
+          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
+            <div className="flex-grow">
+              <input
+                type="text"
+                value={searchId}
+                onChange={(e) => setSearchId(e.target.value)}
+                placeholder="Search by Post ID"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              {searchError && (
+                <p className="text-red-500 text-sm mt-1">{searchError}</p>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                disabled={searchLoading}
+                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
+              >
+                {searchLoading ? 'Searching...' : 'Search'}
+              </button>
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition"
+              >
+                Clear
+              </button>
+            </div>
+          </form>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

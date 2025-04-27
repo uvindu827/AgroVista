@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import ReportDetails from "./ReportDetails";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,6 +21,7 @@ function ReportsList() {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +50,10 @@ function ReportsList() {
     }
   };
 
+  const goToNewsFeed = () => {
+    navigate('/nf-management');
+  };
+
   if (loading) return (
     <div className="flex justify-center items-center h-screen bg-green-100">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
@@ -62,6 +68,18 @@ function ReportsList() {
 
   return (
     <div className="min-h-screen bg-green-50 flex flex-col items-center py-8 px-4">
+      <div className="w-full max-w-6xl flex justify-between items-center mb-6">
+        <button 
+          onClick={goToNewsFeed}
+          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+          </svg>
+          Back to NewsFeed
+        </button>
+      </div>
+      
       <h1 className="text-4xl font-bold text-yellow-600 mb-8 text-center">
         Reported Posts
       </h1>

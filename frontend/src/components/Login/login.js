@@ -32,7 +32,7 @@ export default function LoginPage() {
         } else if (user.role === "admin") {
           navigate("/users_management/"); // Navigate to buyer home page
         } else if (user.role === "tool dealer") {
-          navigate("/"); // Navigate to tool dealer home page
+          navigate("/welcome"); // Navigate to tool dealer home page
         } else if (user.role === "agricultural inspector") {
           navigate("/"); // Navigate to agricultural inspector home page
         } else if (user.role === "customer") {

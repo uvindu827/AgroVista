@@ -14,10 +14,6 @@ function AdminDashboard() {
     navigate("/nf-management");
   };
 
-  const handleNewsFeed = () => {
-    navigate("/newsfeed");
-  };
-
   const handleUsersManagement = () => {
     navigate("/users_management");
   };
@@ -41,17 +37,10 @@ function AdminDashboard() {
       </button>
 
       <button
-        onClick={handleNewsFeed}
-        className="w-full flex items-center gap-2 bg-transparent border-2 border-transparent hover:border-white text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300"
-      >
-        <LayoutGrid className="w-5 h-5" /> User Newsfeed
-      </button>
-
-      <button
         onClick={handleUsersManagement}
         className="w-full flex items-center gap-2 bg-transparent border-2 border-transparent hover:border-white text-white px-4 py-2 rounded-md text-sm font-semibold transition duration-300"
       >
-        <UserCircle2 className="w-5 h-5" /> User Management
+        <UserCircle2 className="w-5 h-5" /> Inquiries Management
       </button>
     </div>
   );

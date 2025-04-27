@@ -12,6 +12,7 @@ function UpdateNFPost() {
     image: null,
     keywords: [],
   });
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     const fetchHandler = async () => {
@@ -25,14 +26,56 @@ function UpdateNFPost() {
     fetchHandler();
   }, [id]);
 
+  const validateInputs = () => {
+    const errors = {};
+    
+    // Image validation (only for new uploads)
+    if (formData.image && formData.image instanceof File) {
+      // Check file format
+      const acceptedFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+      if (!acceptedFormats.includes(formData.image.type)) {
+        errors.image = "Image must be in JPG, PNG, GIF, WEBP, or SVG format";
+      }
+      
+      // Check file size (5MB = 5 * 1024 * 1024 bytes)
+      if (formData.image.size > 5 * 1024 * 1024) {
+        errors.image = "Image size must be less than 5MB";
+      }
+    }
+    
+    // Keywords validation - only letters, spaces, and commas
+    const keywordsString = Array.isArray(formData.keywords) ? formData.keywords.join(',') : formData.keywords;
+    if (!/^[A-Za-z\s,]+$/.test(keywordsString)) {
+      errors.keywords = "Keywords can only contain letters, spaces, and commas";
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const sendRequest = async () => {
     setLoading(true);
+    
+    // Validate inputs before submission
+    if (!validateInputs()) {
+      setLoading(false);
+      return;
+    }
+    
     try {
       const formDataToSend = new FormData();
       formDataToSend.append('title', formData.title);
       formDataToSend.append('content', formData.content);
-      formDataToSend.append('image', formData.image);
-      formData.keywords.forEach((keyword, index) => {
+      
+      if (formData.image instanceof File) {
+        formDataToSend.append('image', formData.image);
+      }
+      
+      const keywordArray = Array.isArray(formData.keywords)
+        ? formData.keywords
+        : formData.keywords.split(',').map(k => k.trim());
+          
+      keywordArray.forEach((keyword, index) => {
         formDataToSend.append(`keywords[${index}]`, keyword);
       });
 
@@ -77,6 +120,32 @@ function UpdateNFPost() {
         [name]: value,
       });
     }
+    
+    // Clear validation error when field is edited
+    if (validationErrors[name]) {
+      setValidationErrors({
+        ...validationErrors,
+        [name]: ''
+      });
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({
+        ...formData,
+        image: file,
+      });
+      
+      // Clear validation error when image is changed
+      if (validationErrors.image) {
+        setValidationErrors({
+          ...validationErrors,
+          image: ''
+        });
+      }
+    }
   };
 
   return (
@@ -99,9 +168,12 @@ function UpdateNFPost() {
               required
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-green-50 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-200 text-green-900 placeholder-green-400"
+              className={`w-full px-4 py-3 bg-green-50 border ${validationErrors.title ? 'border-red-300' : 'border-green-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-200 text-green-900 placeholder-green-400`}
               placeholder="Enter post title"
             />
+            {validationErrors.title && (
+              <p className="mt-1 text-sm text-red-600">{validationErrors.title}</p>
+            )}
           </div>
 
           {/* Content */}
@@ -124,35 +196,40 @@ function UpdateNFPost() {
           {/* Image */}
           <div className="space-y-2">
             <label htmlFor="image" className="block text-sm font-medium text-green-800">
-              Image
+              Image (JPG, PNG, GIF, WEBP, SVG under 5MB)
             </label>
             <div className="relative">
               <input
                 id="image"
                 name="image"
                 type="file"
-                accept="image/*"
-                required
-                onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
-                className="w-full px-4 py-3 bg-green-50 border border-green-200 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-yellow-400 file:text-green-900 file:font-medium hover:file:bg-yellow-300 transition-all duration-200 text-green-900"
+                accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml"
+                onChange={handleImageChange}
+                className={`w-full px-4 py-3 bg-green-50 border ${validationErrors.image ? 'border-red-300' : 'border-green-200'} rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-yellow-400 file:text-green-900 file:font-medium hover:file:bg-yellow-300 transition-all duration-200 text-green-900`}
               />
+              {validationErrors.image && (
+                <p className="mt-1 text-sm text-red-600">{validationErrors.image}</p>
+              )}
             </div>
           </div>
 
           {/* Keywords */}
           <div className="space-y-2">
             <label htmlFor="keywords" className="block text-sm font-medium text-green-800">
-              Keywords (comma-separated)
+              Keywords (comma-separated, letters only)
             </label>
             <input
               id="keywords"
               name="keywords"
               type="text"
-              value={formData.keywords}
+              value={Array.isArray(formData.keywords) ? formData.keywords.join(', ') : formData.keywords}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-green-50 border border-green-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-200 text-green-900 placeholder-green-400"
+              className={`w-full px-4 py-3 bg-green-50 border ${validationErrors.keywords ? 'border-red-300' : 'border-green-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-200 text-green-900 placeholder-green-400`}
               placeholder="e.g. news, tech, updates"
             />
+            {validationErrors.keywords && (
+              <p className="mt-1 text-sm text-red-600">{validationErrors.keywords}</p>
+            )}
           </div>
 
           {/* Action Buttons */}
