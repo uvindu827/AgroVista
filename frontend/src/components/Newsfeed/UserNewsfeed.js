@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import NFPost from "./Post";
 
@@ -28,18 +28,8 @@ function UserNewsfeed() {
     }
   }, [searchTerm]);
 
-
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (searchTerm) {
-        handleSearch();
-      }
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm]);
-
-  const handleSearch = async () => {
+  
+  const handleSearch = useCallback(async () => {
     if (!searchTerm.trim()) return;
     
     setIsSearching(true);
@@ -52,11 +42,21 @@ function UserNewsfeed() {
       setIsSearching(false);
       console.error(err);
     }
-  };
+  }, [searchTerm]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm) {
+        handleSearch();
+      }
+    }, 500);
+  
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm, handleSearch]); 
 
   const clearSearch = () => {
     setSearchTerm('');
