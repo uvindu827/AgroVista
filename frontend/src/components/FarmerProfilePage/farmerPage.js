@@ -61,7 +61,13 @@ export default function FarmerPage() {
             to="/farmer/inquiries"
             className="flex items-center gap-2 text-lg font-medium p-3 rounded-lg hover:bg-green-700 transition duration-300"
           >
-            <FaRegUser size={20} /> inquiries
+            <FaRegUser size={20} /> Inquiries
+          </Link>
+          <Link
+            to="/farmer/newsfeed"
+            className="flex items-center gap-2 text-lg font-medium p-3 rounded-lg hover:bg-green-700 transition duration-300"
+          >
+            <FaRegUser size={20} /> NewsFeed
           </Link>
         </nav>
       </aside>
