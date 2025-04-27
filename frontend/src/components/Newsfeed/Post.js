@@ -11,7 +11,7 @@ function Post({ post }) {
   return (
     <div
       onClick={handleCardClick}
-      className="bg-gradient-to-br from-green-100 via-green-200 to-green-300 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-red-500 transform hover:scale-105"
+      className="bg-white bg-opacity-20 backdrop-blur-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-green-700 transform hover:scale-105"
     >
       {post.image && (
         <div className="relative">
@@ -25,7 +25,7 @@ function Post({ post }) {
       )}
 
       <div className="p-4">
-        <h2 className="text-3xl font-semibold text-green-800 mb-2">{post.title}</h2>
+        <h2 className="text-3xl font-semibold text-white mb-2">{post.title}</h2>
         {post.description && (
           <p className="text-gray-700 text-sm mb-3">{post.description}</p>
         )}
@@ -38,7 +38,7 @@ function Post({ post }) {
             )}
           </div>
 
-          <div className="flex items-center text-red-600 text-xs">
+          <div className="flex items-center text-yellow-400 text-xs">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
@@ -46,9 +46,6 @@ function Post({ post }) {
           </div>
         </div>
       </div>
-
-      {/* Add a colorful bottom border */}
-      <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-red-600 to-red-500"></div>
     </div>
   );
 }
