@@ -2,6 +2,7 @@ import React from "react";
 
 function StaffMember({ StaffMember, onEdit, onDelete, onDownload }) {
   const {
+    employeeId,
     firstName,
     lastName,
     email,
@@ -13,6 +14,7 @@ function StaffMember({ StaffMember, onEdit, onDelete, onDownload }) {
 
   return (
     <tr className="hover:bg-yellow-50 transition-colors">
+      <td className="px-6 py-4 whitespace-nowrap text-gray-700">{employeeId}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{firstName}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{lastName}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{email}</td>

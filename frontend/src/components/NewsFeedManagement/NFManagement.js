@@ -3,15 +3,12 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import NFPost from './NFPost';
 import { useNavigate } from 'react-router-dom';
-import { Search, Plus, Flag, X, ArrowLeft } from 'lucide-react';
+import { Plus, Flag, ArrowLeft } from 'lucide-react';
 
 function NFManagement() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchId, setSearchId] = useState('');
-  const [searchLoading, setSearchLoading] = useState(false);
-  const [searchError, setSearchError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,47 +64,6 @@ function NFManagement() {
     navigate('/report_list');
   };
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    
-    if (!searchId.trim()) {
-      setSearchError('Please enter a post ID');
-      return;
-    }
-
-    setSearchLoading(true);
-    setSearchError('');
-    
-    try {
-      const response = await axios.get(`http://localhost:3000/api/newsFeed/${searchId}/getPostById`);
-      const foundPost = response.data.data;
-      
-      setPosts([foundPost]);
-      setSearchLoading(false);
-    } catch (err) {
-      console.error('Search failed:', err);
-      setSearchError(err.response?.data?.message || 'Failed to find post with this ID');
-      setSearchLoading(false);
-    }
-  };
-
-  const handleClearSearch = async () => {
-    setSearchId('');
-    setSearchError('');
-    
-    // Reset to show all posts
-    setLoading(true);
-    try {
-      const response = await axios.post('http://localhost:3000/api/newsFeed/getAllPosts');
-      setPosts(response.data.data);
-      setLoading(false);
-    } catch (err) {
-      setError('Failed to fetch posts');
-      setLoading(false);
-      console.error(err);
-    }
-  };
-
   if (loading) return <div className="text-center p-8 text-lg text-green-600">Loading posts...</div>;
   if (error) return <div className="text-center p-8 text-lg text-red-500">{error}</div>;
 
@@ -150,40 +106,6 @@ function NFManagement() {
             <h1 className="text-4xl font-extrabold text-green-700">
               News Feed Management
             </h1>
-
-            {/* Search Bar - Right Corner */}
-            <div className="relative">
-              <form onSubmit={handleSearch} className="flex items-center">
-                <input
-                  type="text"
-                  value={searchId}
-                  onChange={(e) => setSearchId(e.target.value)}
-                  placeholder="Search by Post ID"
-                  className="w-64 px-4 py-2 pr-20 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
-                <div className="absolute right-0 flex">
-                  <button
-                    type="submit"
-                    disabled={searchLoading}
-                    className="p-2 text-green-600 hover:text-green-800"
-                    title="Search"
-                  >
-                    <Search size={20} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleClearSearch}
-                    className="p-2 text-gray-500 hover:text-gray-700"
-                    title="Clear search"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-              </form>
-              {searchError && (
-                <p className="absolute text-red-500 text-sm mt-1">{searchError}</p>
-              )}
-            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

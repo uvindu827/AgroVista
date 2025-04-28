@@ -14,9 +14,6 @@ function ReportDetails({ report, onResolve }) {
 
   return (
     <tr className="hover:bg-green-50 transition-colors">
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-green-900 font-semibold">
-        {report.postID}
-      </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-green-700 max-w-xs truncate">
         {report.reason}
       </td>

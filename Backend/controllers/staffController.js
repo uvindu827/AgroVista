@@ -35,7 +35,7 @@ export const addStaffMember = async (req, res) => {
     )
       return res.status(404).json({ message: "Missing required fields" });
 
-    const newStafffMember = new staff({
+    const newStaffMember = new staff({
       firstName,
       lastName,
       email,
@@ -45,18 +45,19 @@ export const addStaffMember = async (req, res) => {
       basicSalary,
     });
 
-    await newStafffMember.save();
+    await newStaffMember.save();
 
     res.status(200).json({
       data: {
-        id: newStafffMember._id,
-        firstName: newStafffMember.firstName,
-        lastName: newStafffMember.lastName,
-        email: newStafffMember.email,
-        phoneNumber: newStafffMember.phoneNumber,
-        address: newStafffMember.address,
-        jobTitle: newStafffMember.jobTitle,
-        basicSalary: newStafffMember.basicSalary,
+        id: newStaffMember._id,
+        employeeId: newStaffMember.employeeId, // Include the auto-incremented employeeId
+        firstName: newStaffMember.firstName,
+        lastName: newStaffMember.lastName,
+        email: newStaffMember.email,
+        phoneNumber: newStaffMember.phoneNumber,
+        address: newStaffMember.address,
+        jobTitle: newStaffMember.jobTitle,
+        basicSalary: newStaffMember.basicSalary,
       },
     });
   } catch (error) {
@@ -68,10 +69,11 @@ export const addStaffMember = async (req, res) => {
 export const getStaff = async (req, res) => {
   try {
     const staffMembers = await staff.find({});
-
+    
     res.status(200).json({
       staff: staffMembers.map((members) => ({
         id: members._id,
+        employeeId: members.employeeId, // Added employeeId to the response
         firstName: members.firstName,
         lastName: members.lastName,
         email: members.email,
@@ -179,12 +181,10 @@ export const deleteStaffMember = async (req, res) => {
 
 export const findStaffMemberById = async (req, res) => {
   try {
-    const memberId = req.params.id;
+    const employeeId = req.params.id;
 
-    if (!mongoose.Types.ObjectId.isValid(memberId))
-      return res.status(400).json({ message: "Invalid member Id!" });
-
-    const foundMember = await staff.findById(memberId);
+    // Search by employeeId instead of _id
+    const foundMember = await staff.findOne({ employeeId: employeeId });
 
     if (!foundMember)
       return res.status(400).json({ message: "Staff member not found!" });
@@ -201,6 +201,7 @@ export const findStaffMemberById = async (req, res) => {
     res.status(200).json({
       data: {
         id: foundMember._id,
+        employeeId: foundMember.employeeId,
         firstName: foundMember.firstName,
         lastName: foundMember.lastName,
         email: foundMember.email,
