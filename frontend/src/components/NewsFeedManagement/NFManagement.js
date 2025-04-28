@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import NFPost from './NFPost';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Flag, X, ArrowLeft } from 'lucide-react';
@@ -40,11 +41,20 @@ function NFManagement() {
   const handleDeletePost = async (postId) => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
 
+    // Show loading toast
+    const loadingToastId = toast.loading('Deleting post...');
+
     try {
       await axios.delete(`http://localhost:3000/api/newsFeed/${postId}`);
+      // Update local state to remove the deleted post
       setPosts((prev) => prev.filter((post) => post.id !== postId));
+      
+      // Replace loading toast with success toast
+      toast.success('Post deleted successfully!', { id: loadingToastId });
     } catch (err) {
       console.error('Delete failed:', err);
+      // Replace loading toast with error toast
+      toast.error(err.response?.data?.message || 'Failed to delete post', { id: loadingToastId });
       setError('Failed to delete post');
     }
   };

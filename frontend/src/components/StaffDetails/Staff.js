@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";  // Import back icon from react-icons
 import StaffMember from "../StaffMember/StaffMember";
@@ -39,17 +40,46 @@ function Staff() {
   };
 
   const handleDelete = async (employeeId) => {
-    if (!window.confirm("Are you sure you want to delete this employee?")) {
+    // Find the employee name to include in the confirmation message
+    const employeeToDelete = staff.find(member => member.id === employeeId);
+    const employeeName = employeeToDelete ? 
+      `${employeeToDelete.firstName} ${employeeToDelete.lastName}` : 
+      'this employee';
+
+    if (!window.confirm(`Are you sure you want to delete ${employeeName}?`)) {
+      toast.dismiss();
+      toast('Deletion cancelled', {
+        icon: '❌',
+        duration: 2000
+      });
       return;
     }
+
+    // Show loading toast
+    const loadingToastId = toast.loading(`Deleting ${employeeName}...`);
 
     try {
       await axios.delete(
         `http://localhost:3000/api/staff/${employeeId}/deleteStaffMember`
       );
+      
+      // Update local state to remove the deleted employee
       setStaff((prev) => prev.filter((member) => member.id !== employeeId));
+      
+      // Show success toast
+      toast.success(`${employeeName} has been deleted successfully`, {
+        id: loadingToastId,
+        duration: 3000
+      });
     } catch (err) {
       console.error("Delete failed:", err);
+      
+      // Show error toast with more specific message if available
+      toast.error(err.response?.data?.message || `Failed to delete ${employeeName}`, {
+        id: loadingToastId,
+        duration: 4000
+      });
+      
       setError("Failed to delete employee");
     }
   };
@@ -120,7 +150,7 @@ function Staff() {
           className="inline-flex items-center text-green-600 hover:text-green-800"
         >
           <IoArrowBack className="mr-2" />
-          Back to Newsfeed Management
+          Back
         </button>
       </div>
 
