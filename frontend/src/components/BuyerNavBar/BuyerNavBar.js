@@ -34,9 +34,9 @@ function BuyerNavBar() {
         <Link to="/manage-purchases" className="flex items-center space-x-2 hover:text-yellow-400">
           <FaList /> <span>MANAGE PURCHASES</span>
         </Link>
-        {/*<Link to="/profile" className="flex items-center space-x-2 hover:text-yellow-400">
-          <FaUser /> <span>PROFILE</span>
-        </Link>*/}
+        <Link to="/newsfeed" className="flex items-center space-x-2 hover:text-yellow-400">
+          <FaUser /> <span>NEWS FEED</span>
+        </Link>*
       </nav>
 
       {/* Logout Button at Bottom */}

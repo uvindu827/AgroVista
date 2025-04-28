@@ -178,7 +178,7 @@ function Cart() {
   if (products.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-green-300 text-center text-xl font-bold text-green-900">
-        Your cart is empty! Continue shopping to add products to your cart.
+        Your cart is empty or You removed product! Continue shopping to add products to your cart.
       </div>
     );
   }

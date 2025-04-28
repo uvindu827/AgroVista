@@ -281,7 +281,7 @@ function BuyerInventoryList() {
                   </div>
                   <div className="p-4">
                     <h3 className="text-lg font-semibold text-gray-800 mb-1 truncate">{item.productName}</h3>
-                    <p className="text-gray-600 text-xs mb-1">Price: ${item.price} per KG</p>
+                    <p className="text-gray-600 text-xs mb-1">Price: Rs.{item.price} per KG</p>
                     <p className="text-gray-600 text-xs mb-1">Stock: {item.stock} KG</p>
                     <p className="text-gray-600 text-xs mb-1">
                       Manufacture: {new Date(item.manufactureDate).toLocaleDateString()}
