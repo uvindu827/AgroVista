@@ -14,7 +14,6 @@ function BuyersList() {
   const location = useLocation();
 
   const customerId = location.state?.customerId || localStorage.getItem('ID');
-
   const defaultImage = 'https://img.freepik.com/free-vector/watercolor-farmers-market-illustration_23-2149346024.jpg?ga=GA1.1.2109057015.1744744570&semt=ais_hybrid&w=740';
 
   const fetchBuyers = useCallback(async () => {
@@ -50,13 +49,38 @@ function BuyersList() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-100 to-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-green-900 sm:text-5xl animate-fade-in">
-            Buyers List
-          </h1>
-          <p className="mt-3 text-lg text-green-800 animate-fade-in-up">
-            Connect with our trusted buyers.
-          </p>
+        <div className="flex justify-between items-center mb-12">
+          {/* Left section with Back button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-200"
+            aria-label="Go back"
+          >
+            <ChevronLeft className="h-5 w-5 mr-1" />
+            Profile
+          </button>
+
+          {/* Center Title */}
+          <div className="text-center">
+            <h1 className="text-4xl font-extrabold text-green-900 sm:text-5xl animate-fade-in">
+              Buyers List
+            </h1>
+            <p className="mt-3 text-lg text-green-800 animate-fade-in-up">
+              Connect with our trusted buyers.
+            </p>
+          </div>
+
+          {/* Right section with Logout button */}
+          <button
+            onClick={() => {
+              localStorage.removeItem('ID');
+              navigate('/');
+            }}
+            className="flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200"
+            aria-label="Logout"
+          >
+            Logout
+          </button>
         </div>
 
         <div className="relative mb-10 max-w-2xl mx-auto">
@@ -142,8 +166,7 @@ function BuyersList() {
                     >
                       View Inventory
                     </button>
-
-                    </div>
+                  </div>
                 </div>
               ))}
             </div>

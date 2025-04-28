@@ -72,7 +72,7 @@ function ChartDashboard() {
       labels: productNames, 
       datasets: [{ 
         data: stock, 
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'], 
+        backgroundColor: ['#6B4F2D', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'], 
       }] 
     }; 
   }; 
@@ -104,7 +104,7 @@ function ChartDashboard() {
       labels: ['Expiring Soon (<= 30 days)', 'Expiring in 3 Months (31-90 days)', 'Expiring Later (> 90 days)'], 
       datasets: [{ 
         data: [expiringSoon, expiringInThreeMonths, expiringLater], 
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], 
+        backgroundColor: ['#FF9800', '#36A2EB', '#FFCE56'], 
       }] 
     }; 
   }; 
@@ -136,7 +136,7 @@ function ChartDashboard() {
       labels: ['Manufactured in Last 6 Months', 'Manufactured in Last Year', 'Manufactured Earlier'], 
       datasets: [{ 
         data: [manufacturedInLastSixMonths, manufacturedInLastYear, manufacturedEarlier], 
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'], 
+        backgroundColor: ['#FF9800', '#36A2EB', '#FFCE56'], 
       }] 
     }; 
   }; 
@@ -153,7 +153,7 @@ function ChartDashboard() {
       labels: Object.keys(categoryCounts), 
       datasets: [{ 
         data: Object.values(categoryCounts), 
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'], 
+        backgroundColor: ['#FF9800', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'], 
       }] 
     }; 
   }; 

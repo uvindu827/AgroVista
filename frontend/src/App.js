@@ -23,6 +23,9 @@ import CustomerPaymentPage from "./components/CustomerPaymentPage/CustomerPaymen
 import OrderSuccessPage from "./components/OrderSuccessPage/OrderSuccessPage";
 import BuyerOrders from "./components/BuyerOrders/BuyerOrders";
 import ChartDashboard from "./components/ChartDashboard/ChartDashboard";
+import PaymentDetails from "./components/PaymentDetails/PaymentDetails";
+import Header from "./components/Header/Header"; 
+
 
 function App() {
   return (
@@ -51,6 +54,8 @@ function App() {
           <Route path="/ordersuccess" element={<OrderSuccessPage />} />
           <Route path="/manage-purchases" element={<BuyerOrders />} />
           <Route path="/dashboard" element={<ChartDashboard />} />
+          <Route path="/manage-sales" element={<PaymentDetails />} />
+          <Route path="/manage-sales" element={<Header />} />
 
           
           
