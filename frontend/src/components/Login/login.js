@@ -3,6 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
+import Header from "../Header/Header";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -52,6 +53,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Header />
       <div className="flex-grow flex justify-center items-center bg-cover bg-center relative overflow-hidden">
         {/* Background with overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-green-900/70 to-green-800/70 z-10"></div>

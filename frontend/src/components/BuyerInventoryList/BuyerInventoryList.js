@@ -15,6 +15,7 @@ function BuyerInventoryList() {
   const [sortOrder, setSortOrder] = useState('desc');
   const [isLoading, setIsLoading] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState(null);
+  
 
   const navigate = useNavigate();
   const { buyerId } = useParams();
@@ -195,6 +196,7 @@ function BuyerInventoryList() {
       <div className="flex-1 p-6 max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-12">
           <h2 className="text-4xl font-extrabold text-green-900 text-center">Product List</h2>
+          
           <button
             onClick={handleViewCart}
             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-all duration-200"
