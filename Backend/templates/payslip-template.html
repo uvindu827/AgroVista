@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Employee Payslip</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans text-gray-800 m-0 p-0 box-border" style="width: 210mm;">
+    <div class="max-w-4xl mx-auto p-6 box-border">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-3xl font-bold text-blue-600 m-0">PAYSLIP</h1>
+            <img src="{{companyLogo}}" alt="Company Logo" class="w-32 h-auto">
+        </div>
+        <hr class="border-gray-300 my-4">
+        
+        <!-- Company Info -->
+        <div class="text-center mb-6">
+            <h2 class="text-2xl font-bold">AgroVista</h2>
+            <p class="my-1">123 Kaduwela Road, Malabe, SriLanka</p>
+            <p class="my-1">Phone: +94-114-567-890 | Email: hr@agrovista.com</p>
+        </div>
+        
+        <!-- Payslip Info -->
+        <div class="mb-6">
+            <table class="w-full border-collapse mb-4">
+                <tr class="bg-gray-100">
+                    <th class="p-2 text-left border-b border-gray-300">Pay Period</th>
+                    <th class="p-2 text-left border-b border-gray-300">Issue Date</th>
+                    <th class="p-2 text-left border-b border-gray-300">Employee ID</th>
+                </tr>
+                <tr>
+                    <td class="p-2 border-b border-gray-200">{{payPeriod}}</td>
+                    <td class="p-2 border-b border-gray-200">{{issueDate}}</td>
+                    <td class="p-2 border-b border-gray-200">{{employeeId}}</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Employee Details -->
+        <div class="mb-6">
+            <h3 class="text-lg font-bold mt-0 mb-2 pb-1 border-b border-gray-300">Employee Details</h3>
+            <table class="w-full border-collapse mb-4 table-fixed">
+                <tr>
+                    <th class="w-1/5 p-2 text-left bg-gray-100 border-b border-gray-300">Name</th>
+                    <td class="w-3/10 p-2 border-b border-gray-200">{{employeeName}}</td>
+                    <th class="w-1/5 p-2 text-left bg-gray-100 border-b border-gray-300">Job Title</th>
+                    <td class="w-3/10 p-2 border-b border-gray-200">{{jobTitle}}</td>
+                </tr>
+                <tr>
+                    <th class="w-1/5 p-2 text-left bg-gray-100 border-b border-gray-300">Email</th>
+                    <td class="w-3/10 p-2 border-b border-gray-200">{{email}}</td>
+                    <th class="w-1/5 p-2 text-left bg-gray-100 border-b border-gray-300">Phone</th>
+                    <td class="w-3/10 p-2 border-b border-gray-200">{{phoneNumber}}</td>
+                </tr>
+                <tr>
+                    <th class="w-1/5 p-2 text-left bg-gray-100 border-b border-gray-300">Address</th>
+                    <td class="p-2 border-b border-gray-200" colspan="3">{{address}}</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Salary Details -->
+        <div class="mb-6">
+            <h3 class="text-lg font-bold mt-0 mb-2 pb-1 border-b border-gray-300">Salary Details</h3>
+            <table class="w-full border-collapse mb-4 table-fixed">
+                <tr>
+                    <th class="w-3/4 p-2 text-left bg-gray-100 border-b border-gray-300">Description</th>
+                    <th class="w-1/4 p-2 text-right bg-gray-100 border-b border-gray-300">Amount</th>
+                </tr>
+                <tr>
+                    <td class="p-2 border-b border-gray-200">Basic Salary</td>
+                    <td class="p-2 text-right border-b border-gray-200">{{basicSalary}}</td>
+                </tr>
+                <tr>
+                    <td class="p-2 border-b border-gray-200">Gross Salary</td>
+                    <td class="p-2 text-right border-b border-gray-200">{{grossSalary}}</td>
+                </tr>
+            </table>
+            
+            <h3 class="text-lg font-bold mt-4 mb-2 pb-1 border-b border-gray-300">Deductions</h3>
+            <table class="w-full border-collapse mb-4 table-fixed">
+                <tr>
+                    <th class="w-3/4 p-2 text-left bg-gray-100 border-b border-gray-300">Description</th>
+                    <th class="w-1/4 p-2 text-right bg-gray-100 border-b border-gray-300">Amount</th>
+                </tr>
+                <tr>
+                    <td class="p-2 border-b border-gray-200">EPF Employee Contribution (8%)</td>
+                    <td class="p-2 text-right border-b border-gray-200">{{deductions.epfEmployee}}</td>
+                </tr>
+                <tr class="bg-gray-50 font-bold">
+                    <td class="p-2 border-b border-gray-200">Total Deductions</td>
+                    <td class="p-2 text-right border-b border-gray-200">{{deductions.epfEmployee}}</td>
+                </tr>
+            </table>
+            
+            <h3 class="text-lg font-bold mt-4 mb-2 pb-1 border-b border-gray-300">Employer Contributions</h3>
+            <table class="w-full border-collapse mb-4 table-fixed">
+                <tr>
+                    <th class="w-3/4 p-2 text-left bg-gray-100 border-b border-gray-300">Description</th>
+                    <th class="w-1/4 p-2 text-right bg-gray-100 border-b border-gray-300">Amount</th>
+                </tr>
+                <tr>
+                    <td class="p-2 border-b border-gray-200">EPF Employer Contribution (12%)</td>
+                    <td class="p-2 text-right border-b border-gray-200">{{contributions.epfEmployer}}</td>
+                </tr>
+                <tr>
+                    <td class="p-2 border-b border-gray-200">ETF (3%)</td>
+                    <td class="p-2 text-right border-b border-gray-200">{{contributions.etf}}</td>
+                </tr>
+                <tr class="bg-gray-50 font-bold">
+                    <td class="p-2 border-b border-gray-200">Total Employer Contributions</td>
+                    <td class="p-2 text-right border-b border-gray-200">{{totalEmployerContributions}}</td>
+                </tr>
+            </table>
+            
+            <h3 class="text-lg font-bold mt-4 mb-2 pb-1 border-b border-gray-300">Net Salary</h3>
+            <table class="w-full border-collapse mb-4 table-fixed">
+                <tr class="bg-gray-50 font-bold">
+                    <td class="w-3/4 p-2 border-b border-gray-200">Net Pay</td>
+                    <td class="w-1/4 p-2 text-right border-b border-gray-200">{{netSalary}}</td>
+                </tr>
+            </table>
+        </div>
+        
+        <!-- Footer -->
+        <div class="mt-10 text-center text-sm text-gray-500">
+            <p>This is a computer-generated document and does not require a signature.</p>
+            <p>For any salary queries, please contact the HR department.</p>
+        </div>
+    </div>
+</body>
+</html>
