@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import {useNavigate} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function PostDetails() {
   const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [summary, setSummary] = useState("");
+  const [summarizing, setSummarizing] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,9 +16,13 @@ function PostDetails() {
         const response = await fetch(
           `http://localhost:3000/api/newsFeed/${postId}/getPostById`
         );
+        if (!response.ok) {
+          throw new Error("Failed to fetch post details");
+        }
         const data = await response.json();
         setPost(data.data);
       } catch (err) {
+        console.error("Error fetching post:", err);
         setError("Failed to load post details.");
       } finally {
         setLoading(false);
@@ -27,54 +32,147 @@ function PostDetails() {
     fetchPostDetails();
   }, [postId]);
 
-  const handleUpvotePost = (e) => {
-    e.stopPropagation();
-    console.log("Upvote clicked for post:", post.id);
-  };
-
   const handleReportPost = (e) => {
     e.stopPropagation();
     navigate(`/postReport/${postId}`);
   };
 
-  if (loading) return <div className="text-center mt-20 text-lg font-semibold">Loading...</div>;
-  if (error) return <div className="text-center mt-20 text-red-600">{error}</div>;
+  const handleBackToFeed = () => {
+    navigate("/newsFeed"); // Navigate back to the news feed
+  };
+
+  const handleSummarizePost = async () => {
+    if (!post?.content || summarizing) return;
+    
+    setSummarizing(true);
+    try {
+      console.log("Sending content for summarization:", post.content.substring(0, 100) + "...");
+      
+      const response = await fetch("http://localhost:3000/api/newsFeed/summarize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          text: post.content
+        })
+      });
+      
+      const data = await response.json();
+      console.log("Summarization response:", data);
+      
+      if (data.success && data.summary) {
+        setSummary(data.summary);
+      } else {
+        throw new Error(data.error || "No summary returned");
+      }
+    } catch (err) {
+      console.error("Summarization failed:", err);
+      setSummary(`Failed to generate summary: ${err.message}`);
+    } finally {
+      setSummarizing(false);
+    }
+  };
+
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-screen bg-slate-50">
+      <div className="text-center p-8 rounded-lg bg-white shadow-md">
+        <div className="w-16 h-16 border-4 border-slate-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-lg font-medium text-slate-800">Loading post details...</p>
+      </div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="flex items-center justify-center min-h-screen bg-red-50">
+      <div className="text-center p-8 rounded-lg bg-white shadow-md border-l-4 border-red-500">
+        <p className="text-xl text-red-600 font-medium">{error}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="mt-4 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-md transition duration-300"
+        >
+          Try Again
+        </button>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="max-w-3xl mx-auto p-6 mt-10 bg-white rounded-2xl shadow-lg border border-gray-100">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800">Post Details</h1>
-      <div className="rounded-xl overflow-hidden">
-        <img
-          src={post.image}
-          alt={post.title}
-          className="w-full h-60 object-cover"
-        />
-      </div>
-
-      <div className="mt-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-700">Title:</h2>
-        <p className="text-lg text-gray-800">{post?.title || "N/A"}</p>
-
-        <h2 className="text-xl font-semibold text-gray-700">Content:</h2>
-        <p className="text-gray-700 leading-relaxed">{post?.content || "N/A"}</p>
-
-        <h2 className="text-xl font-semibold text-gray-700">Upvotes:</h2>
-        <p className="text-gray-700">{post?.upvoteCount ?? "N/A"}</p>
-      </div>
-
-      <div className="flex justify-end gap-4 mt-8">
-        <button
-          onClick={handleUpvotePost}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition duration-300 shadow-md"
-        >
-          👍 Upvote
-        </button>
-        <button
-          onClick={handleReportPost}
-          className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-medium transition duration-300 shadow-md"
-        >
-          🚩 Report
-        </button>
+    <div className="bg-gradient-to-b from-slate-900 to-slate-800 min-h-screen pb-12">
+      {/* Header */}
+      <header className="bg-slate-900 py-5">
+        <div className="max-w-4xl mx-auto px-4 flex items-center justify-between">
+          <button 
+            onClick={handleBackToFeed}
+            className="flex items-center text-white hover:text-blue-300 transition duration-300"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Feed
+          </button>
+          <h1 className="text-2xl md:text-3xl font-bold text-white">Post Details</h1>
+          <div className="w-24"></div> {/* Empty div for balance */}
+        </div>
+      </header>
+  
+      {/* Post Details Card */}
+      <div className="max-w-4xl mx-auto mt-8 px-4 ">
+        <div className="bg-white bg-opacity-60 backgrop-blur-lg rounded-2xl shadow-lg overflow-hidden border border-slate-100">
+          {/* Title Section */}
+          <div className="p-6 md:p-8 bg-white bg-opacity-60 backgrop-blur-lg">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-800">{post?.title || "N/A"}</h2>
+          </div>
+  
+          {/* Image Section */}
+          <div className="relative h-64 md:h-80 overflow-hidden">
+            <img
+              src={post?.image}
+              alt={post?.title || "Post image"}
+              className="w-full h-full object-cover"
+            />
+          </div>
+  
+          {/* Content Section */}
+          <div className="p-6 md:p-8 mt-6"> {/* Added margin-top */}
+            <div className="prose max-w-none">
+              <p className="text-gray-950 leading-relaxed whitespace-pre-line">{post?.content || "No content available"}</p>
+            </div>
+  
+            {/* Summary Section */}
+            {summary && (
+              <div className="mt-8">
+                <h3 className="flex items-center text-xl font-semibold text-teal-800 mb-3">
+                  <span className="mr-2">📝</span> Summary
+                </h3>
+                <div className="bg-white p-5 rounded-xl border-4 border-teal-600">
+                  <p className="italic text-gray-700">{summary}</p>
+                </div>
+              </div>
+            )}
+  
+            {/* Action Buttons */}
+            <div className="flex flex-wrap justify-end gap-4 mt-8">
+              <button
+                onClick={handleSummarizePost}
+                disabled={summarizing}
+                className={`flex items-center bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-lg font-medium transition duration-300 shadow ${
+                  summarizing ? "opacity-60 cursor-not-allowed" : ""
+                }`}
+              >
+                <span className="mr-2">📝</span>
+                {summarizing ? "Summarizing..." : "Summarize"}
+              </button>
+              <button
+                onClick={handleReportPost}
+                className="flex items-center bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg font-medium transition duration-300 shadow"
+              >
+                <span className="mr-2">🚩</span>
+                Report
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
