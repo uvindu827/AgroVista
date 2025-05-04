@@ -28,7 +28,7 @@ function BuyerNavBar() {
         <Link to="/manage-products" className="flex items-center space-x-2 hover:text-yellow-400">
           <BsBoxSeam /> <span>MANAGE PRODUCTS</span>
         </Link>
-        <Link to="/manage-sales" className="flex items-center space-x-2 hover:text-yellow-400">
+        <Link to="/items" className="flex items-center space-x-2 hover:text-yellow-400">
           <FaShoppingCart /> <span>MANAGE SALES</span>
         </Link>
         <Link to="/manage-purchases" className="flex items-center space-x-2 hover:text-yellow-400">
