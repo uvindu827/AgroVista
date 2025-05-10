@@ -53,6 +53,35 @@ function Staff() {
     }
   };
 
+  const handleDownloadPayslip = async (employeeId) => {
+    const payPeriod = prompt("Enter pay period (e.g., April-2024):");
+    if (!payPeriod) return;
+  
+    try {
+      
+      const generateResponse = await axios.post(
+        `http://localhost:3000/api/staff/${employeeId}/payslip`,
+        { payPeriod }
+      );
+      
+      const downloadUrl = `http://localhost:3000${generateResponse.data.data.downloadPath}`;
+            
+      const response = await fetch(downloadUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = generateResponse.data.data.employeeName + '_' + payPeriod + '.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    
+    } catch (error) {
+      console.error("Download error:", error);
+      alert(error.response?.data?.error || "Failed to download payslip");
+    }
+  };
+
   if (loading) return <div className="p-4 text-green-600">Loading...</div>;
   if (error) return <div className="p-4 text-yellow-700">Error: {error}</div>;
 
@@ -137,6 +166,7 @@ function Staff() {
                   StaffMember={member}
                   onEdit={() => handleEdit(member.id)}
                   onDelete={() => handleDelete(member.id)}
+                  onDownload={() => handleDownloadPayslip(member.id)}
                 />
               ))}
             </tbody>
