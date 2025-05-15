@@ -29,8 +29,7 @@ import ScrollToTop from "./components/ScrollToTop";
 
 import BHomePage from "./components/FarmerProductOverview/bhomePage";
 import ProductOverview from "./components/FarmerProductOverview/productOverview";
-import PurchasePage from "./components/FarmerProductOverview/purchasePage";
-import cartFunction from "./utils/cartFunction";
+
 import UserManagementDashboard from "./components/UsersManagement/UserManagementDashboard";
 import BuyerNavBar from "./components/BuyerNavBar/BuyerNavBar";
 
