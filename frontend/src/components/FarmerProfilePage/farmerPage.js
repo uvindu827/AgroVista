@@ -59,6 +59,12 @@ export default function FarmerPage() {
     </Link>
   );
 
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
@@ -88,6 +94,12 @@ export default function FarmerPage() {
             icon={<FaRegUser size={20} />} 
             label="NewsFeed" 
           />
+          <button
+            onClick={handleLogout}
+            className="mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+          >
+            Log Out
+          </button>
         </nav>
       </aside>
 
