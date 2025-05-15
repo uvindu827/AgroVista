@@ -28,7 +28,6 @@ export default function ProductOverview() {
   return (
     <div className="min-h-screen flex flex-col bg-white text-gray-800">
       <Header />
-
       <main className="flex-grow px-4 py-8 flex justify-center items-center">
         {loadingStatus === "loading" && (
           <div className="w-16 h-16 border-b-4 border-blue-500 rounded-full animate-spin"></div>
@@ -47,7 +46,7 @@ export default function ProductOverview() {
 
             {/* Right: Details */}
             <div className="md:w-1/2 w-full flex flex-col gap-4">
-              <h1 className="text-3xl font-bold text-blue-600">
+              <h1 className="text-3xl font-bold text-green-800">
                 {product.name}
               </h1>
               <h2 className="text-xl text-gray-700">
@@ -71,7 +70,7 @@ export default function ProductOverview() {
                     toast.success("Added to Cart");
                     console.log(loadCart());
                   }}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg transition duration-200"
+                  className="w-full bg-green-800 hover:bg-green-900 text-white py-3 rounded-lg text-lg transition duration-200"
                 >
                   Add to Cart
                 </button>

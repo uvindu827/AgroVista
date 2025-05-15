@@ -75,25 +75,25 @@ export default function FarmerPage() {
         </h1>
 
         <nav className="flex flex-col space-y-4">
-          <NavLink 
-            to="orders" 
-            icon={<FaRegBookmark size={20} />} 
-            label="Orders" 
+          <NavLink
+            to="/farmer/orders"
+            icon={<FaRegBookmark size={20} />}
+            label="Orders"
           />
-          <NavLink 
-            to="items" 
-            icon={<MdOutlineSpeaker size={20} />} 
-            label="Items" 
+          <NavLink
+            to="/farmer/items"
+            icon={<MdOutlineSpeaker size={20} />}
+            label="Items"
           />
-          <NavLink 
-            to="inquiries" 
-            icon={<FaRegUser size={20} />} 
-            label="Inquiries" 
+          <NavLink
+            to="/farmer/inquiries"
+            icon={<FaRegUser size={20} />}
+            label="Inquiries"
           />
-          <NavLink 
-            to="/newsfeed" 
-            icon={<FaRegUser size={20} />} 
-            label="NewsFeed" 
+          <NavLink
+            to="/newsfeed"
+            icon={<FaRegUser size={20} />}
+            label="NewsFeed"
           />
           <button
             onClick={handleLogout}
@@ -120,10 +120,10 @@ export default function FarmerPage() {
         {userValidated && (
           <div className="mt-6">
             <Routes>
-              <Route path="/items" element={<FarmerItemsPage />} />
-              <Route path="/items/edit" element={<UpdateItemPage />} />
-              <Route path="/items/add" element={<AddItemPage />} />
-              <Route path="/inquiries" element={<InquiriesPage />} />
+              <Route path="items" element={<FarmerItemsPage />} />
+              <Route path="items/edit" element={<UpdateItemPage />} />
+              <Route path="items/add" element={<AddItemPage />} />
+              <Route path="inquiries" element={<InquiriesPage />} />
             </Routes>
           </div>
         )}

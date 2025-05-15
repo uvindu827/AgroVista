@@ -25,18 +25,21 @@ import Login from "./components/Login/login";
 import BuyerUpdateProducts from "./components/BuyerUpdateProducts/BuyerUpdateProducts";
 import Test from "./components/Test/Testingp4";
 import FarmerPage from "./components/FarmerProfilePage/farmerPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 import BHomePage from "./components/FarmerProductOverview/bhomePage";
 import ProductOverview from "./components/FarmerProductOverview/productOverview";
 import PurchasePage from "./components/FarmerProductOverview/purchasePage";
 import cartFunction from "./utils/cartFunction";
 import UserManagementDashboard from "./components/UsersManagement/UserManagementDashboard";
+import BuyerNavBar from "./components/BuyerNavBar/BuyerNavBar";
 
 function App() {
   return (
     <div>
       <React.Fragment>
         <Toaster position="top-right" />
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/buyerHome" element={<BuyerHomePage />} />
@@ -67,6 +70,7 @@ function App() {
           <Route path="/*" element={<BHomePage />} />
           <Route path="/product/:key" element={<ProductOverview />} />
           <Route path="/cart" element={<cartFunction />} />
+          <Route path="/dashboard" element={<BuyerNavBar />} />
         </Routes>
       </React.Fragment>
     </div>
