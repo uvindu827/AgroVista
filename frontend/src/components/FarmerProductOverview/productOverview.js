@@ -58,7 +58,8 @@ export default function ProductOverview() {
               Rs. {product.price?.toFixed(2)}
             </p>
             <div className="text-sm text-gray-600">
-              <span className="font-medium">Dimensions:</span> {product.dimensions}
+              <span className="font-medium">Dimensions:</span>{" "}
+              {product.dimensions}
             </div>
 
             {/* Add to Cart Button */}
