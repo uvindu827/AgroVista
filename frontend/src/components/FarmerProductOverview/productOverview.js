@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import ImageSlider from "../../components/ImageSlider/imageSlider";
 import { addToCart, loadCart } from "../../utils/cartFunction";
 import toast from "react-hot-toast";
+import Header from "../../components/Header.jsx";
+import Footer from "../../components/Footer.jsx";
 
 export default function ProductOverview() {
   const { key } = useParams();
@@ -24,64 +26,62 @@ export default function ProductOverview() {
   }, [key]);
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center p-4">
-      {loadingStatus === "loading" && (
-        <div className="flex justify-center items-center">
-          <div className="w-16 h-16 border-b-4 border-accent rounded-full animate-spin"></div>
-        </div>
-      )}
+    <div className="min-h-screen flex flex-col bg-white text-gray-800">
+      <Header />
 
-      {loadingStatus === "loaded" && (
-        <div className="w-full max-w-6xl flex flex-col md:flex-row items-center gap-8">
-          {/* Product Name for Mobile */}
-          <h1 className="text-2xl font-bold text-accent my-4 md:hidden text-center">
-            {product.name}
-          </h1>
+      <main className="flex-grow px-4 py-8 flex justify-center items-center">
+        {loadingStatus === "loading" && (
+          <div className="w-16 h-16 border-b-4 border-blue-500 rounded-full animate-spin"></div>
+        )}
 
-          {/* Image Slider */}
-          <div className="w-full md:w-1/2">
-            <ImageSlider images={product.image} />
-          </div>
+        {loadingStatus === "error" && (
+          <h1 className="text-3xl font-bold text-red-500">Error Occurred</h1>
+        )}
 
-          {/* Product Details */}
-          <div className="w-full md:w-1/2 flex flex-col items-center md:items-start gap-4">
-            <h1 className="hidden md:block text-3xl font-bold text-accent">
-              {product.name}
-            </h1>
-            <h2 className="text-xl font-semibold text-gray-800">
-              {product.category} Category
-            </h2>
-            <p className="text-gray-700 text-center md:text-left">
-              {product.description}
-            </p>
-            <p className="text-2xl text-green-600 font-bold">
-              Rs. {product.price?.toFixed(2)}
-            </p>
-            <div className="text-sm text-gray-600">
-              <span className="font-medium">Dimensions:</span>{" "}
-              {product.dimensions}
+        {loadingStatus === "loaded" && (
+          <div className="w-full max-w-6xl flex flex-col md:flex-row gap-10 bg-white rounded-xl shadow-lg p-6">
+            {/* Left: Image */}
+            <div className="md:w-1/2 w-full">
+              <ImageSlider images={product.image} />
             </div>
 
-            {/* Add to Cart Button */}
-            <button
-              onClick={() => {
-                addToCart(product.key, 1);
-                toast.success("Added to Cart");
-                console.log(loadCart());
-              }}
-              className="mt-4 bg-accent hover:bg-accent-dark transition-all text-white font-semibold px-6 py-3 rounded-lg"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      )}
+            {/* Right: Details */}
+            <div className="md:w-1/2 w-full flex flex-col gap-4">
+              <h1 className="text-3xl font-bold text-blue-600">
+                {product.name}
+              </h1>
+              <h2 className="text-xl text-gray-700">
+                {product.category} Category
+              </h2>
+              <p className="text-gray-600">{product.description}</p>
 
-      {loadingStatus === "error" && (
-        <div className="flex justify-center items-center">
-          <h1 className="text-3xl font-bold text-red-500">Error Occurred</h1>
-        </div>
-      )}
+              <p className="text-2xl font-semibold text-green-600">
+                ₹{product.price?.toFixed(2)}
+              </p>
+
+              <div className="text-sm text-gray-500">
+                <span className="font-medium">Dimensions:</span>{" "}
+                {product.dimensions}
+              </div>
+
+              <div className="mt-4">
+                <button
+                  onClick={() => {
+                    addToCart(product.key, 1);
+                    toast.success("Added to Cart");
+                    console.log(loadCart());
+                  }}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg text-lg transition duration-200"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      <Footer />
     </div>
   );
 }

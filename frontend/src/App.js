@@ -29,9 +29,8 @@ import FarmerPage from "./components/FarmerProfilePage/farmerPage";
 import BHomePage from "./components/FarmerProductOverview/bhomePage";
 import ProductOverview from "./components/FarmerProductOverview/productOverview";
 import PurchasePage from "./components/FarmerProductOverview/purchasePage";
+import cartFunction from "./utils/cartFunction";
 import UserManagementDashboard from "./components/UsersManagement/UserManagementDashboard";
-
-
 
 function App() {
   return (
@@ -55,16 +54,19 @@ function App() {
           <Route path="/report_list" element={<ReportsList />} />
           <Route path="/newsfeed" element={<NewsFeed />} />
           <Route path="/users/" element={<RegisterPage />} />
-          <Route path="/jyhg" element={<DisplayT/>} />
+          <Route path="/jyhg" element={<DisplayT />} />
           <Route path="/e" element={<Atool />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/update-product/:id" element={<BuyerUpdateProducts />} />
-          <Route path="/users_management" element={<UserManagementDashboard />} />
+          <Route
+            path="/users_management"
+            element={<UserManagementDashboard />}
+          />
           <Route path="/testing" element={<Test />} />
           <Route path="/farmer/*" element={<FarmerPage />} />
           <Route path="/*" element={<BHomePage />} />
           <Route path="/product/:key" element={<ProductOverview />} />
-          <Route path="/cart" element={<PurchasePage/>} />
+          <Route path="/cart" element={<cartFunction />} />
         </Routes>
       </React.Fragment>
     </div>

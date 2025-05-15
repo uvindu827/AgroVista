@@ -8,6 +8,7 @@ import axios from "axios";
 import FarmerItemsPage from "../FarmerProducts/farmerItemsPage";
 import UpdateItemPage from "../FarmerProducts/updateItemPage";
 import AddItemPage from "../FarmerProducts/addItemsPage";
+import InquiriesPage from "./inquiriesPage";
 
 /**
  * FarmerPage - Main dashboard component for farmers
@@ -20,19 +21,19 @@ export default function FarmerPage() {
   useEffect(() => {
     const validateUser = async () => {
       const token = localStorage.getItem("token");
-      
+
       if (!token) {
         window.location.href = "/login";
         return;
       }
-      
+
       try {
         const response = await axios.get("http://localhost:3000/api/users/", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        
+
         const user = response.data;
         if (user.role === "farmer") {
           setUserValidated(true);
@@ -72,20 +73,20 @@ export default function FarmerPage() {
         <h1 className="text-2xl font-bold text-center mb-6">
           🌱 AgriDashboard
         </h1>
-        
+
         <nav className="flex flex-col space-y-4">
           <NavLink 
-            to="/farmer/orders" 
+            to="orders" 
             icon={<FaRegBookmark size={20} />} 
             label="Orders" 
           />
           <NavLink 
-            to="/farmer/items" 
+            to="items" 
             icon={<MdOutlineSpeaker size={20} />} 
             label="Items" 
           />
           <NavLink 
-            to="/farmer/inquiries" 
+            to="inquiries" 
             icon={<FaRegUser size={20} />} 
             label="Inquiries" 
           />
@@ -122,6 +123,7 @@ export default function FarmerPage() {
               <Route path="/items" element={<FarmerItemsPage />} />
               <Route path="/items/edit" element={<UpdateItemPage />} />
               <Route path="/items/add" element={<AddItemPage />} />
+              <Route path="/inquiries" element={<InquiriesPage />} />
             </Routes>
           </div>
         )}
