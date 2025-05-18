@@ -64,7 +64,7 @@ export default function FarmerPage() {
   // Logout function
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   return (

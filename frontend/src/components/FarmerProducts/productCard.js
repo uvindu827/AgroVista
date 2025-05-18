@@ -41,7 +41,7 @@ export default function ProductCard({ item }) {
       <div className="px-4 pb-4 pt-2">
         <Link
           to={`/product/${item.key}`}
-          className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition duration-200"
+          className="block w-full text-center bg-green-800 hover:bg-green-900 text-white py-2 rounded-lg transition duration-200"
         >
           View Details
         </Link>

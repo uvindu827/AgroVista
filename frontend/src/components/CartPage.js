@@ -128,7 +128,7 @@ export default function CartPage() {
           Total: ${calculateTotal().toFixed(2)}
         </div>
         <button
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-900"
           onClick={handleCheckout}
         >
           Checkout & Payment
