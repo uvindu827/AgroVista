@@ -1,6 +1,7 @@
 import Order from "../models/order.js";
 import Product from "../models/product.js";
 import { isItFarmer, isItBuyer } from "./userController.js";
+import Notification from "../models/notification.js";
 
 export async function createOrder(req, res) {
   try {
@@ -162,16 +163,26 @@ export async function updateOrder(req, res) {
     // Get the updated status and notes from the request body
     const { notes, status } = req.body;
 
-    // Use `findOneAndUpdate` to update the order
+    // Update the order with new notes and status
     const updatedOrder = await Order.findOneAndUpdate(
       { orderId: orderId },
-      { notes, status }, // Update the order with new notes and status
-      { new: true } // Return the updated document
+      { notes, status },
+      { new: true }
     );
+
+    // Send notification to buyer if status is Accepted or Declined
+    if (status === "Accepted" || status === "Declined") {
+      const message = `Your order ${orderId} has been ${status.toLowerCase()} by the farmer.`;
+      const notification = new Notification({
+        recipientEmail: order.email,
+        message: message,
+      });
+      await notification.save();
+    }
 
     res.json({
       message: "Order updated successfully",
-      order: updatedOrder, // Return the updated order
+      order: updatedOrder,
     });
   } catch (error) {
     res.status(500).json({

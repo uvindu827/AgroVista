@@ -62,9 +62,9 @@ app.use("/api/staff", staffRouter);
 app.use("/api/products",productRouter);
 app.use("/api/inquiries",inquiryRouter);
 app.use('/api/cart', cartRouter);
-app.use("/api/orders", cOrderRoutes);  // Mount routes on /api/orders
+app.use("/api/orders", orderRouter);  // Mount orderRouter on /api/orders
 app.use("/api/tools", TsRoutes);
-app.use("/api/buyerorders", orderRouter);
+app.use("/api/buyerorders", cOrderRoutes);  // Mount cOrderRoutes on /api/buyerorders
 
 
 app.listen(3000, () => {

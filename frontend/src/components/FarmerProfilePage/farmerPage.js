@@ -9,6 +9,7 @@ import FarmerItemsPage from "../FarmerProducts/farmerItemsPage";
 import UpdateItemPage from "../FarmerProducts/updateItemPage";
 import AddItemPage from "../FarmerProducts/addItemsPage";
 import InquiriesPage from "./inquiriesPage";
+import OrdersPage from "./ordersPage";
 
 /**
  * FarmerPage - Main dashboard component for farmers
@@ -120,6 +121,7 @@ export default function FarmerPage() {
         {userValidated && (
           <div className="mt-6">
             <Routes>
+              <Route path="orders" element={<OrdersPage />} />
               <Route path="items" element={<FarmerItemsPage />} />
               <Route path="items/edit" element={<UpdateItemPage />} />
               <Route path="items/add" element={<AddItemPage />} />
