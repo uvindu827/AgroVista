@@ -20,7 +20,7 @@ export default function ProductCard({ item }) {
 
         <div className="mt-4">
           <div className="flex justify-between items-center">
-            <span className="text-lg font-semibold text-green-600">₹{item.price}</span>
+            <span className="text-lg font-semibold text-green-600">LKR{item.price}</span>
             <span
               className={`px-3 py-1 text-xs font-medium rounded-full ${
                 item.availability

@@ -55,7 +55,7 @@ export default function ProductOverview() {
               <p className="text-gray-600">{product.description}</p>
 
               <p className="text-2xl font-semibold text-green-600">
-                ₹{product.price?.toFixed(2)}
+                LKR{product.price?.toFixed(2)}
               </p>
 
               <div className="text-sm text-gray-500">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loadCart, addToCart, removeFromCart } from "../utils/cartFunction";
 import axios from "axios";
 
@@ -7,6 +8,7 @@ export default function CartPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const cart = loadCart();
@@ -55,7 +57,7 @@ export default function CartPage() {
   };
 
   const handleCheckout = () => {
-    alert("Checkout functionality to be implemented.");
+    navigate("/purchase");
   };
 
   if (loading) return <div>Loading cart...</div>;
@@ -128,7 +130,7 @@ export default function CartPage() {
           Total: ${calculateTotal().toFixed(2)}
         </div>
         <button
-          className="bg-green-800 text-white px-6 py-2 rounded hover:bg-green-900"
+          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
           onClick={handleCheckout}
         >
           Checkout & Payment
