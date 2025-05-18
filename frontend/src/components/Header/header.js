@@ -11,7 +11,7 @@ export default function Header() {
             alt="Agro Logo"
             className="w-[60px] h-[60px] object-contain"
           />
-          <span className="text-2xl font-bold text-green-800">AgroMart</span>
+          <span className="text-2xl font-bold text-green-800">AgroVista</span>
         </Link>
 
         {/* Navigation Links */}
