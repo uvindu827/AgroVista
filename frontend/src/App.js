@@ -32,6 +32,7 @@ import ProductOverview from "./components/FarmerProductOverview/productOverview"
 
 import UserManagementDashboard from "./components/UsersManagement/UserManagementDashboard";
 import BuyerNavBar from "./components/BuyerNavBar/BuyerNavBar";
+import CartPage from "./components/CartPage";
 
 function App() {
   return (
@@ -68,7 +69,7 @@ function App() {
           <Route path="/farmer/*" element={<FarmerPage />} />
           <Route path="/*" element={<BHomePage />} />
           <Route path="/product/:key" element={<ProductOverview />} />
-          <Route path="/cart" element={<cartFunction />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/dashboard" element={<BuyerNavBar />} />
         </Routes>
       </React.Fragment>
