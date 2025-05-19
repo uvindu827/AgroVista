@@ -40,7 +40,7 @@ function BuyerNavBar() {
       </nav>
 
       {/* Logout Button at Bottom */}
-      <Link to="/logout" className="flex items-center space-x-2 text-red-400 hover:text-red-500 mt-6">
+      <Link to="/" className="flex items-center space-x-2 text-red-400 hover:text-red-500 mt-6">
         <FaSignOutAlt /> <span>LOGOUT</span>
       </Link>
 
