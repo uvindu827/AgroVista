@@ -8,29 +8,29 @@ export default function OrdersPage() {
 
   const token = localStorage.getItem("token");
 
-  const fetchOrders = async () => {
-    if (!token) {
-      window.location.href = "/login";
-      return;
-    }
-
-    try {
-      const response = await axios.get("http://localhost:3000/api/orders/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setOrders(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError("Failed to fetch orders");
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchOrders = async () => {
+      if (!token) {
+        window.location.href = "/login";
+        return;
+      }
+
+      try {
+        const response = await axios.get("http://localhost:3000/api/orders/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setOrders(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch orders");
+        setLoading(false);
+      }
+    };
+
     fetchOrders();
-  }, []);
+  }, [token]); // include token as it's used in the function
 
   const updateOrderStatus = async (orderId, status) => {
     try {
@@ -69,9 +69,10 @@ export default function OrdersPage() {
               key={order._id}
               className="border rounded-lg p-4 shadow-md bg-white"
             >
-              <div className="flex justify-between mb-2">
+              <div className="flex justify-between mb-2 flex-wrap gap-2">
                 <div>
-                  <span className="font-semibold">Order ID:</span> {order.orderId}
+                  <span className="font-semibold">Order ID:</span>{" "}
+                  {order.orderId}
                 </div>
                 <div>
                   <span className="font-semibold">Date:</span>{" "}
@@ -81,7 +82,8 @@ export default function OrdersPage() {
                   <span className="font-semibold">Status:</span> {order.status}
                 </div>
                 <div>
-                  <span className="font-semibold">Total:</span> ${order.totalAmount ? order.totalAmount.toFixed(2) : "0.00"}
+                  <span className="font-semibold">Total:</span> LKR{" "}
+                  {order.totalAmount ? order.totalAmount.toFixed(2) : "0.00"}
                 </div>
               </div>
               <div>
@@ -97,7 +99,8 @@ export default function OrdersPage() {
                       <div>
                         <div>{item.name}</div>
                         <div>
-                          Quantity: {item.quantity} | Price: ${item.price ? item.price.toFixed(2) : "0.00"}
+                          Quantity: {item.quantity} | Price: LKR{" "}
+                          {item.price ? item.price.toFixed(2) : "0.00"}
                         </div>
                       </div>
                     </li>

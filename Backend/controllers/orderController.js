@@ -5,6 +5,7 @@ import Notification from "../models/notification.js";
 
 export async function createOrder(req, res) {
   try {
+    console.log("Incoming order data:", req.body);
     const latestOrder = await Order.find().sort({ orderId: -1 }).limit(1);
 
     let orderId;
@@ -53,6 +54,15 @@ export async function createOrder(req, res) {
     newOrderData.totalAmount = totalAmount;
     newOrderData.orderDate = new Date();
 
+    // Set name, address, phone from request body
+    const buyerInfo = newOrderData.buyerInfo || {};
+    newOrderData.name = `${buyerInfo.firstName || ""} ${buyerInfo.lastName || ""}`.trim();
+
+    if (!newOrderData.address || newOrderData.address.trim() === "") {
+      return res.status(400).json({ message: "Address is required" });
+    }
+    newOrderData.phone = buyerInfo.phone || "";
+
     const order = new Order(newOrderData);
     const savedOrder = await order.save();
 
@@ -61,6 +71,7 @@ export async function createOrder(req, res) {
       order: JSON.parse(JSON.stringify(savedOrder)), // Ensure the order is serialized properly
     });
   } catch (error) {
+    console.error("Create order error:", error);
     res.status(500).json({
       message: error.message,
     });

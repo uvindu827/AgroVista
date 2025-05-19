@@ -96,7 +96,7 @@ export default function CartPage() {
               />
               <div className="flex-1">
                 <h3 className="font-semibold">{product.name}</h3>
-                <p>Price: ${product.price.toFixed(2)}</p>
+                <p>Price: LKR{product.price.toFixed(2)}</p>
                 <div className="flex items-center space-x-2">
                   <button
                     className="bg-gray-300 px-2 rounded"
@@ -119,7 +119,7 @@ export default function CartPage() {
                     Remove
                   </button>
                 </div>
-                <p>Total: ${(product.price * item.qty).toFixed(2)}</p>
+                <p>Total: LKR{(product.price * item.qty).toFixed(2)}</p>
               </div>
             </li>
           );
@@ -127,7 +127,7 @@ export default function CartPage() {
       </ul>
       <div className="mt-6 flex justify-between items-center">
         <div className="text-xl font-semibold">
-          Total: ${calculateTotal().toFixed(2)}
+          Total: LKR{calculateTotal().toFixed(2)}
         </div>
         <button
           className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"

@@ -34,6 +34,7 @@ import UserManagementDashboard from "./components/UsersManagement/UserManagement
 import BuyerNavBar from "./components/BuyerNavBar/BuyerNavBar";
 import CartPage from "./components/CartPage";
 import PurchasePage from "./components/FarmerProductOverview/purchasePage";
+import OrdersPage from "./components/FarmerProfilePage/ordersPage";
 
 function App() {
   return (
@@ -73,6 +74,7 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/purchase" element={<PurchasePage />} />
           <Route path="/dashboard" element={<BuyerNavBar />} />
+          <Route path="/orders" element={<OrdersPage />} />
         </Routes>
       </React.Fragment>
     </div>
