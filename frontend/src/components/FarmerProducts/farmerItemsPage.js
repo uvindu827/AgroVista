@@ -121,7 +121,7 @@ export default function FarmerItemsPage() {
                 >
                   <td className="p-3 border">{product.key}</td>
                   <td className="p-3 border">{product.name}</td>
-                  <td className="p-3 border">₹{product.price.toFixed(2)}</td>
+                  <td className="p-3 border">LKR.{product.price.toFixed(2)}</td>
                   <td className="p-3 border">{product.category}</td>
                   <td className="p-3 border">{product.dimensions}</td>
                   <td className="p-3 border">
