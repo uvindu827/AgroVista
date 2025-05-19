@@ -86,8 +86,7 @@ export default function InquiriesPage() {
         </button>
         {error && <p className="text-red-600 mt-2">{error}</p>}
       </form>
-
-      <h3 className="text-xl font-semibold mb-2">Your Inquiries and Admin Responses</h3>
+<h3 className="text-xl font-semibold mb-2">Your Inquiries and Admin Responses</h3>
       {inquiries.length === 0 ? (
         <p>No inquiries found.</p>
       ) : (
@@ -103,7 +102,7 @@ export default function InquiriesPage() {
             {inquiries.map((inquiry) => (
               <tr key={inquiry.id} className="hover:bg-gray-100">
                 <td className="py-2 px-4 border-b border-gray-300">{inquiry.message}</td>
-                <td className="py-2 px-4 border-b border-gray-300">{inquiry.adminResponse || "No response yet"}</td>
+                <td className="py-2 px-4 border-b border-gray-300">{inquiry.response || "No response yet"}</td>
                 <td className="py-2 px-4 border-b border-gray-300">{new Date(inquiry.createdAt).toLocaleDateString()}</td>
               </tr>
             ))}

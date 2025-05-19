@@ -36,6 +36,7 @@ import CartPage from "./components/CartPage";
 import PurchasePage from "./components/FarmerProductOverview/purchasePage";
 import OrdersPage from "./components/FarmerProfilePage/ordersPage";
 import MyOrdersPage from "./components/FarmerProfilePage/MyOrdersPage";
+import AdminInquiryResponsePage from "./components/Admin_dashboard/AdminInquiryResponsePage";
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
           <Route path="/dashboard" element={<BuyerNavBar />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/myorders" element={<MyOrdersPage />} />
+          <Route path="/inquiries" element={<AdminInquiryResponsePage />} />
         </Routes>
       </React.Fragment>
     </div>
