@@ -22,6 +22,9 @@ export default function Header() {
           <Link to="/items" className="text-gray-700 hover:text-blue-600 transition">
             Items
           </Link>
+          <Link to="/myorders" className="text-gray-700 hover:text-blue-600 transition">
+            My Orders
+          </Link>
           <Link
             to="/cart"
             className="bg-green-800 text-white px-4 py-2 rounded-md hover:bg-green-900 transition"
