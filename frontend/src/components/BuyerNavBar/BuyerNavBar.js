@@ -28,7 +28,7 @@ function BuyerNavBar() {
         <Link to="/manage-products" className="flex items-center space-x-2 hover:text-yellow-400">
           <BsBoxSeam /> <span>MANAGE PRODUCTS</span>
         </Link>
-        <Link to="/manage-sales" className="flex items-center space-x-2 hover:text-yellow-400">
+        <Link to="/items" className="flex items-center space-x-2 hover:text-yellow-400">
           <FaShoppingCart /> <span>MANAGE SALES</span>
         </Link>
         <Link to="/manage-purchases" className="flex items-center space-x-2 hover:text-yellow-400">
@@ -40,7 +40,7 @@ function BuyerNavBar() {
       </nav>
 
       {/* Logout Button at Bottom */}
-      <Link to="/logout" className="flex items-center space-x-2 text-red-400 hover:text-red-500 mt-6">
+      <Link to="/" className="flex items-center space-x-2 text-red-400 hover:text-red-500 mt-6">
         <FaSignOutAlt /> <span>LOGOUT</span>
       </Link>
 
