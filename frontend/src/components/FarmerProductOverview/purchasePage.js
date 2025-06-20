@@ -231,17 +231,7 @@ export default function PurchasePage() {
               <h2 className="font-semibold text-lg mb-4">Payment Method</h2>
 
               <div className="space-y-4">
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="radio"
-                    name="payment"
-                    value="visa"
-                    checked={paymentMethod === "visa"}
-                    onChange={(e) => setPaymentMethod(e.target.value)}
-                  />
-                  <img src="/visalogo.jpg" alt="Visa" className="h-6" />
-                  <span>Pay with Visa Card</span>
-                </label>
+                <label className="flex items-center space-x-3"></label>
 
                 <label className="flex items-center space-x-3">
                   <input
