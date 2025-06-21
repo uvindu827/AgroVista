@@ -62,7 +62,7 @@ function UserNewsfeed() {
   };
 
   const handleBack = () => {
-    navigate('/farmer/*'); // Navigate to the farmer dashboard
+    navigate('/farmer/orders'); // Navigate to the farmer dashboard
   };
 
   if (loading) return <div className="text-center p-8 text-lg text-slate-600">Loading posts...</div>;

@@ -44,7 +44,7 @@ export default function FarmerPage() {
           setUserValidated(true);
           setUserData(user);
         } else {
-          window.location.href = "/farmer/";
+          window.location.href = "/farmer/ordera";
         }
       } catch (error) {
         console.error("Authentication error:", error);

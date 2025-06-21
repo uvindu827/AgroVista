@@ -141,6 +141,8 @@ export default function MyOrdersPage() {
     );
   }
 
+  // Sort orders by date - LATEST FIRST (newest to oldest)
+  // This will show the most recent orders at the top
   const sortedOrders = [...orders].sort(
     (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
   );
@@ -163,7 +165,7 @@ export default function MyOrdersPage() {
             My Orders
           </h1>
           <p className="text-gray-600">
-            Track your order history and status
+            Track your order history and status • Latest orders first
           </p>
         </div>
 
