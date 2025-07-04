@@ -13,40 +13,23 @@ export default function LoginPage() {
   const [touched, setTouched] = useState({});
   const navigate = useNavigate();
 
-  // Validation functions
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim()) {
-      return "Email is required";
-    }
-    if (!emailRegex.test(email)) {
-      return "Please enter a valid email address";
-    }
+    if (!email.trim()) return "Email is required";
+    if (!emailRegex.test(email)) return "Please enter a valid email address";
     return "";
   };
 
   const validatePassword = (password) => {
-    if (!password) {
-      return "Password is required";
-    }
-    if (password.length < 6) {
+    if (!password) return "Password is required";
+    if (password.length < 6)
       return "Password must be at least 6 characters long";
-    }
     return "";
   };
 
-  const validateRememberMe = (rememberMe) => {
-    if (!rememberMe) {
-      return "Please check 'Remember Me' to proceed";
-    }
-    return "";
-  };
-
-  // Handle input changes with validation
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
-
     if (touched.email) {
       setErrors((prev) => ({
         ...prev,
@@ -58,7 +41,6 @@ export default function LoginPage() {
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
-
     if (touched.password) {
       setErrors((prev) => ({
         ...prev,
@@ -67,10 +49,8 @@ export default function LoginPage() {
     }
   };
 
-  // Handle input blur (when user leaves the field)
   const handleBlur = (field) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
-
     if (field === "email") {
       setErrors((prev) => ({
         ...prev,
@@ -84,26 +64,20 @@ export default function LoginPage() {
     }
   };
 
-  // Validate all fields
   const validateForm = () => {
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
-
     const newErrors = {
       email: emailError,
       password: passwordError,
     };
-
     setErrors(newErrors);
     setTouched({ email: true, password: true });
-
     return !emailError && !passwordError;
   };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate form before submission
     if (!validateForm()) {
       toast.error("Please fix the errors below");
       return;
@@ -117,10 +91,12 @@ export default function LoginPage() {
         {
           email: email.trim(),
           password,
+          rememberMe,
         }
       );
 
       toast.success("Login Successful");
+
       const user = response.data.user;
 
       localStorage.setItem("token", response.data.token);
@@ -147,16 +123,11 @@ export default function LoginPage() {
       }
     } catch (err) {
       console.error("Login error:", err);
-
-      // Handle different types of errors
       if (err.response) {
-        // Server responded with error status
         const errorMessage =
           err.response.data?.error ||
           err.response.data?.message ||
           "Login failed";
-
-        // Handle specific error cases
         if (err.response.status === 401) {
           toast.error("Invalid email or password");
         } else if (err.response.status === 404) {
@@ -167,12 +138,10 @@ export default function LoginPage() {
           toast.error(errorMessage);
         }
       } else if (err.request) {
-        // Network error
         toast.error(
           "Network error. Please check your connection and try again"
         );
       } else {
-        // Other error
         toast.error("An unexpected error occurred. Please try again");
       }
     } finally {
@@ -185,16 +154,11 @@ export default function LoginPage() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
       style={{ backgroundImage: "url('/loginbg.jpg')" }}
     >
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/50 z-0"></div>
-
-      {/* Floating circles */}
       <div className="absolute top-10 left-10 w-24 h-24 bg-white/10 rounded-full blur-2xl animate-float z-0"></div>
       <div className="absolute bottom-20 right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-float2 z-0"></div>
 
-      {/* Main Container */}
       <div className="z-10 flex w-11/12 max-w-6xl bg-white/10 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl">
-        {/* Welcome Text */}
         <div className="w-1/2 p-10 text-white hidden lg:flex flex-col justify-center">
           <h1 className="text-5xl font-bold mb-4">Welcome Back</h1>
           <p className="text-lg mb-6">
@@ -214,14 +178,12 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Login Form */}
         <div className="w-full lg:w-1/2 p-10 bg-white/20">
           <h2 className="text-3xl font-semibold text-white mb-6 text-center">
             Sign in
           </h2>
 
           <form onSubmit={handleOnSubmit} className="space-y-6" noValidate>
-            {/* Email Input */}
             <div>
               <input
                 type="email"
@@ -234,23 +196,15 @@ export default function LoginPage() {
                     ? "focus:ring-red-400 ring-2 ring-red-400"
                     : "focus:ring-green-400"
                 }`}
-                aria-invalid={errors.email && touched.email ? "true" : "false"}
-                aria-describedby={
-                  errors.email && touched.email ? "email-error" : undefined
-                }
               />
               {errors.email && touched.email && (
-                <p
-                  id="email-error"
-                  className="text-red-300 text-sm mt-1 flex items-center"
-                >
+                <p className="text-red-300 text-sm mt-1 flex items-center">
                   <span className="mr-1">⚠️</span>
                   {errors.email}
                 </p>
               )}
             </div>
 
-            {/* Password Input */}
             <div>
               <input
                 type="password"
@@ -263,20 +217,9 @@ export default function LoginPage() {
                     ? "focus:ring-red-400 ring-2 ring-red-400"
                     : "focus:ring-green-400"
                 }`}
-                aria-invalid={
-                  errors.password && touched.password ? "true" : "false"
-                }
-                aria-describedby={
-                  errors.password && touched.password
-                    ? "password-error"
-                    : undefined
-                }
               />
               {errors.password && touched.password && (
-                <p
-                  id="password-error"
-                  className="text-red-300 text-sm mt-1 flex items-center"
-                >
+                <p className="text-red-300 text-sm mt-1 flex items-center">
                   <span className="mr-1">⚠️</span>
                   {errors.password}
                 </p>
@@ -285,7 +228,12 @@ export default function LoginPage() {
 
             <div className="flex justify-between items-center text-white">
               <label className="flex items-center space-x-2">
-                <input type="checkbox" className="accent-green-500" />
+                <input
+                  type="checkbox"
+                  className="accent-green-500"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
+                />
                 <span className="text-sm">Remember Me</span>
               </label>
               <Link to="/forgot-password" className="text-sm hover:underline">
@@ -331,6 +279,17 @@ export default function LoginPage() {
               )}
             </button>
 
+            {/* ✅ Fixed Sign Up Link */}
+            <p className="text-sm text-white text-center">
+              Don't have an account?{" "}
+              <Link
+                to="/users/"
+                className="underline hover:text-green-300 font-medium"
+              >
+                Sign up
+              </Link>
+            </p>
+
             <p className="text-sm text-white text-center mt-4">
               By clicking on "Sign in now" you agree to our{" "}
               <a href="#" className="underline hover:text-green-300">
@@ -346,7 +305,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Extra Styles */}
       <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0); }

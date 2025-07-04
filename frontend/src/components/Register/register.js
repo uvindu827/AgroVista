@@ -14,7 +14,7 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const [role, setRole] = useState("");           // ✅ Role (NEW field)
+  const [role, setRole] = useState(""); // ✅ Role (NEW field)
 
   const validateForm = () => {
     const newErrors = {};
@@ -294,28 +294,26 @@ export default function RegisterPage() {
               )}
             </div>
 
-
-               {/* Role */}
-               <div className="col-span-1 md:col-span-2">
-                <label className="text-white block mb-1">Select Role</label>
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="w-full border bg-white/60 rounded px-3 py-2 text-black focus:outline-none"
-                >
-                  <option value="">-- Select Role --</option>
-                  <option value="customer">Customer</option>
-                  <option value="farmer">Farmer</option>
-                  <option value="buyer">Buyer</option>
-                  <option value="tool dealer">Tool Dealer</option>
-                  <option value="agricultural inspector">Agri Inspector</option>
-                  <option value="admin">Admin</option>
-                </select>
-                {errors.role && (
-                  <p className="text-red-500 text-sm mt-1">{errors.role}</p>
-                )}
-              </div>
-            
+            {/* Role */}
+            <div className="col-span-1 md:col-span-2">
+              <label className="text-white block mb-1">Select Role</label>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="w-full border bg-white/60 rounded px-3 py-2 text-black focus:outline-none"
+              >
+                <option value="">-- Select Role --</option>
+                <option value="customer">Customer</option>
+                <option value="farmer">Farmer</option>
+                <option value="buyer">Buyer</option>
+                <option value="tool dealer">Tool Dealer</option>
+                <option value="agricultural inspector">Agri Inspector</option>
+                <option value="admin">Admin</option>
+              </select>
+              {errors.role && (
+                <p className="text-red-500 text-sm mt-1">{errors.role}</p>
+              )}
+            </div>
 
             <div className="mt-6">
               <button
@@ -357,7 +355,7 @@ export default function RegisterPage() {
               <p className="text-green-100">
                 Already have an account?{" "}
                 <Link
-                  to="/"
+                  to="/login"
                   className="text-white font-semibold hover:text-green-300 transition-colors"
                 >
                   Sign in here
