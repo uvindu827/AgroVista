@@ -1,10 +1,20 @@
+<<<<<<< HEAD
 // src/pages/LoginPage.jsx
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
+=======
+import React, { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate, Link } from "react-router-dom";
+import Footer from "../Footer/Footer";
+import { useAuth } from "../Farmer/pages/context/AuthContext";
+>>>>>>> Agriculture-Inspector-review-query
 
 export default function LoginPage() {
+  const { setUser, setToken } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -13,6 +23,7 @@ export default function LoginPage() {
   const [touched, setTouched] = useState({});
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) return "Email is required";
@@ -76,6 +87,8 @@ export default function LoginPage() {
     return !emailError && !passwordError;
   };
 
+=======
+>>>>>>> Agriculture-Inspector-review-query
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -86,6 +99,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
+<<<<<<< HEAD
       const response = await axios.post(
         `http://localhost:3000/api/users/login`,
         {
@@ -106,6 +120,27 @@ export default function LoginPage() {
       switch (user.role) {
         case "farmer":
           navigate("/farmer/orders");
+=======
+      const res = await axios.post("http://localhost:3000/api/users/login", { email, password });
+
+      toast.success("Login Successful");
+      const user = res.data.user;
+      const token = res.data.token;
+
+      // Save token and user info in localStorage (AuthContext also syncs)
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("ID", user._id);
+
+      // Update AuthContext state
+      setUser(user);
+      setToken(token);
+
+      // Navigate based on user role
+      switch (user.role) {
+        case "farmer":
+          navigate("/farmer/");
+>>>>>>> Agriculture-Inspector-review-query
           break;
         case "buyer":
           navigate("/buyerHome/");
@@ -114,14 +149,26 @@ export default function LoginPage() {
           navigate("/users_management/");
           break;
         case "tool dealer":
+<<<<<<< HEAD
           navigate("/welcome");
           break;
         case "agricultural inspector":
         case "customer":
+=======
+          navigate("/");
+          break;
+        case "agricultural inspector":
+          navigate("/instructor");
+          break;
+        case "customer":
+          navigate("/");
+          break;
+>>>>>>> Agriculture-Inspector-review-query
         default:
           navigate("/");
       }
     } catch (err) {
+<<<<<<< HEAD
       console.error("Login error:", err);
       if (err.response) {
         const errorMessage =
@@ -144,12 +191,16 @@ export default function LoginPage() {
       } else {
         toast.error("An unexpected error occurred. Please try again");
       }
+=======
+      toast.error(err.response?.data?.error || "An error occurred");
+>>>>>>> Agriculture-Inspector-review-query
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
+<<<<<<< HEAD
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
       style={{ backgroundImage: "url('/loginbg.jpg')" }}
@@ -171,6 +222,97 @@ export default function LoginPage() {
                 key={icon}
                 href="#"
                 className="text-white hover:text-green-300 transition duration-300"
+=======
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-grow flex justify-center items-center bg-cover bg-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-green-900/70 to-green-800/70 z-10"></div>
+        <div
+          className="absolute inset-0 bg-cover bg-center animate-[backgroundScroll_30s_linear_infinite]"
+          style={{ backgroundImage: "url('/loginbg.jpg')" }}
+        ></div>
+
+        {/* Floating animated circles */}
+        <div className="absolute top-20 left-20 w-24 h-24 bg-yellow-200/20 rounded-full blur-xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-32 h-32 bg-green-300/20 rounded-full blur-xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-amber-300/20 rounded-full blur-xl animate-pulse delay-500"></div>
+
+        <div className="z-20 w-full max-w-md px-4">
+          <form
+            onSubmit={handleOnSubmit}
+            className="bg-white/20 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-white/30 transform hover:scale-[1.01] transition-all duration-300"
+          >
+            <div className="text-center mb-8">
+              <div className="flex justify-center mb-4">
+                <img src="/agrologo.png" alt="AgroVista Logo" className="w-24 h-auto" />
+              </div>
+              <h2 className="text-4xl font-bold text-white mb-2">Welcome Back</h2>
+              <p className="text-green-100">Sign in to your AgroVista account</p>
+            </div>
+
+            <div className="space-y-5">
+              {[{
+                label: "Email",
+                value: email,
+                setValue: setEmail,
+                type: "email",
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-black"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                ),
+              }, {
+                label: "Password",
+                value: password,
+                setValue: setPassword,
+                type: "password",
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-black"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                ),
+              }].map(({ label, value, setValue, type, icon }, idx) => (
+                <div key={idx} className="relative">
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">{icon}</div>
+                  <input
+                    type={type}
+                    placeholder={label}
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    className="w-full p-3 pl-10 rounded-lg bg-white/30 text-white placeholder-green-100 outline-none border border-white/30 focus:border-green-300 focus:ring-2 focus:ring-green-300/50 transition-all"
+                    required
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 rounded-lg font-semibold text-lg hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-lg hover:shadow-green-500/30 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+>>>>>>> Agriculture-Inspector-review-query
               >
                 <i className={`fab fa-${icon} text-xl`}></i>
               </a>
@@ -305,6 +447,7 @@ export default function LoginPage() {
         </div>
       </div>
 
+<<<<<<< HEAD
       <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0); }
@@ -324,6 +467,21 @@ export default function LoginPage() {
           animation: float2 8s ease-in-out infinite;
         }
       `}</style>
+=======
+      <style>
+        {`
+          @keyframes backgroundScroll {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+          }
+          @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+          }
+        `}
+      </style>
+>>>>>>> Agriculture-Inspector-review-query
     </div>
   );
 }
