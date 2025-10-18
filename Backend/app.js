@@ -1,21 +1,23 @@
-// backend/app.js
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import biRoutes from "./routes/biRoutes.js"; // Buyer Inventory routes
-import cartRouter from './routes/cCartRoutes.js'; // Cart routes
+import biRoutes from "./routes/biRoutes.js";
+import cartRouter from "./routes/cCartRoutes.js";
 import userRouter from "./routes/userRouter.js";
 import nfRouter from "./routes/nfRoutes.js";
-import cOrderRoutes from './routes/cOrderRoutes.js';  // Import order routes
-import cors from "cors"; // Enable Cross-Origin Resource Sharing
+import cOrderRoutes from "./routes/cOrderRoutes.js";
+import cors from "cors";
 import jwt from "jsonwebtoken";
-import path from "path"; // Path utilities
-
+import path from "path";
+import { fileURLToPath } from "url";  // ✅ Add this line
+import morgan from "morgan";          // ✅ Also missing import
+import cookieParser from "cookie-parser"; // ✅ Also missing import
 
 import staffRouter from "./routes/staffRoutes.js";
 import productRouter from "./routes/productRouter.js";
 import inquiryRouter from "./routes/inquiryRouter.js";
 
+import stripeRoutes from "./routes/stripeRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -91,3 +93,4 @@ app.use("/api/orders", cOrderRoutes);  // Mount routes on /api/orders
 app.listen(3000, () => {
   console.log("Server is runing on port 3000");
 });
+
