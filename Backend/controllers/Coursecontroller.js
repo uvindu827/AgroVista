@@ -1,4 +1,64 @@
 import Course from "../models/Coursemodel.js";
+import Stripe from "stripe";
+import Order from "../models/orderModel.js";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// Create Stripe Checkout session for Agriculture Inspector course
+export const createCourseCheckoutSession = async (req, res) => {
+  try {
+    const { userId, courseId } = req.body;
+    const course = await Course.findById(courseId);
+    if (!course || course.deleted) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    // Only allow payment for Agriculture Inspector course
+    if (course.title.toLowerCase().indexOf("agriculture inspector") === -1) {
+      return res.status(400).json({ error: "This course is not eligible for Stripe payment." });
+    }
+
+    // Create order with pending status
+    const order = await Order.create({
+      userId,
+      courses: [courseId],
+      amount: course.coursefee,
+      paymentStatus: "pending",
+    });
+
+    // Create Stripe Checkout session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: course.title,
+              description: course.description,
+            },
+            unit_amount: Math.round(course.coursefee * 100),
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${process.env.FRONTEND_URL}/course/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.FRONTEND_URL}/course/cancel`,
+      metadata: {
+        userId,
+        courseIds: JSON.stringify([courseId]),
+        orderId: order._id.toString(),
+      },
+    });
+
+    // Save Stripe session ID to order
+    order.stripeSessionId = session.id;
+    await order.save();
+
+    res.json({ url: session.url });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 export const createCourse = async (req, res) => {
   try {

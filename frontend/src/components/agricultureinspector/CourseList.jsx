@@ -1,8 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+// ...existing code...
 
 const MySwal = withReactContent(Swal);
 
@@ -22,6 +18,29 @@ export default function CourseList() {
   const config = useMemo(() => ({
     headers: { Authorization: `Bearer ${token}` },
   }), [token]);
+
+  // Stripe payment handler (now inside component)
+  const handleStripePayment = async (courseId) => {
+    try {
+      const userId = localStorage.getItem("userId"); // Adjust if userId is stored differently
+      if (!userId) {
+        toast.error("User not logged in");
+        return;
+      }
+      const res = await axios.post(
+        "http://localhost:3000/api/courses/checkout-session",
+        { userId, courseId },
+        config
+      );
+      if (res.data.url) {
+        window.location.href = res.data.url;
+      } else {
+        toast.error("Stripe session creation failed");
+      }
+    } catch (err) {
+      toast.error("Payment error: " + (err.response?.data?.error || err.message));
+    }
+  };
 
   const fetchCourses = useCallback(async () => {
     setLoading(true);
@@ -308,6 +327,15 @@ export default function CourseList() {
                         >
                           Delete
                         </button>
+                        {/* Stripe payment button for Agriculture Inspector course */}
+                        {course.title.toLowerCase().includes("agriculture inspector") && (
+                          <button
+                            onClick={() => handleStripePayment(course._id)}
+                            className="bg-purple-600 hover:bg-purple-700 text-white text-sm px-4 py-1.5 rounded-lg"
+                          >
+                            Pay with Stripe
+                          </button>
+                        )}
                       </>
                     ) : (
                       <button

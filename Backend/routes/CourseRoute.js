@@ -2,6 +2,8 @@ import express from "express";
 import * as courseController from "../controllers/Coursecontroller.js";
 import { protect } from "../middleware/auth.js";
 import { parser } from "../config/cloudinary.js";
+// Stripe payment for Agriculture Inspector course
+router.post("/checkout-session", protect, courseController.createCourseCheckoutSession);
 
 const router = express.Router();
 

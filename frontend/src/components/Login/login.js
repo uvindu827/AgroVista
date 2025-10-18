@@ -1,17 +1,10 @@
-<<<<<<< HEAD
-// src/pages/LoginPage.jsx
-import { useState } from "react";
-import axios from "axios";
-import toast from "react-hot-toast";
-import { useNavigate, Link } from "react-router-dom";
-=======
+
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
-import Footer from "../Footer/Footer";
 import { useAuth } from "../Farmer/pages/context/AuthContext";
->>>>>>> Agriculture-Inspector-review-query
+
 
 export default function LoginPage() {
   const { setUser, setToken } = useAuth();
@@ -23,7 +16,7 @@ export default function LoginPage() {
   const [touched, setTouched] = useState({});
   const navigate = useNavigate();
 
-<<<<<<< HEAD
+// ...existing code...
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) return "Email is required";
@@ -87,8 +80,7 @@ export default function LoginPage() {
     return !emailError && !passwordError;
   };
 
-=======
->>>>>>> Agriculture-Inspector-review-query
+// ...existing code...
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -99,48 +91,25 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-<<<<<<< HEAD
-      const response = await axios.post(
-        `http://localhost:3000/api/users/login`,
-        {
-          email: email.trim(),
-          password,
-          rememberMe,
-        }
-      );
-
-      toast.success("Login Successful");
-
-      const user = response.data.user;
-
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("ID", response.data.user._id);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      switch (user.role) {
-        case "farmer":
-          navigate("/farmer/orders");
-=======
-      const res = await axios.post("http://localhost:3000/api/users/login", { email, password });
+      const res = await axios.post("http://localhost:3000/api/users/login", {
+        email: email.trim(),
+        password,
+        rememberMe,
+      });
 
       toast.success("Login Successful");
       const user = res.data.user;
       const token = res.data.token;
 
-      // Save token and user info in localStorage (AuthContext also syncs)
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("ID", user._id);
-
-      // Update AuthContext state
       setUser(user);
       setToken(token);
 
-      // Navigate based on user role
       switch (user.role) {
         case "farmer":
-          navigate("/farmer/");
->>>>>>> Agriculture-Inspector-review-query
+          navigate("/farmer/orders");
           break;
         case "buyer":
           navigate("/buyerHome/");
@@ -149,12 +118,6 @@ export default function LoginPage() {
           navigate("/users_management/");
           break;
         case "tool dealer":
-<<<<<<< HEAD
-          navigate("/welcome");
-          break;
-        case "agricultural inspector":
-        case "customer":
-=======
           navigate("/");
           break;
         case "agricultural inspector":
@@ -163,12 +126,10 @@ export default function LoginPage() {
         case "customer":
           navigate("/");
           break;
->>>>>>> Agriculture-Inspector-review-query
         default:
           navigate("/");
       }
     } catch (err) {
-<<<<<<< HEAD
       console.error("Login error:", err);
       if (err.response) {
         const errorMessage =
@@ -185,44 +146,16 @@ export default function LoginPage() {
           toast.error(errorMessage);
         }
       } else if (err.request) {
-        toast.error(
-          "Network error. Please check your connection and try again"
-        );
+        toast.error("Network error. Please check your connection and try again");
       } else {
         toast.error("An unexpected error occurred. Please try again");
       }
-=======
-      toast.error(err.response?.data?.error || "An error occurred");
->>>>>>> Agriculture-Inspector-review-query
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-<<<<<<< HEAD
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-      style={{ backgroundImage: "url('/loginbg.jpg')" }}
-    >
-      <div className="absolute inset-0 bg-black/50 z-0"></div>
-      <div className="absolute top-10 left-10 w-24 h-24 bg-white/10 rounded-full blur-2xl animate-float z-0"></div>
-      <div className="absolute bottom-20 right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-float2 z-0"></div>
-
-      <div className="z-10 flex w-11/12 max-w-6xl bg-white/10 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl">
-        <div className="w-1/2 p-10 text-white hidden lg:flex flex-col justify-center">
-          <h1 className="text-5xl font-bold mb-4">Welcome Back</h1>
-          <p className="text-lg mb-6">
-            It is a long established fact that a reader will be distracted by
-            the readable content of a page.
-          </p>
-          <div className="flex space-x-4">
-            {["facebook", "twitter", "instagram", "youtube"].map((icon) => (
-              <a
-                key={icon}
-                href="#"
-                className="text-white hover:text-green-300 transition duration-300"
-=======
     <div className="min-h-screen flex flex-col">
       <div className="flex-grow flex justify-center items-center bg-cover bg-center relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-green-900/70 to-green-800/70 z-10"></div>
@@ -312,176 +245,62 @@ export default function LoginPage() {
                 type="submit"
                 disabled={isLoading}
                 className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 rounded-lg font-semibold text-lg hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-lg hover:shadow-green-500/30 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
->>>>>>> Agriculture-Inspector-review-query
               >
-                <i className={`fab fa-${icon} text-xl`}></i>
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="w-full lg:w-1/2 p-10 bg-white/20">
-          <h2 className="text-3xl font-semibold text-white mb-6 text-center">
-            Sign in
-          </h2>
-
-          <form onSubmit={handleOnSubmit} className="space-y-6" noValidate>
-            <div>
-              <input
-                type="email"
-                placeholder="Email Address"
-                value={email}
-                onChange={handleEmailChange}
-                onBlur={() => handleBlur("email")}
-                className={`w-full px-4 py-3 rounded bg-white/70 text-black placeholder-gray-600 focus:outline-none focus:ring-2 transition-all ${
-                  errors.email && touched.email
-                    ? "focus:ring-red-400 ring-2 ring-red-400"
-                    : "focus:ring-green-400"
-                }`}
-              />
-              {errors.email && touched.email && (
-                <p className="text-red-300 text-sm mt-1 flex items-center">
-                  <span className="mr-1">⚠️</span>
-                  {errors.email}
-                </p>
-              )}
+                {isLoading ? (
+                  <span className="flex items-center justify-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Signing in...
+                  </span>
+                ) : (
+                  "Sign in now"
+                )}
+              </button>
+              <p className="text-sm text-white text-center mt-4">
+                Don't have an account?{' '}
+                <Link to="/users/" className="underline hover:text-green-300 font-medium">
+                  Sign up
+                </Link>
+              </p>
+              <p className="text-sm text-white text-center mt-4">
+                By clicking on "Sign in now" you agree to our{' '}
+                <a href="#" className="underline hover:text-green-300">Terms of Service</a> and{' '}
+                <a href="#" className="underline hover:text-green-300">Privacy Policy</a>.
+              </p>
             </div>
-
-            <div>
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={handlePasswordChange}
-                onBlur={() => handleBlur("password")}
-                className={`w-full px-4 py-3 rounded bg-white/70 text-black placeholder-gray-600 focus:outline-none focus:ring-2 transition-all ${
-                  errors.password && touched.password
-                    ? "focus:ring-red-400 ring-2 ring-red-400"
-                    : "focus:ring-green-400"
-                }`}
-              />
-              {errors.password && touched.password && (
-                <p className="text-red-300 text-sm mt-1 flex items-center">
-                  <span className="mr-1">⚠️</span>
-                  {errors.password}
-                </p>
-              )}
-            </div>
-
-            <div className="flex justify-between items-center text-white">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  className="accent-green-500"
-                  checked={rememberMe}
-                  onChange={() => setRememberMe(!rememberMe)}
-                />
-                <span className="text-sm">Remember Me</span>
-              </label>
-              <Link to="/forgot-password" className="text-sm hover:underline">
-                Lost your password?
-              </Link>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={`w-full py-3 rounded font-semibold transition-all ${
-                isLoading
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-green-600 hover:bg-green-700 active:bg-green-800"
-              } text-white`}
-            >
-              {isLoading ? (
-                <span className="flex items-center justify-center">
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Signing in...
-                </span>
-              ) : (
-                "Sign in now"
-              )}
-            </button>
-
-            {/* ✅ Fixed Sign Up Link */}
-            <p className="text-sm text-white text-center">
-              Don't have an account?{" "}
-              <Link
-                to="/users/"
-                className="underline hover:text-green-300 font-medium"
-              >
-                Sign up
-              </Link>
-            </p>
-
-            <p className="text-sm text-white text-center mt-4">
-              By clicking on "Sign in now" you agree to our{" "}
-              <a href="#" className="underline hover:text-green-300">
-                Terms of Service
-              </a>{" "}
-              and{" "}
-              <a href="#" className="underline hover:text-green-300">
-                Privacy Policy
-              </a>
-              .
-            </p>
           </form>
         </div>
       </div>
-
-<<<<<<< HEAD
       <style>{`
+        @keyframes backgroundScroll {
+          0% { background-position: 0% 0%; }
+          100% { background-position: 100% 100%; }
+        }
         @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-
-        @keyframes float2 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(15px); }
-        }
-
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .animate-float2 {
-          animation: float2 8s ease-in-out infinite;
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+          100% { transform: translateY(0px); }
         }
       `}</style>
-=======
-      <style>
-        {`
-          @keyframes backgroundScroll {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
-          }
-          @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-          }
-        `}
-      </style>
->>>>>>> Agriculture-Inspector-review-query
     </div>
   );
 }
+// ...existing code...
