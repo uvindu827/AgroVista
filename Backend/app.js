@@ -2,24 +2,19 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import cors from "cors";
-import jwt from "jsonwebtoken";
-import morgan from "morgan";
-import path from "path";
-import { fileURLToPath } from "url";
-import cookieParser from "cookie-parser";
-
+import biRoutes from "./routes/biRoutes.js"; // Buyer Inventory routes
+import cartRouter from './routes/cCartRoutes.js'; // Cart routes
 import userRouter from "./routes/userRouter.js";
 import nfRouter from "./routes/nfRoutes.js";
-import biRoutes from "./routes/biRoutes.js";
+import cOrderRoutes from './routes/cOrderRoutes.js';  // Import order routes
+import cors from "cors"; // Enable Cross-Origin Resource Sharing
+import jwt from "jsonwebtoken";
+import path from "path"; // Path utilities
+
+
 import staffRouter from "./routes/staffRoutes.js";
 import productRouter from "./routes/productRouter.js";
 import inquiryRouter from "./routes/inquiryRouter.js";
-import CourseRouter from "./routes/CourseRoute.js";
-import cartRoutes from "./routes/cartRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
-import stripeRoutes from "./routes/stripeRoutes.js";
-import { authenticateUser } from "./middleware/auth.js";
 
 dotenv.config();
 
@@ -87,28 +82,12 @@ app.use("/api/users", userRouter);
 app.use("/api/newsFeed", nfRouter);
 app.use("/api/inventory", biRoutes);
 app.use("/api/staff", staffRouter);
-app.use("/api/products", productRouter);
-app.use("/api/inquiries", inquiryRouter);
-app.use("/api/courses", CourseRouter);
-app.use("/api/cart", cartRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/create-checkout-session", stripeRoutes); // stripeRoutes contains your checkout and webhook endpoints
+app.use("/api/products",productRouter);
+app.use("/api/inquiries",inquiryRouter);
+app.use('/api/cart', cartRouter);
+app.use("/api/orders", cOrderRoutes);  // Mount routes on /api/orders
 
-// Root API health check
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URL)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
-    process.exit(1);
-  });
-
-// Start server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log("Server is runing on port 3000");
 });

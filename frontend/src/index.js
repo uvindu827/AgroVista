@@ -6,7 +6,13 @@ import { Toaster } from "react-hot-toast";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 
+<<<<<<< HEAD
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+=======
 const root = ReactDOM.createRoot(document.getElementById("root"));
+>>>>>>> Agriculture-Inspector-review-query
 root.render(
   <React.StrictMode>
     <BrowserRouter>

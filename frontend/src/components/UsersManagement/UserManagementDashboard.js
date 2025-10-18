@@ -3,7 +3,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminDashboard from "../Admin_dashboard/adminDashboard";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+// Remove Next.js router import
+// Using window.location for navigation instead
 
 function UserManagementDashboard() {
   const [users, setUsers] = useState([]);
@@ -11,6 +13,7 @@ function UserManagementDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     fetchUsers("farmer");
@@ -46,40 +49,116 @@ function UserManagementDashboard() {
     }
   };
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  // Logout function - updated to use window.location
+  const handleLogout = async () => {
+    try {
+      // Clear local storage
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      
+      // Show success message
+      toast.success("Logged out successfully");
+      
+      // Redirect to login page using window.location instead of router
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
+    } catch (err) {
+      console.error("Logout error:", err);
+      toast.error("Logout failed. Please try again.");
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-green-50">
-      <header className="w-full bg-darkGreen text-white flex items-center justify-between px-6 py-4 shadow-md sticky top-0 z-50">
-        <div className="flex items-center space-x-4">
-          <span className="text-2xl font-bold">AgroVista</span>
-          <span className="text-sm font-light hidden sm:block">
-            Admin Dashboard
-          </span>
+      {/* Modern Header */}
+      <header className="w-full bg-gradient-to-r from-darkGreen to-fernGreen text-white flex items-center justify-between px-6 py-4 shadow-lg sticky top-0 z-50">
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 rounded-full hover:bg-white/20 transition-all"
+          >
+            {sidebarOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+          </button>
+          
+          <div className="flex items-center space-x-3">
+            <div className="relative">
+              <img
+                src="/agrologo.png"
+                alt="AgroVista Logo"
+                className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-md"
+              />
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
+            </div>
+            
+            <div className="flex flex-col">
+              <span className="text-xl font-bold tracking-wide flex items-center">
+                AgroVista
+                <span className="ml-2 text-xs font-normal bg-white/20 px-2 py-0.5 rounded-full">Admin</span>
+              </span>
+              <span className="text-xs font-light text-gray-100">
+                User Management Dashboard
+              </span>
+            </div>
+          </div>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <img
-            src="/agrologo.png"
-            alt="agrologo"
-            className="w-20 h-20 rounded-full border-2 border-white"
-          />
+        <div className="flex items-center space-x-3">
+          <div className="hidden md:flex items-center space-x-1">
+            <span className="bg-white/10 rounded-lg px-3 py-1 text-sm">
+              {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+            </span>
+          </div>
+          
+          {/* Logout Button */}
+          <button 
+            onClick={handleLogout}
+            className="flex items-center space-x-1 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-md transition-all text-sm"
+          >
+            <FaSignOutAlt size={16} />
+            <span className="hidden sm:inline">Logout</span>
+          </button>
+          
+          <div className="relative">
+            <button 
+              onClick={toggleDropdown}
+              className="flex items-center space-x-2 p-1 rounded-full hover:bg-white/20 transition-all"
+            >
+              <FaUserCircle size={20} />
+              <span className="hidden md:block text-sm font-medium">Admin</span>
+            </button>
+            
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                  <FaUserCircle className="mr-2" size={14} />
+                  Profile
+                </a>
+                <button 
+                  onClick={handleLogout}
+                  className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                >
+                  <FaSignOutAlt className="mr-2" size={14} />
+                  Sign out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
-      <div className="flex flex-1">
-        {sidebarOpen && (
-          <div className="w-64 bg-fernGreen min-h-screen shadow-md">
-            <AdminDashboard />
-          </div>
-        )}
+      <div className="flex flex-1 mt-1 mb-1">
+        {/* Sidebar with proper styling */}
+        <aside className={`${sidebarOpen ? 'block' : 'hidden'} bg-[rgba(79,121,66,0.8)] min-h-[90vh] my-4 p-6 shadow-md rounded-lg border border-green-200`}>
+          <AdminDashboard />
+        </aside>
 
         <div className="flex-1 p-4">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="mb-4 px-4 py-2 bg-darkGreen hover:bg-fernGreen text-white rounded shadow transition-colors flex items-center justify-center"
-          >
-            {sidebarOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-          </button>
-
+          {/* Content area */}
           <div className="p-4 max-w-7xl mx-auto">
             <ToastContainer
               position="top-center"
@@ -93,37 +172,39 @@ function UserManagementDashboard() {
               pauseOnHover
             />
 
-            <div className="flex flex-wrap gap-4 mb-8">
-              <button
-                onClick={() => fetchUsers("farmer")}
-                className="px-6 py-3 bg-darkGreen hover:bg-fernGreen text-white rounded-md shadow-sm transition-colors"
-              >
-                Farmer Management
-              </button>
-              <button
-                onClick={() => fetchUsers("buyer")}
-                className="px-6 py-3 bg-sinopia hover:bg-sienna text-white rounded-md shadow-sm transition-colors"
-              >
-                Buyer Management
-              </button>
-              <button
-                onClick={() => fetchUsers("customer")}
-                className="px-6 py-3 bg-gamboge hover:bg-sienna text-white rounded-md shadow-sm transition-colors"
-              >
-                Customer Management
-              </button>
-              <button
-                onClick={() => fetchUsers("tool dealer")}
-                className="px-6 py-3 bg-fernGreen hover:bg-darkGreen text-white rounded-md shadow-sm transition-colors"
-              >
-                Tool Dealer Management
-              </button>
-              <button
-                onClick={() => fetchUsers("agricultural inspector")}
-                className="px-6 py-3 bg-sienna hover:bg-darkGreen text-white rounded-md shadow-sm transition-colors"
-              >
-                Agricultural Inspector Management
-              </button>
+            <div className="bg-[rgba(79,121,66,0.1)] p-6 rounded-lg shadow-md border border-green-200 mb-6">
+              <div className="flex flex-wrap gap-4 justify-center">
+                <button
+                  onClick={() => fetchUsers("farmer")}
+                  className="flex-1 min-w-[150px] px-4 py-2 bg-darkGreen hover:bg-fernGreen text-white rounded-md shadow-sm transition-colors text-sm md:text-base"
+                >
+                  Farmers
+                </button>
+                <button
+                  onClick={() => fetchUsers("buyer")}
+                  className="flex-1 min-w-[150px] px-4 py-2 bg-sinopia hover:bg-sienna text-white rounded-md shadow-sm transition-colors text-sm md:text-base"
+                >
+                  Buyers
+                </button>
+                <button
+                  onClick={() => fetchUsers("customer")}
+                  className="flex-1 min-w-[150px] px-4 py-2 bg-gamboge hover:bg-sienna text-white rounded-md shadow-sm transition-colors text-sm md:text-base"
+                >
+                  Customers
+                </button>
+                <button
+                  onClick={() => fetchUsers("tool dealer")}
+                  className="flex-1 min-w-[150px] px-4 py-2 bg-fernGreen hover:bg-darkGreen text-white rounded-md shadow-sm transition-colors text-sm md:text-base"
+                >
+                  Tool Dealers
+                </button>
+                <button
+                  onClick={() => fetchUsers("agricultural inspector")}
+                  className="flex-1 min-w-[150px] px-4 py-2 bg-sienna hover:bg-darkGreen text-white rounded-md shadow-sm transition-colors text-sm md:text-base"
+                >
+                  Agricultural Inspectors
+                </button>
+              </div>
             </div>
           </div>
 

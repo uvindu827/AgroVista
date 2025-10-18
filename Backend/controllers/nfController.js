@@ -7,11 +7,45 @@ import postReport from "../models/postReportModel.js";
 export const addPost = async (req, res) => {
   try {
     const { title, content } = req.body;
-    const image = req.file?.path; // Assuming the image is uploaded and its path is available in req.file.path
-    const keywords = req.body.keywords?.split(",").map((k) => k.trim()) || [];
+    const image = req.file?.path;
+    let keywords = [];
 
+    try {
+      if (typeof req.body.keywords === "string") {
+        keywords = JSON.parse(req.body.keywords);
+      } else if (Array.isArray(req.body.keywords)) {
+        keywords = req.body.keywords.map(k => k.trim());
+      }
+    } catch (error) {
+      console.error("Keyword parsing error:", error);
+      return res.status(400).json({ error: "Invalid keywords format" });
+    }
+
+    // Validation
+    // Check if required fields are present
     if (!title || !content || !image || keywords.length === 0) {
-      return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Validate keywords (only letters, spaces, and commas)
+    for (const keyword of keywords) {
+      if (!/^[A-Za-z\s]+$/.test(keyword)) {
+        return res.status(400).json({ error: "Keywords can only contain letters and spaces" });
+      }
+    }
+
+    // Validate image
+    if (req.file) {
+      // Check file type (MIME type)
+      const acceptedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+      if (!acceptedMimeTypes.includes(req.file.mimetype)) {
+        return res.status(400).json({ error: "Image must be in JPG, PNG, GIF, WEBP, or SVG format" });
+      }
+
+      // Check file size (5MB = 5 * 1024 * 1024 bytes)
+      if (req.file.size > 5 * 1024 * 1024) {
+        return res.status(400).json({ error: "Image size must be less than 5MB" });
+      }
     }
 
     const newPost = new nfPost({
@@ -34,8 +68,8 @@ export const addPost = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("Submit Error:", err.response?.data || err.message);
-    setError(err.response?.data?.error || "Failed to create post");
+    console.error("Submit Error:", err);
+    res.status(500).json({ error: "Failed to create post" });
   }
 };
 
@@ -83,6 +117,30 @@ export const updatePost = async (req, res) => {
       }
     } catch (error) {
       console.error("Keyword parsing error:", error);
+      return res.status(400).json({ error: "Invalid keywords format" });
+    }
+
+    // Validate keywords (only letters and spaces)
+    if (keywords.length > 0) {
+      for (const keyword of keywords) {
+        if (!/^[A-Za-z\s]+$/.test(keyword)) {
+          return res.status(400).json({ error: "Keywords can only contain letters and spaces" });
+        }
+      }
+    }
+
+    // Validate image
+    if (req.file) {
+      // Check file type (MIME type)
+      const acceptedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+      if (!acceptedMimeTypes.includes(req.file.mimetype)) {
+        return res.status(400).json({ error: "Image must be in JPG, PNG, GIF, WEBP, or SVG format" });
+      }
+
+      // Check file size (5MB = 5 * 1024 * 1024 bytes)
+      if (req.file.size > 5 * 1024 * 1024) {
+        return res.status(400).json({ error: "Image size must be less than 5MB" });
+      }
     }
 
     const updateData = {
@@ -98,7 +156,7 @@ export const updatePost = async (req, res) => {
     });
 
     if (!updatedPost) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ error: "Post not found" });
     }
 
     res.status(200).json({
