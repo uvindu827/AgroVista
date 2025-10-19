@@ -1,62 +1,73 @@
+// AdminDashboard.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Users, Newspaper, UserCircle2 } from "lucide-react";
+
 
 function AdminDashboard() {
   const navigate = useNavigate();
 
-  const handleStaffManagement = () => {
-    navigate("/staff");
-  };
+  // Example quick stats (replace with real data)
+  const stats = [
+    { label: "Staff", value: 12, icon: <Users className="w-6 h-6 text-blue-500" /> },
+    { label: "Newsfeed Posts", value: 34, icon: <Newspaper className="w-6 h-6 text-green-500" /> },
+    { label: "Inquiries", value: 7, icon: <UserCircle2 className="w-6 h-6 text-yellow-500" /> },
+  ];
 
-  const handlenfManagement = () => {
-    navigate("/nf-management");
-  };
+  const actions = [
+    {
+      label: "Staff Management",
+      icon: <Users className="w-8 h-8" />,
+      onClick: () => navigate("/staff"),
+      color: "bg-blue-100 hover:bg-blue-200",
+    },
+    {
+      label: "Newsfeed Management",
+      icon: <Newspaper className="w-8 h-8" />,
+      onClick: () => navigate("/nf-management"),
+      color: "bg-green-100 hover:bg-green-200",
+    },
+    {
+      label: "Inquiries Management",
+      icon: <UserCircle2 className="w-8 h-8" />,
+      onClick: () => navigate("/inquiries"),
+      color: "bg-yellow-100 hover:bg-yellow-200",
+    },
+  ];
 
-  const handleNewsFeed = () => {
-    navigate("/newsfeed");
-  };
-  
-  const handleUsersManagement = (role) => {
-    navigate("/users_management");
-  };
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-700 p-6 flex flex-col items-center">
+      <div className="w-full max-w-3xl">
+        <h1 className="text-3xl font-bold text-white mb-2">Welcome, Admin!</h1>
+        <p className="text-gray-300 mb-6">Manage your platform efficiently with quick access to all admin features.</p>
 
-return (
-    <div className="px-4 sm:px-6 lg:px-8 py-8 bg-green-50 min-h-screen">
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-4">
-            <button
-                onClick={handleStaffManagement}
-                className="inline-flex items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-            >
-                Staff Management
-            </button>
-        </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-4">
-            <button
-                onClick={handlenfManagement}
-                className="inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-            >
-                Newsfeed Management
-            </button>
-        </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-4">
-            <button
-                onClick={handleNewsFeed}
-                className="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-                User Newsfeed
-            </button>
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          {stats.map((stat) => (
+            <div key={stat.label} className="flex flex-col items-center bg-gray-800 rounded-lg p-4 shadow">
+              {stat.icon}
+              <span className="text-2xl font-bold text-white mt-2">{stat.value}</span>
+              <span className="text-gray-400 text-sm">{stat.label}</span>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none mb-4">
+        {/* Dashboard Actions */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {actions.map((action) => (
             <button
-                onClick={handleUsersManagement}
-                className="inline-flex items-center justify-center rounded-md bg-purple-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              key={action.label}
+              onClick={action.onClick}
+              className={`flex flex-col items-center justify-center ${action.color} text-gray-900 font-semibold py-6 rounded-xl shadow transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
             >
-                User Management
+              {action.icon}
+              <span className="mt-3 text-lg">{action.label}</span>
             </button>
+          ))}
         </div>
+      </div>
     </div>
-);
+  );
 }
 
 export default AdminDashboard;

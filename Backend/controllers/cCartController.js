@@ -6,6 +6,10 @@ export const createOrUpdateCart = async (req, res) => {
   try {
     const { customerId, buyerId, products } = req.body;
 
+    if (!Array.isArray(products)) {
+      return res.status(400).json({ error: "Products must be an array." });
+    }
+
     let totalAmount = 0;
     const updatedProducts = [];
 

@@ -1,0 +1,50 @@
+.paid-courses-table-container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 0 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.page-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #065f46;
+  margin-bottom: 2rem;
+}
+
+.courses-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f9fafb;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.courses-table th,
+.courses-table td {
+  padding: 14px 20px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.course-img {
+  width: 100px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.status-paid {
+  background-color: #10b981;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.status-not-paid {
+  background-color: #fbbf24;
+  color: #1f2937;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+}
