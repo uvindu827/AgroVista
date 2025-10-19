@@ -7,16 +7,7 @@ import { useAuth } from "../Farmer/pages/context/AuthContext";
 
 
 export default function LoginPage() {
-  const { setUser, setToken } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
-  const navigate = useNavigate();
-
-// ...existing code...
+  // Email validation function
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) return "Email is required";
@@ -24,59 +15,27 @@ export default function LoginPage() {
     return "";
   };
 
+  // Password validation function
   const validatePassword = (password) => {
     if (!password) return "Password is required";
     if (password.length < 6)
       return "Password must be at least 6 characters long";
     return "";
   };
+  const { setUser, setToken } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleEmailChange = (e) => {
-    const value = e.target.value;
-    setEmail(value);
-    if (touched.email) {
-      setErrors((prev) => ({
-        ...prev,
-        email: validateEmail(value),
-      }));
-    }
-  };
+// ...existing code...
+  // ...existing code...
 
-  const handlePasswordChange = (e) => {
-    const value = e.target.value;
-    setPassword(value);
-    if (touched.password) {
-      setErrors((prev) => ({
-        ...prev,
-        password: validatePassword(value),
-      }));
-    }
-  };
-
-  const handleBlur = (field) => {
-    setTouched((prev) => ({ ...prev, [field]: true }));
-    if (field === "email") {
-      setErrors((prev) => ({
-        ...prev,
-        email: validateEmail(email),
-      }));
-    } else if (field === "password") {
-      setErrors((prev) => ({
-        ...prev,
-        password: validatePassword(password),
-      }));
-    }
-  };
+  // ...existing code...
 
   const validateForm = () => {
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
-    const newErrors = {
-      email: emailError,
-      password: passwordError,
-    };
-    setErrors(newErrors);
-    setTouched({ email: true, password: true });
     return !emailError && !passwordError;
   };
 
@@ -93,8 +52,7 @@ export default function LoginPage() {
     try {
       const res = await axios.post("http://localhost:3000/api/users/login", {
         email: email.trim(),
-        password,
-        rememberMe,
+        password
       });
 
       toast.success("Login Successful");
@@ -282,8 +240,8 @@ export default function LoginPage() {
               </p>
               <p className="text-sm text-white text-center mt-4">
                 By clicking on "Sign in now" you agree to our{' '}
-                <a href="#" className="underline hover:text-green-300">Terms of Service</a> and{' '}
-                <a href="#" className="underline hover:text-green-300">Privacy Policy</a>.
+                <button type="button" className="underline hover:text-green-300" style={{background: 'none', border: 'none', padding: 0, color: 'inherit', cursor: 'pointer'}}>Terms of Service</button> and{' '}
+                <button type="button" className="underline hover:text-green-300" style={{background: 'none', border: 'none', padding: 0, color: 'inherit', cursor: 'pointer'}}>Privacy Policy</button>.
               </p>
             </div>
           </form>

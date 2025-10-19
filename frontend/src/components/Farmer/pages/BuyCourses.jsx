@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import StripeBuyNowButton from "../pages/Stripe/StripeCheckoutButton";
 
 export default function BuyCourses() {
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -31,7 +31,12 @@ export default function BuyCourses() {
 
   const addToCart = async (courseId) => {
     try {
-      await API.post(`/cart/add`, { courseId });
+      // Send products as an array for backend compatibility
+      await API.post(`/cart/add`, {
+        customerId: user?._id,
+        buyerId: user?.buyerId || "",
+        products: [{ productId: courseId, quantity: 1 }],
+      });
       toast.success("Added to cart!");
     } catch (err) {
       toast.error("Failed to add to cart");

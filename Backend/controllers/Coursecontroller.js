@@ -3,7 +3,10 @@ import Stripe from "stripe";
 import Order from "../models/orderModel.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-// Create Stripe Checkout session for Agriculture Inspector course
+
+// ========================
+// Create Stripe checkout
+// ========================
 export const createCourseCheckoutSession = async (req, res) => {
   try {
     const { userId, courseId } = req.body;
@@ -11,6 +14,7 @@ export const createCourseCheckoutSession = async (req, res) => {
     if (!course || course.deleted) {
       return res.status(404).json({ error: "Course not found" });
     }
+
     // Only allow payment for Agriculture Inspector course
     if (course.title.toLowerCase().indexOf("agriculture inspector") === -1) {
       return res.status(400).json({ error: "This course is not eligible for Stripe payment." });
@@ -60,25 +64,37 @@ export const createCourseCheckoutSession = async (req, res) => {
   }
 };
 
+// ========================
+// Low purchase alert logic
+// ========================
+export const getLowPurchaseCourses = async (req, res) => {
+  try {
+    const threshold = 3;
+    const lowCourses = await Course.find({ deleted: false })
+      .populate("coordinator", "name email")
+      .lean();
+
+    const result = lowCourses
+      .map((c) => ({
+        ...c,
+        registeredCount: c.registeredUsers ? c.registeredUsers.length : 0,
+      }))
+      .filter((c) => c.registeredCount < threshold);
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ========================
+// CRUD and other functions
+// ========================
 export const createCourse = async (req, res) => {
   try {
-    const {
-      title,
-      description,
-      startingdate,
-      enddate,
-      coursefee,
-      coordinator,
-    } = req.body;
+    const { title, description, startingdate, enddate, coursefee, coordinator } = req.body;
 
-    if (
-      !title ||
-      !description ||
-      !coursefee ||
-      !startingdate ||
-      !enddate ||
-      !coordinator
-    ) {
+    if (!title || !description || !coursefee || !startingdate || !enddate || !coordinator) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -105,13 +121,10 @@ export const createCourse = async (req, res) => {
 export const updateCourse = async (req, res) => {
   try {
     const updateData = req.body;
-
     if (req.file) updateData.imageUrl = req.file.path;
     if (updateData.coursefee) updateData.coursefee = Number(updateData.coursefee);
 
-    const updated = await Course.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-    });
+    const updated = await Course.findByIdAndUpdate(req.params.id, updateData, { new: true });
     if (!updated) return res.status(404).json({ error: "Course not found" });
 
     res.json(updated);
@@ -206,10 +219,7 @@ export const registerUserToCourse = async (req, res) => {
 export const getRegisteredCoursesForUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const courses = await Course.find({
-      registeredUsers: userId,
-      deleted: false,
-    })
+    const courses = await Course.find({ registeredUsers: userId, deleted: false })
       .populate("createdBy", "name email")
       .populate("coordinator", "name email");
     res.json(courses);

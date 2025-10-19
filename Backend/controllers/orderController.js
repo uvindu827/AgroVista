@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import Order from "../models/order.js";
 import Product from "../models/product.js";
 import { isItFarmer, isItBuyer } from "./userController.js";
@@ -178,7 +177,6 @@ export async function updateOrder(req, res) {
     res.status(500).json({ message: error.message });
   }
 }
-=======
 import Stripe from "stripe";
 import dotenv from "dotenv";
 import Order from "../models/orderModel.js";
@@ -229,4 +227,3 @@ export const createCheckoutSession = async (req, res) => {
     res.status(500).json({ error: "Failed to create Stripe session" });
   }
 };
->>>>>>> Agriculture-Inspector-review-query

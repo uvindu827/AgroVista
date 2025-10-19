@@ -37,37 +37,56 @@ export default function Sidebar() {
     }`;
 
   return (
-    <div className="w-64 bg-green-100 shadow-lg flex flex-col">
-      <h2 className="text-2xl font-bold text-center py-4 text-green-700">
-        Instructor Dashboard
+    <div
+      className="w-64 min-h-screen flex flex-col shadow-xl"
+      style={{
+        background: 'linear-gradient(135deg, #38b2ac 0%, #22c55e 100%)',
+        backdropFilter: 'blur(12px)',
+        borderRadius: '32px',
+        boxShadow: '0 8px 32px rgba(34,197,94,0.18)',
+        border: '2px solid rgba(56,178,172,0.18)',
+        margin: '18px 0 18px 18px',
+        fontFamily: 'Poppins, Segoe UI, sans-serif',
+        position: 'relative',
+      }}
+    >
+      <h2
+        className="text-3xl font-extrabold text-center py-6"
+        style={{
+          color: '#fff',
+          letterSpacing: '2px',
+          textShadow: '0 2px 12px #22c55e',
+        }}
+      >
+        Inspector Dashboard
       </h2>
 
-      <nav className="space-y-1 px-2">
-        <NavLink to="/instructor" className={linkClasses}>
-          <FiHome />
-          <span><h1>Home</h1></span>
+      <nav className="space-y-2 px-4 mt-2">
+        <NavLink to="/instructor" className={linkClasses} style={{ transition: 'all 0.2s' }}>
+          <FiHome className="transition-transform duration-200 group-hover:scale-125" size={22} />
+          <span style={{ fontWeight: 600, fontSize: '1.1rem', color: '#fff' }}>Home</span>
         </NavLink>
-        <NavLink to="/instructor/courses" className={linkClasses}>
-          <FiBookOpen />
-          <span><h1>Courses</h1></span>
+        <NavLink to="/instructor/courses" className={linkClasses} style={{ transition: 'all 0.2s' }}>
+          <FiBookOpen className="transition-transform duration-200 group-hover:scale-125" size={22} />
+          <span style={{ fontWeight: 600, fontSize: '1.1rem', color: '#fff' }}>Courses</span>
         </NavLink>
-        <NavLink to="/instructor/purchases" className={linkClasses}>
-          <FiShoppingCart />
-          <span>Course Purchases</span>
+        <NavLink to="/instructor/purchases" className={linkClasses} style={{ transition: 'all 0.2s' }}>
+          <FiShoppingCart className="transition-transform duration-200 group-hover:scale-125" size={22} />
+          <span style={{ fontWeight: 600, fontSize: '1.1rem', color: '#fff' }}>Course Purchases</span>
         </NavLink>
-        <NavLink to="/instructor/add-course" className={linkClasses}>
-          <FiPlusCircle />
-          <span>Add Course</span>
+        <NavLink to="/instructor/add-course" className={linkClasses} style={{ transition: 'all 0.2s' }}>
+          <FiPlusCircle className="transition-transform duration-200 group-hover:scale-125" size={22} />
+          <span style={{ fontWeight: 600, fontSize: '1.1rem', color: '#fff' }}>Add Course</span>
         </NavLink>
       </nav>
 
-      {/* 👇 Logout button moved up here directly below nav */}
-      <div className="px-2 mt-4">
+      <div className="px-4 mt-8 mb-4">
         <button
           onClick={handleLogout}
-          className="flex items-center space-x-2 px-4 py-2 rounded text-red-700 hover:bg-red-100 w-full"
+          className="flex items-center space-x-2 px-4 py-2 rounded-full text-white font-semibold bg-gradient-to-r from-red-400 to-red-600 shadow hover:scale-105 transition w-full"
+          style={{ letterSpacing: '1px', fontSize: '1.08rem' }}
         >
-          <FiLogOut />
+          <FiLogOut size={20} />
           <span>Logout</span>
         </button>
       </div>

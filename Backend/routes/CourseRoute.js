@@ -1,27 +1,32 @@
 import express from "express";
-import * as courseController from "../controllers/Coursecontroller.js";
-import { protect } from "../middleware/auth.js";
-import { parser } from "../config/cloudinary.js";
-// Stripe payment for Agriculture Inspector course
-router.post("/checkout-session", protect, courseController.createCourseCheckoutSession);
+import {
+  getAllCourses,
+  getCourseById,
+  createCourse,
+  updateCourse,
+  deleteCourse,
+  restoreCourse,
+  getPaidCourses,
+  registerUserToCourse,
+  getRegisteredCoursesForUser,
+  createCourseCheckoutSession,
+  getLowPurchaseCourses,
+} from "../controllers/Coursecontroller.js";
 
 const router = express.Router();
 
-// Public routes
-router.get("/", courseController.getAllCourses);
+router.get("/", getAllCourses);
+router.get("/:id", getCourseById);
+router.post("/", createCourse);
+router.put("/:id", updateCourse);
+router.delete("/:id", deleteCourse);
+router.post("/restore/:id", restoreCourse);
+router.get("/paid", getPaidCourses);
+router.post("/:userId/register", registerUserToCourse);
+router.get("/:userId/registered", getRegisteredCoursesForUser);
 
-// Protected routes
-router.get("/paid", protect, courseController.getPaidCourses);  // <--- protected with `protect`
-
-// Other protected routes
-router.post("/", protect, parser.single("image"), courseController.createCourse);
-router.get("/:id", protect, courseController.getCourseById);
-router.put("/:id", protect, parser.single("image"), courseController.updateCourse);
-router.delete("/:id", protect, courseController.deleteCourse);
-router.post("/restore/:id", protect, courseController.restoreCourse);
-
-// User registration
-router.post("/register/:userId", protect, courseController.registerUserToCourse);
-router.get("/registered/:userId", protect, courseController.getRegisteredCoursesForUser);
+// Stripe & low-purchase routes
+router.post("/checkout-session", createCourseCheckoutSession);
+router.get("/low-purchases", getLowPurchaseCourses);
 
 export default router;

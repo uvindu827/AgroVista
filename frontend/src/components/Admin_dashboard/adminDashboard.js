@@ -1,7 +1,7 @@
 // AdminDashboard.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, Newspaper, UserCircle2, LayoutGrid } from "lucide-react";
+import { Users, Newspaper, UserCircle2 } from "lucide-react";
 
 
 function AdminDashboard() {
