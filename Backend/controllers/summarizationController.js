@@ -34,8 +34,6 @@ export const summarizeText = async (req, res) => {
       }
     );
 
-    console.log("API response:", response.data);
-
     if (Array.isArray(response.data) && response.data.length > 0) {
       const summaryText = response.data[0].summary_text;
       if (summaryText) {

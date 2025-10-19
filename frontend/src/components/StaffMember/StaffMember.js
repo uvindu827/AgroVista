@@ -22,7 +22,7 @@ function StaffMember({ StaffMember, onEdit, onDelete, onDownload }) {
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{address}</td>
       <td className="px-6 py-4 whitespace-nowrap text-gray-700">{jobTitle}</td>
       <td className="px-6 py-4 whitespace-nowrap text-green-600 font-medium">
-        ${basicSalary}
+        Rs.{basicSalary}
       </td>
 
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

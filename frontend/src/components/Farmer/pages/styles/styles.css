@@ -1,0 +1,65 @@
+/* src/components/Farmer/pages/styles.css */
+.course-container, .cart-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.course-grid, .cart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 20px;
+}
+
+.course-card, .cart-card {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.course-img, .cart-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.course-info, .cart-info {
+  margin-top: 10px;
+}
+
+.course-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-add, .btn-remove, .btn-buy {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-add {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-remove {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-buy {
+  background-color: #28a745;
+  color: white;
+}
+
+.cart-footer {
+  text-align: right;
+  margin-top: 20px;
+}
