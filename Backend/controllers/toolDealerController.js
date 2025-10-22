@@ -1,6 +1,6 @@
-const ToolDealer = require('../models/toolDealerModel');
+import ToolDealer from '../models/toolDealerModel.js';
 
-exports.createToolDealer = async (req, res) => {
+export const createToolDealer = async (req, res) => {
     try {
         const dealer = new ToolDealer(req.body);
         await dealer.save();
@@ -10,7 +10,7 @@ exports.createToolDealer = async (req, res) => {
     }
 };
 
-exports.getToolDealers = async (req, res) => {
+export const getToolDealers = async (req, res) => {
     try {
         const dealers = await ToolDealer.find();
         res.json(dealers);
@@ -19,7 +19,7 @@ exports.getToolDealers = async (req, res) => {
     }
 };
 
-exports.getToolDealerById = async (req, res) => {
+export const getToolDealerById = async (req, res) => {
     try {
         const dealer = await ToolDealer.findById(req.params.id);
         if (!dealer) return res.status(404).json({ error: 'Not found' });
@@ -29,7 +29,7 @@ exports.getToolDealerById = async (req, res) => {
     }
 };
 
-exports.updateToolDealer = async (req, res) => {
+export const updateToolDealer = async (req, res) => {
     try {
         const dealer = await ToolDealer.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!dealer) return res.status(404).json({ error: 'Not found' });
@@ -39,7 +39,7 @@ exports.updateToolDealer = async (req, res) => {
     }
 };
 
-exports.deleteToolDealer = async (req, res) => {
+export const deleteToolDealer = async (req, res) => {
     try {
         const dealer = await ToolDealer.findByIdAndDelete(req.params.id);
         if (!dealer) return res.status(404).json({ error: 'Not found' });

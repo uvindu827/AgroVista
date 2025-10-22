@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const toolDealerSchema = new mongoose.Schema({
     name: { type: String, required: true },
@@ -14,4 +14,5 @@ const toolDealerSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('ToolDealer', toolDealerSchema);
+const ToolDealer = mongoose.model('ToolDealer', toolDealerSchema);
+export default ToolDealer;
