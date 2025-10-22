@@ -21,6 +21,7 @@ import { protect } from "./middleware/auth.js";
 import courseRouter from "./routes/CourseRoute.js";
 import aiAssistantRoutes from "./routes/aiAssistantRoutes.js";
 import lowPurchaseRoutes from "./routes/lowPurchaseRoutes.js";
+import toolDealerRoutes from "./routes/toolDealerRoutes.js";
 
 dotenv.config();
 
@@ -98,6 +99,7 @@ app.use("/api/staff", staffRouter);
 app.use("/api/products", productRouter);
 app.use("/api/inquiries", inquiryRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/tooldealers", toolDealerRoutes);
 
 // Compatibility endpoint for /api/cart/add (maps to createOrUpdateCart)
 import { createOrUpdateCart } from "./controllers/cCartController.js";
