@@ -31,6 +31,12 @@ export default function Header() {
           >
             Cart
           </Link>
+          <Link
+            to="/crop-disease-detection"
+            className="text-gray-700 hover:text-green-600 transition"
+          >
+            Crop Disease Detection
+          </Link>
         </nav>
       </div>
     </header>

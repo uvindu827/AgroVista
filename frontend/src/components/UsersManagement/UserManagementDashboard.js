@@ -134,10 +134,10 @@ function UserManagementDashboard() {
             
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center" aria-label="Profile">
                   <FaUserCircle className="mr-2" size={14} />
                   Profile
-                </a>
+                </button>
                 <button 
                   onClick={handleLogout}
                   className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"

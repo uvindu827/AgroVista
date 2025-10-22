@@ -14,6 +14,7 @@ import {
 } from "../controllers/Coursecontroller.js";
 
 const router = express.Router();
+import { stripeWebhook } from "../controllers/Coursecontroller.js";
 
 router.get("/", getAllCourses);
 router.get("/:id", getCourseById);
@@ -26,6 +27,7 @@ router.post("/:userId/register", registerUserToCourse);
 router.get("/:userId/registered", getRegisteredCoursesForUser);
 
 // Stripe & low-purchase routes
+router.post("/stripe/webhook", express.raw({ type: 'application/json' }), stripeWebhook);
 router.post("/checkout-session", createCourseCheckoutSession);
 router.get("/low-purchases", getLowPurchaseCourses);
 

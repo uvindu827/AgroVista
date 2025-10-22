@@ -6,7 +6,7 @@ export default function ImageSlider(props) {
 
   return (
     <div className="w-full aspect-square flex items-center flex-col relative">
-      <img src={images[activeImage]} className="w-full aspect-square object-cover" />
+  <img src={images[activeImage]} className="w-full aspect-square object-cover" alt="Product" />
       <div className="absolute bottom-0 w-full h-[100px] backdrop-blur-lg">
         <div className="w-full h-full  flex items-center justify-center overflow-hidden">
           {images.map((image, index) => (
@@ -15,6 +15,7 @@ export default function ImageSlider(props) {
               key={index}
               src={image}
               className=" w-16 h-16 cursor-pointer  object-cover  mx-2"
+              alt={`Thumbnail ${index + 1}`}
             />
           ))}
         </div>

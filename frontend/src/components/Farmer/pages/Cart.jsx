@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import API from "../pages/api/api";
 import { useAuth } from "../pages/context/AuthContext";
 import toast from "react-hot-toast";
@@ -8,29 +8,27 @@ export default function Cart() {
   const { token } = useAuth();
   const [cartCourses, setCartCourses] = useState([]);
 
-  useEffect(() => {
-    if (token) {
-      fetchCart();
-    }
-  }, [token]);
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
+    if (!token) return;
     try {
-      const { data } = await API.get("/cart", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await API.get("/cart");
       setCartCourses(data);
     } catch (error) {
       console.error("Failed to fetch cart", error);
       toast.error("Failed to load cart");
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
+
+  // fetchCart is now wrapped in useCallback above
 
   const removeFromCart = async (courseId) => {
     try {
-      await API.delete(`/cart/${courseId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await API.delete(`/cart/${courseId}`);
       toast.success("Removed from cart");
       fetchCart();
     } catch (error) {
@@ -39,7 +37,7 @@ export default function Cart() {
     }
   };
 
-  const totalPrice = cartCourses.reduce((sum, course) => sum + course.price, 0);
+  const totalPrice = cartCourses.reduce((sum, item) => sum + (item.course?.coursefee || 0), 0);
 
   return (
     <div style={{ maxWidth: "800px", margin: "2rem auto", padding: "1rem" }}>
@@ -49,9 +47,9 @@ export default function Cart() {
       ) : (
         <>
           <ul style={{ listStyle: "none", padding: 0 }}>
-            {cartCourses.map((course) => (
+            {cartCourses.map((item) => (
               <li
-                key={course._id}
+                key={item._id}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -61,8 +59,8 @@ export default function Cart() {
                 }}
               >
                 <img
-                  src={course.imageUrl}
-                  alt={course.title}
+                  src={item.course?.imageUrl}
+                  alt={item.course?.title}
                   style={{
                     width: "100px",
                     height: "70px",
@@ -72,13 +70,19 @@ export default function Cart() {
                   }}
                 />
                 <div style={{ flex: 1 }}>
-                  <h4 style={{ margin: 0 }}>{course.title}</h4>
+                  <h4 style={{ margin: 0 }}>{item.course?.title}</h4>
                   <p style={{ margin: 0, color: "gray" }}>
-                    LKR {course.price.toLocaleString()}
+                    LKR {(item.course?.coursefee || 0).toLocaleString()}
                   </p>
                 </div>
                 <button
-                  onClick={() => removeFromCart(course._id)}
+                  onClick={() => {
+                    if (item.course && item.course._id) {
+                      removeFromCart(item.course._id);
+                    } else {
+                      toast.error("Course ID not found. Cannot remove from cart.");
+                    }
+                  }}
                   style={{
                     backgroundColor: "#dc3545",
                     color: "white",

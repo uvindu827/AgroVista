@@ -14,8 +14,10 @@ export const authenticateUser = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.userId).select("-password");
-    console.log("User ID from token:", req.user?._id);
+    const user = await User.findById(decoded.userId).select("-password");
+    req.user = user;
+    if (user) req.user.id = user._id; // Ensure req.user.id is set
+    console.log("User ID from token:", req.user?.id);
     next();
   } catch (err) {
     console.error("JWT Error:", err);

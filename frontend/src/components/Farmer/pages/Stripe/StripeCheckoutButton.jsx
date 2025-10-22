@@ -1,4 +1,5 @@
 import React from "react";
+import { useAuth } from "../context/AuthContext";
 import { loadStripe } from "@stripe/stripe-js";
 import API from "../api/api";
 import toast from "react-hot-toast";
@@ -7,20 +8,22 @@ import toast from "react-hot-toast";
 const stripePromise = loadStripe("pk_test_YourStripePublicKey");
 
 export default function StripeCheckoutButton({ cartMode = true, courseId = null }) {
+  const { user } = useAuth();
   const handleCheckout = async () => {
     try {
-      const stripe = await stripePromise;
+      await stripePromise; // Only load, don't assign
 
       const payload = cartMode
-        ? { cart: true }
-        : { courseId: courseId };
+        ? { cart: true, userId: user?._id || user?.id }
+        : { courseId: courseId, userId: user?._id || user?.id };
 
-      const response = await API.post("/create-checkout-session", payload);
+      // Use correct backend endpoint for Stripe session creation
+      const response = await API.post("/courses/checkout-session", payload);
 
-      if (response.data.id) {
-        await stripe.redirectToCheckout({ sessionId: response.data.id });
+      if (response.data.url) {
+        window.location.href = response.data.url;
       } else {
-        toast.error("Payment initiation failed: no session ID");
+        toast.error("Payment initiation failed: no session URL");
       }
     } catch (error) {
       console.error("Stripe checkout error:", error);

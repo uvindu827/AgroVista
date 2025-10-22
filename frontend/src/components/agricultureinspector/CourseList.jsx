@@ -18,11 +18,11 @@ export default function CourseList() {
   const token = localStorage.getItem("token");
   const config = useMemo(() => ({ headers: { Authorization: `Bearer ${token}` } }), [token]);
 
+  // --- Creative background ---
+  const backgroundUrl = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80"; // Agriculture inspection themed
+
   // Stripe payment
   const handleStripePayment = async (courseId) => {
-    // TODO: Implement Stripe payment logic here
-    // This function should trigger the payment process for the given courseId
-    // Example: redirect to Stripe checkout or open payment modal
     toast('Stripe payment not implemented yet.');
   };
 
@@ -57,39 +57,40 @@ export default function CourseList() {
       const matchesSearch =
         course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (course.coordinator && course.coordinator.toLowerCase().includes(searchTerm.toLowerCase()));
-
       const fee = Number(course.coursefee);
       let matchesPrice = true;
       if (priceFilter === "below20k") matchesPrice = fee < 20000;
       else if (priceFilter === "above20k") matchesPrice = fee >= 20000;
-
       return matchesSearch && matchesPrice;
     });
   }, [courses, searchTerm, priceFilter]);
 
-  // Pagination
+  // Pagination logic
   const totalPages = Math.ceil(filteredCourses.length / pageSize);
-  const paginatedCourses = filteredCourses.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const paginatedCourses = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredCourses.slice(start, start + pageSize);
+  }, [filteredCourses, currentPage, pageSize]);
 
-  const goPrev = () => setCurrentPage((p) => Math.max(p - 1, 1));
-  const goNext = () => setCurrentPage((p) => Math.min(p + 1, totalPages));
+  const goPrev = () => setCurrentPage((p) => Math.max(1, p - 1));
+  const goNext = () => setCurrentPage((p) => Math.min(totalPages, p + 1));
   const goToPage = (page) => setCurrentPage(page);
 
-  // Delete course
-  const handleDelete = async (id) => {
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "This course will be marked as deleted.",
+  // Course actions
+  const handleDelete = async (courseId) => {
+    const confirm = await Swal.fire({
+      title: "Delete Course?",
+      text: "Are you sure you want to delete this course?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
     });
-    if (result.isConfirmed) {
+    if (confirm.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:3000/api/courses/${id}`, config);
-        toast.success("Course deleted");
+        await axios.delete(`http://localhost:3000/api/courses/${courseId}`, config);
+        toast.success("Course deleted successfully");
         fetchCourses();
       } catch {
         toast.error("Failed to delete course");
@@ -97,23 +98,13 @@ export default function CourseList() {
     }
   };
 
-  // Restore course
-  const handleRestore = async (id) => {
-    const result = await Swal.fire({
-      title: "Restore Course?",
-      text: "This course will be visible again.",
-      icon: "info",
-      showCancelButton: true,
-      confirmButtonText: "Restore",
-    });
-    if (result.isConfirmed) {
-      try {
-        await axios.post(`http://localhost:3000/api/courses/restore/${id}`, {}, config);
-        toast.success("Course restored");
-        fetchCourses();
-      } catch {
-        toast.error("Failed to restore course");
-      }
+  const handleRestore = async (courseId) => {
+    try {
+      await axios.patch(`http://localhost:3000/api/courses/${courseId}/restore`, {}, config);
+      toast.success("Course restored successfully");
+      fetchCourses();
+    } catch {
+      toast.error("Failed to restore course");
     }
   };
 
@@ -122,8 +113,8 @@ export default function CourseList() {
       {/* Background */}
       <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         <img
-          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1440&q=80"
-          alt="Farm"
+          src={backgroundUrl}
+          alt="Agriculture Inspection"
           style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.55 }}
         />
         <div
@@ -135,7 +126,7 @@ export default function CourseList() {
         ></div>
       </div>
 
-      {/* Main */}
+
       <div className="container mx-auto px-4 py-6" style={{ position: "relative", zIndex: 2 }}>
         <div className="mb-8"><LowPurchaseAlert /></div>
         <div className="mb-8"><InspectorAssistant /></div>
@@ -230,3 +221,4 @@ export default function CourseList() {
     </div>
   );
 }
+

@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import biRoutes from "./routes/biRoutes.js";
-import cartRouter from "./routes/cCartRoutes.js";
+import cartRouter from "./routes/cartRoutes.js";
 import userRouter from "./routes/userRouter.js";
 import nfRouter from "./routes/nfRoutes.js";
 import cOrderRoutes from "./routes/cOrderRoutes.js";
@@ -21,6 +21,7 @@ import { protect } from "./middleware/auth.js";
 import courseRouter from "./routes/CourseRoute.js";
 import aiAssistantRoutes from "./routes/aiAssistantRoutes.js";
 import lowPurchaseRoutes from "./routes/lowPurchaseRoutes.js";
+import diseaseDetectionRoutes from "./routes/diseaseDetectionRoutes.js";
 import toolDealerRoutes from "./routes/toolDealerRoutes.js";
 
 dotenv.config();
@@ -29,6 +30,7 @@ dotenv.config();
 const app = express();
 // Mount low-purchase suggestion route (after app is initialized)
 app.use("/api/low-purchase", lowPurchaseRoutes);
+app.use("/api/disease-detection", diseaseDetectionRoutes);
 
 // Setup __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -75,7 +77,7 @@ app.use((req, res, next) => {
     const token = authHeader.slice(7);
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded;
+      req.user = { id: decoded.userId || decoded._id };
     } catch (err) {
       req.user = null;
     }
@@ -101,9 +103,7 @@ app.use("/api/inquiries", inquiryRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/tooldealers", toolDealerRoutes);
 
-// Compatibility endpoint for /api/cart/add (maps to createOrUpdateCart)
-import { createOrUpdateCart } from "./controllers/cCartController.js";
-app.post("/api/cart/add", createOrUpdateCart);
+// ...existing code...
 app.use("/api/orders", cOrderRoutes);
 
 // Also mount userRouter on /api/order for paid-courses endpoint

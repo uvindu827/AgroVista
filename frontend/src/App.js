@@ -43,6 +43,7 @@ import AddCoursePage from "./pages/AddCoursePage";
 import PurchasesPage from "./components/Farmer/PaidCourses";
 import FarmerDashboard from "./components/Farmer/FarmerDashboard";
 import ViewOrders from "./components/Admin/ViewOrders";
+import CropDiseaseDetection from "./components/Farmer/pages/CropDiseaseDetection";
 
 function App() {
   return (
@@ -102,6 +103,7 @@ function App() {
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/myorders" element={<MyOrdersPage />} />
         <Route path="/inquiries" element={<AdminInquiryResponsePage />} />
+        <Route path="/crop-disease-detection" element={<CropDiseaseDetection />} />
       </Routes>
     </>
   );

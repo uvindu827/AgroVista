@@ -5,6 +5,42 @@ import Order from "../models/orderModel.js";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // ========================
+// Stripe webhook to confirm payment and register course
+export const stripeWebhook = async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+  try {
+    event = Stripe.webhooks.constructEvent(req.rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+  
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const userId = session.metadata.userId;
+    const courseIds = JSON.parse(session.metadata.courseIds);
+    const orderId = session.metadata.orderId;
+
+    // Mark order as paid
+    await Order.findByIdAndUpdate(orderId, { paymentStatus: 'paid' });
+
+    // Register course(s) to user
+    const user = await import('../models/user.js').then(m => m.default.findById(userId));
+    if (user) {
+      for (const courseId of courseIds) {
+        if (!user.purchased.includes(courseId)) {
+          user.purchased.push(courseId);
+        }
+        if (!user.registeredCourses.includes(courseId)) {
+          user.registeredCourses.push(courseId);
+        }
+      }
+      await user.save();
+    }
+  }
+  res.status(200).json({ received: true });
+};
 // Create Stripe checkout
 // ========================
 export const createCourseCheckoutSession = async (req, res) => {
@@ -15,10 +51,7 @@ export const createCourseCheckoutSession = async (req, res) => {
       return res.status(404).json({ error: "Course not found" });
     }
 
-    // Only allow payment for Agriculture Inspector course
-    if (course.title.toLowerCase().indexOf("agriculture inspector") === -1) {
-      return res.status(400).json({ error: "This course is not eligible for Stripe payment." });
-    }
+    // Allow payment for any course
 
     // Create order with pending status
     const order = await Order.create({
