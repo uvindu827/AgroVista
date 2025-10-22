@@ -6,7 +6,24 @@ export default function CropDiseaseDetection() {
   const [preview, setPreview] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState({ lat: "", lng: "" });
+  const [locError, setLocError] = useState("");
 
+  // Get geolocation on mount
+  React.useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        },
+        (err) => {
+          setLocError("Location access denied or unavailable.");
+        }
+      );
+    } else {
+      setLocError("Geolocation not supported.");
+    }
+  }, []);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
@@ -20,6 +37,8 @@ export default function CropDiseaseDetection() {
     setResult(null);
     const formData = new FormData();
     formData.append("image", image);
+    formData.append("lat", location.lat);
+    formData.append("lng", location.lng);
     try {
       const { data } = await API.post("/disease-detection", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -38,6 +57,13 @@ export default function CropDiseaseDetection() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center">
         <input type="file" accept="image/*" onChange={handleImageChange} className="mb-2" />
         {preview && <img src={preview} alt="Preview" className="w-64 h-48 object-cover rounded-lg border mb-2" />}
+        <div className="mb-2 text-center">
+          {location.lat && location.lng ? (
+            <span className="text-green-700 text-sm">Location: {location.lat}, {location.lng}</span>
+          ) : (
+            <span className="text-red-600 text-sm">{locError}</span>
+          )}
+        </div>
         <button type="submit" disabled={!image || loading} className="bg-green-600 text-white px-6 py-2 rounded-full font-semibold shadow hover:bg-green-700 transition">
           {loading ? "Detecting..." : "Detect Disease"}
         </button>
