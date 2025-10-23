@@ -21,6 +21,12 @@ import { protect } from "./middleware/auth.js";
 import courseRouter from "./routes/CourseRoute.js";
 import aiAssistantRoutes from "./routes/aiAssistantRoutes.js";
 import lowPurchaseRoutes from "./routes/lowPurchaseRoutes.js";
+<<<<<<< Updated upstream
+=======
+import diseaseDetectionRoutes from "./routes/diseaseDetectionRoutes.js";
+import cropDiseaseRoutes from "./routes/cropDiseaseRoutes.js";
+import toolDealerRoutes from "./routes/toolDealerRoutes.js";
+>>>>>>> Stashed changes
 
 dotenv.config();
 
@@ -28,6 +34,11 @@ dotenv.config();
 const app = express();
 // Mount low-purchase suggestion route (after app is initialized)
 app.use("/api/low-purchase", lowPurchaseRoutes);
+<<<<<<< Updated upstream
+=======
+app.use("/api/disease-detection", diseaseDetectionRoutes);
+app.use("/api", cropDiseaseRoutes);
+>>>>>>> Stashed changes
 
 // Setup __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);

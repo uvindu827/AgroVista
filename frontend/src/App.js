@@ -4,6 +4,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import "./App.css";
 // ...existing imports from both branches (merged)
 import BuyerHomePage from "./components/BuyerHomePage/BuyerHomePage";
+import CropDiseaseDetection from "./components/CropDiseaseDetection";
 import AddEmployee from "./components/AddEmployee/AddEmployee";
 import Staff from "./components/StaffDetails/Staff";
 import UpdateEmployee from "./components/UpdateEmployee/updateEmployee";
@@ -65,6 +66,8 @@ function App() {
         <Route path="/update_employee/:id" element={<UpdateEmployee />} />
         {/* News Feed Management */}
         <Route path="/nf-management" element={<NFManagement />} />
+        {/* Crop Disease Detection Page */}
+        <Route path="/crop-disease-detection" element={<CropDiseaseDetection />} />
         <Route path="/add-post" element={<AddPost />} />
         <Route path="/update_post/:id" element={<UpdateNFPost />} />
         <Route path="/report_list" element={<ReportsList />} />
