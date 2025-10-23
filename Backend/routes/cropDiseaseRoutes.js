@@ -18,7 +18,7 @@ router.post('/detect-crop-disease', upload.single('image'), async (req, res) => 
     const lon = req.body.lon || req.body.lng || null;
     const weather = req.body.weather ? req.body.weather : null;
 
-    // Prepare form-data for Flask API
+    // Prepare form-data for ML API
     const formData = new FormData();
     if (imageBuffer) {
       formData.append('image', imageBuffer, {
@@ -30,27 +30,56 @@ router.post('/detect-crop-disease', upload.single('image'), async (req, res) => 
     formData.append('lon', lon);
     formData.append('weather', weather);
 
-    // Call Flask API (if available). If Flask is down, return a fallback dummy response
-    try {
-      const flaskUrl = 'http://localhost:5001/predict';
-      const flaskRes = await axios.post(flaskUrl, formData, {
+    // Call ML API (configurable via ML_URL). If it fails, try a local mock service on port 5000/5001
+    const mlUrl = process.env.ML_URL || 'http://localhost:5001/predict';
+    const mockUrl = process.env.MOCK_DETECT_URL || 'http://localhost:5001/api/detect-crop-disease';
+
+    const tryForward = async (url) => {
+      const resp = await axios.post(url, formData, {
         headers: formData.getHeaders(),
         timeout: 5000,
       });
-      return res.json(flaskRes.data);
-    } catch (forwardErr) {
-      console.warn('Flask service unavailable, returning local fallback result:', forwardErr.message);
-      // Fallback dummy response so frontend can still show a result while the ML service is offline
-      const fallback = {
-        success: false,
-        disease: 'Unknown (model unavailable)',
-        confidence: 0,
-        suggestions: [
-          'Server ML service unreachable. Try again later.',
-        ],
+      return resp.data;
+    };
+
+    // Allow an in-process mock for CI/local deterministic runs
+    if (process.env.USE_INPROCESS_MOCK === '1') {
+      const mockResp = {
+        success: true,
+        disease: 'MockDisease (in-process)',
+        confidence: 0.99,
+        suggestions: ['In-process mock used for testing'],
         location: { lat: lat || null, lon: lon || null },
       };
-      return res.status(200).json(fallback);
+      console.info('Using in-process mock response');
+      return res.json(mockResp);
+    }
+
+    // First try configured ML URL
+    try {
+      const mlResp = await tryForward(mlUrl);
+      return res.json(mlResp);
+    } catch (err1) {
+      console.warn('ML service at', mlUrl, 'unreachable:', err1.message || err1);
+      // Try mock
+      try {
+        const mockResp = await tryForward(mockUrl);
+        console.info('Using mock ML service at', mockUrl);
+        return res.json(mockResp);
+      } catch (err2) {
+        console.warn('Mock ML service at', mockUrl, 'also unreachable:', err2.message || err2);
+        // Final fallback response
+        const fallback = {
+          success: false,
+          disease: 'Unknown (model unavailable)',
+          confidence: 0,
+          suggestions: [
+            'Server ML service unreachable. Try again later.',
+          ],
+          location: { lat: lat || null, lon: lon || null },
+        };
+        return res.status(200).json(fallback);
+      }
     }
   } catch (err) {
     console.error('Error in detect-crop-disease:', err);
