@@ -2,7 +2,19 @@ import Course from "../models/Coursemodel.js";
 import Stripe from "stripe";
 import Order from "../models/orderModel.js";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// Initialize Stripe only if the secret key is provided to avoid crashing
+// the whole app at import time when running in environments without Stripe configured.
+let stripe = null;
+try {
+  if (process.env.STRIPE_SECRET_KEY) {
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  } else {
+    console.warn('Stripe secret key not provided. Stripe features will be disabled.');
+  }
+} catch (initErr) {
+  console.error('Failed to initialize Stripe:', initErr);
+  stripe = null;
+}
 
 // ========================
 // Stripe webhook to confirm payment and register course
