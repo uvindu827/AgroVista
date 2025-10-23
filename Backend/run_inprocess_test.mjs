@@ -6,6 +6,8 @@ import axios from 'axios';
 import FormData from 'form-data';
 
 (async () => {
+  // Force in-process mock for deterministic test runs
+  process.env.USE_INPROCESS_MOCK = '1';
   // Create an express app and mount the existing route
   const app = express();
   app.use('/api', cropDiseaseRoutes);
@@ -31,8 +33,9 @@ import FormData from 'form-data';
 
     const form = new FormData();
     form.append('image', fs.createReadStream(srcPath));
-    form.append('lat', '7.8731');
-    form.append('lon', '80.7718');
+  // Do not include lat/lon in test request per user request
+  // form.append('lat', '7.8731');
+  // form.append('lon', '80.7718');
 
     console.log('Posting to', url, 'using file:', srcPath);
     const res = await axios.post(url, form, { headers: { ...form.getHeaders() }, timeout: 15000 });

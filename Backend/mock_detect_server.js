@@ -18,7 +18,6 @@ app.post('/api/detect-crop-disease', upload.single('image'), (req, res) => {
     suggestions: [
       'This is a mock detection server used for local testing. Replace with real ML service.',
     ],
-    location: { lat: lat || null, lon: lon || null },
   };
 
   console.log('Mock server received file:', !!req.file, 'lat:', lat, 'lon:', lon);

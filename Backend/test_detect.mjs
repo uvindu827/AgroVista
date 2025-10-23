@@ -14,8 +14,9 @@ if (!fs.existsSync(srcPath)) {
   try {
     const form = new FormData();
     form.append('image', fs.createReadStream(srcPath));
-    form.append('lat', '7.8731');
-    form.append('lon', '80.7718');
+  // Do not send latitude/longitude per user preference
+  // form.append('lat', '7.8731');
+  // form.append('lon', '80.7718');
 
     const detectUrl = process.env.DETECT_URL || 'http://localhost:3000/api/detect-crop-disease';
     console.log('Posting to', detectUrl, 'using file:', srcPath);

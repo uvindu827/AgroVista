@@ -13,10 +13,10 @@ const upload = multer({ storage });
 router.post('/detect-crop-disease', upload.single('image'), async (req, res) => {
   try {
     const imageBuffer = req.file ? req.file.buffer : null;
-    const lat = req.body.lat;
-    // accept either 'lon' or older 'lng'
-    const lon = req.body.lon || req.body.lng || null;
-    const weather = req.body.weather ? req.body.weather : null;
+  // No longer collect latitude/longitude per user request.
+  // const lat = req.body.lat;
+  // const lon = req.body.lon || req.body.lng || null;
+  const weather = req.body.weather ? req.body.weather : null;
 
     // Prepare form-data for ML API
     const formData = new FormData();
@@ -26,8 +26,7 @@ router.post('/detect-crop-disease', upload.single('image'), async (req, res) => 
         contentType: req.file.mimetype
       });
     }
-    formData.append('lat', lat);
-    formData.append('lon', lon);
+    // Do not append lat/lon to forwarded requests any more.
     formData.append('weather', weather);
 
     // Call ML API (configurable via ML_URL). If it fails, try a local mock service on port 5000/5001
@@ -49,7 +48,6 @@ router.post('/detect-crop-disease', upload.single('image'), async (req, res) => 
         disease: 'MockDisease (in-process)',
         confidence: 0.99,
         suggestions: ['In-process mock used for testing'],
-        location: { lat: lat || null, lon: lon || null },
       };
       console.info('Using in-process mock response');
       return res.json(mockResp);
@@ -76,7 +74,6 @@ router.post('/detect-crop-disease', upload.single('image'), async (req, res) => 
           suggestions: [
             'Server ML service unreachable. Try again later.',
           ],
-          location: { lat: lat || null, lon: lon || null },
         };
         return res.status(200).json(fallback);
       }
