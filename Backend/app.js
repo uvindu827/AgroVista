@@ -123,11 +123,14 @@ app.post("/api/create-checkout-session", protect, createCourseCheckoutSession);
 const connectDB = async () => {
   console.log("Connecting to MongoDB...");
   console.log("MONGO_URI:", process.env.MONGO_URI || process.env.MONGO_URL);
-
   const mongoURI = process.env.MONGO_URI || process.env.MONGO_URL;
   if (!mongoURI) {
-    console.error("Error: MongoDB URI is not defined in .env");
-    process.exit(1);
+    // Allow running the app without a DB for local testing (e.g. running the detection
+    // endpoint and simple integration tests). Log a warning but don't exit.
+    console.warn(
+      "Warning: MongoDB URI is not defined in .env — skipping DB connection (test mode)"
+    );
+    return;
   }
 
   try {
@@ -138,6 +141,7 @@ const connectDB = async () => {
     console.log(`MongoDB connected: ${conn.connection.host}`);
   } catch (error) {
     console.error("MongoDB connection error:", error);
+    // In CI / production we want to fail fast; keep the exit here to surface issues.
     process.exit(1);
   }
 };

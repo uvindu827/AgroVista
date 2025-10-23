@@ -17,9 +17,10 @@ if (!fs.existsSync(srcPath)) {
     form.append('lat', '7.8731');
     form.append('lon', '80.7718');
 
-    console.log('Posting to http://localhost:5000/api/detect-crop-disease using file:', srcPath);
+    const detectUrl = process.env.DETECT_URL || 'http://localhost:3000/api/detect-crop-disease';
+    console.log('Posting to', detectUrl, 'using file:', srcPath);
 
-    const res = await axios.post('http://localhost:5000/api/detect-crop-disease', form, {
+    const res = await axios.post(detectUrl, form, {
       headers: {
         ...form.getHeaders(),
       },
