@@ -22,6 +22,7 @@ import courseRouter from "./routes/CourseRoute.js";
 import aiAssistantRoutes from "./routes/aiAssistantRoutes.js";
 import lowPurchaseRoutes from "./routes/lowPurchaseRoutes.js";
 import diseaseDetectionRoutes from "./routes/diseaseDetectionRoutes.js";
+import cropDiseaseRoutes from "./routes/cropDiseaseRoutes.js";
 import toolDealerRoutes from "./routes/toolDealerRoutes.js";
 
 dotenv.config();
@@ -31,6 +32,9 @@ const app = express();
 // Mount low-purchase suggestion route (after app is initialized)
 app.use("/api/low-purchase", lowPurchaseRoutes);
 app.use("/api/disease-detection", diseaseDetectionRoutes);
+// Mount legacy/alternate crop detection route so tools/tests hitting
+// /api/detect-crop-disease work (test_detect.mjs expects this).
+app.use("/api", cropDiseaseRoutes);
 
 // Setup __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
