@@ -13,18 +13,35 @@ const upload = multer({ storage });
 router.post('/detect-crop-disease', upload.single('image'), async (req, res) => {
   try {
     const imageBuffer = req.file ? req.file.buffer : null;
-  // No longer collect latitude/longitude per user request.
-  // const lat = req.body.lat;
-  // const lon = req.body.lon || req.body.lng || null;
-  const weather = req.body.weather ? req.body.weather : null;
+    // No longer collect latitude/longitude per user request.
+    // const lat = req.body.lat;
+    // const lon = req.body.lon || req.body.lng || null;
+    const weather = req.body.weather ? req.body.weather : null;
+
+    // Debug logging: show that we received a request and whether a file arrived.
+    console.info('[detect-crop-disease] request received');
+    if (req.file) {
+      console.info('[detect-crop-disease] file received:', {
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+      });
+    } else {
+      console.warn('[detect-crop-disease] no file attached in request');
+    }
 
     // Prepare form-data for ML API
     const formData = new FormData();
     if (imageBuffer) {
-      formData.append('image', imageBuffer, {
-        filename: 'image.jpg',
-        contentType: req.file.mimetype
-      });
+      try {
+        formData.append('image', imageBuffer, {
+          filename: req.file && req.file.originalname ? req.file.originalname : 'image.jpg',
+          contentType: req.file ? req.file.mimetype : 'application/octet-stream',
+        });
+      } catch (appendErr) {
+        console.error('[detect-crop-disease] failed to append image buffer to FormData:', appendErr);
+        throw appendErr;
+      }
     }
     // Do not append lat/lon to forwarded requests any more.
     formData.append('weather', weather);
@@ -55,17 +72,24 @@ router.post('/detect-crop-disease', upload.single('image'), async (req, res) => 
 
     // First try configured ML URL
     try {
+      console.info('[detect-crop-disease] forwarding to ML URL:', mlUrl);
       const mlResp = await tryForward(mlUrl);
+      console.info('[detect-crop-disease] received response from ML URL');
       return res.json(mlResp);
     } catch (err1) {
-      console.warn('ML service at', mlUrl, 'unreachable:', err1.message || err1);
+      console.warn('[detect-crop-disease] ML service at', mlUrl, 'unreachable:', err1 && err1.message ? err1.message : err1);
+      if (err1 && err1.response) {
+        console.warn('[detect-crop-disease] ML response status/data:', err1.response.status, err1.response.data);
+      }
       // Try mock
       try {
+        console.info('[detect-crop-disease] forwarding to mock URL:', mockUrl);
         const mockResp = await tryForward(mockUrl);
-        console.info('Using mock ML service at', mockUrl);
+        console.info('[detect-crop-disease] received response from mock URL');
         return res.json(mockResp);
       } catch (err2) {
-        console.warn('Mock ML service at', mockUrl, 'also unreachable:', err2.message || err2);
+        console.warn('[detect-crop-disease] Mock ML service at', mockUrl, 'also unreachable:', err2 && err2.message ? err2.message : err2);
+        if (err2 && err2.response) console.warn('[detect-crop-disease] mock response status/data:', err2.response.status, err2.response.data);
         // Final fallback response
         const fallback = {
           success: false,

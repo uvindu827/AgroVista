@@ -7,10 +7,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 app.use(cors());
 
 app.post('/api/detect-crop-disease', upload.single('image'), (req, res) => {
-  const lat = req.body.lat || null;
-  const lon = req.body.lon || req.body.lng || null;
-
   // Return a simple mock response similar to the fallback in cropDiseaseRoutes
+  console.log('Mock server received file:', !!req.file);
   const fallback = {
     success: true,
     disease: 'MockDisease - Mock server',
@@ -20,7 +18,6 @@ app.post('/api/detect-crop-disease', upload.single('image'), (req, res) => {
     ],
   };
 
-  console.log('Mock server received file:', !!req.file, 'lat:', lat, 'lon:', lon);
   res.json(fallback);
 });
 
