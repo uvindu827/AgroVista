@@ -3,11 +3,20 @@ import FormData from 'form-data';
 import fs from 'fs';
 import path from 'path';
 
-const filePath = path.resolve('.', 'uploads', 'sample-field-bg.svg');
-// If the uploads/sample-field-bg.svg doesn't exist, fallback to frontend svg
-let srcPath = filePath;
-if (!fs.existsSync(srcPath)) {
-  srcPath = path.resolve('..','frontend','public','assets','field-bg.svg');
+// Prefer a raster image (PNG/JPG). If the preferred sample SVG exists, fall back
+// to a PNG (logo192.png) because the ML scaffold expects raster images.
+const preferred = path.resolve('.', 'uploads', 'sample-field-bg.svg');
+const fallbackPng = path.resolve('..','frontend','public','logo192.png');
+let srcPath;
+if (fs.existsSync(path.resolve('.', 'uploads', 'sample-field-bg.png'))) {
+  srcPath = path.resolve('.', 'uploads', 'sample-field-bg.png');
+} else if (fs.existsSync(fallbackPng)) {
+  srcPath = fallbackPng;
+} else if (fs.existsSync(preferred)) {
+  // as last resort use the SVG, but note ML may not accept SVG
+  srcPath = preferred;
+} else {
+  throw new Error('No sample image found. Place a PNG at uploads/sample-field-bg.png or ensure frontend/public/logo192.png exists');
 }
 
 (async () => {

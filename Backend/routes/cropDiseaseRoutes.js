@@ -47,13 +47,39 @@ router.post('/detect-crop-disease', upload.single('image'), async (req, res) => 
     formData.append('weather', weather);
 
     // Call ML API (configurable via ML_URL). If it fails, try a local mock service on port 5000/5001
-    const mlUrl = process.env.ML_URL || 'http://localhost:5001/predict';
-    const mockUrl = process.env.MOCK_DETECT_URL || 'http://localhost:5001/api/detect-crop-disease';
+    // Normalize URLs: prefer explicit 127.0.0.1 to avoid IPv6 vs IPv4 binding issues on some systems
+    const rawMlUrl = process.env.ML_URL || 'http://localhost:5001/predict';
+    const rawMockUrl = process.env.MOCK_DETECT_URL || 'http://localhost:5001/api/detect-crop-disease';
+    const normalize = (u) => {
+      try {
+        const parsed = new URL(u);
+        if (parsed.hostname === 'localhost') parsed.hostname = '127.0.0.1';
+        return parsed.toString();
+      } catch (e) {
+        // fallback: replace literal
+        return u.replace('localhost', '127.0.0.1');
+      }
+    };
+    const mlUrl = normalize(rawMlUrl);
+    const mockUrl = normalize(rawMockUrl);
 
     const tryForward = async (url) => {
+      // compute headers and ensure Content-Length is present to avoid chunking issues
+      const headers = formData.getHeaders();
+      try {
+        const length = await new Promise((resolve, reject) => {
+          formData.getLength((err, len) => err ? reject(err) : resolve(len));
+        });
+        headers['Content-Length'] = length;
+      } catch (lenErr) {
+        // ignore; axios will handle chunked encoding but log the issue
+        console.warn('[detect-crop-disease] could not compute form-data length:', lenErr && lenErr.message ? lenErr.message : lenErr);
+      }
       const resp = await axios.post(url, formData, {
-        headers: formData.getHeaders(),
-        timeout: 5000,
+        headers,
+        timeout: 15000,
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
       });
       return resp.data;
     };

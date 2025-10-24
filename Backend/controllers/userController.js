@@ -1,4 +1,5 @@
-import User from "../models/User.js";
+import User from "../models/user.js";
+import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -27,6 +28,11 @@ function sanitizeUser(user) {
   return userData;
 }
 
+// Helper to resolve user id from different middleware shapes
+function getUserId(req) {
+  return req.user?.userId || req.user?.id || req.user?._id || null;
+}
+
 // User registration
 export async function registerUser(req, res) {
   try {
@@ -44,6 +50,46 @@ export async function registerUser(req, res) {
 // User login
 export async function loginUser(req, res) {
   try {
+    // If the DB is not connected, return a clear 503 so the client knows
+    // the service is temporarily unavailable instead of timing out.
+    if (!mongoose.connection || mongoose.connection.readyState !== 1) {
+      console.warn('Login attempted but MongoDB is not connected (readyState=' + (mongoose.connection ? mongoose.connection.readyState : 'none') + ')');
+      // Developer convenience: allow a local fallback login when DEV_AUTH=1 is set.
+      if (process.env.DEV_AUTH === '1') {
+        const { email, password } = req.body;
+        const devEmail = process.env.DEV_USER_EMAIL || 'dev@local';
+        const devPass = process.env.DEV_USER_PASS || 'devpass';
+        if (email === devEmail && password === devPass) {
+          const fakeUser = {
+            _id: '000000000000000000000000',
+            firstName: 'Dev',
+            lastName: 'User',
+            email: devEmail,
+            role: 'admin',
+            profilePicture: null,
+            phone: null,
+            emailVerified: true,
+          };
+          const token = jwt.sign(
+            {
+              userId: fakeUser._id,
+              firstName: fakeUser.firstName,
+              lastName: fakeUser.lastName,
+              email: fakeUser.email,
+              role: fakeUser.role,
+              profilePicture: fakeUser.profilePicture,
+              phone: fakeUser.phone,
+              emailVerified: fakeUser.emailVerified,
+            },
+            process.env.JWT_SECRET || 'dev_jwt_secret',
+            { expiresIn: '7d' }
+          );
+          return res.json({ message: 'Login successful (dev)', token, user: sanitizeUser(fakeUser) });
+        }
+        return res.status(401).json({ error: 'Invalid dev credentials' });
+      }
+      return res.status(503).json({ error: 'Authentication service temporarily unavailable. Please try again later.' });
+    }
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
@@ -64,7 +110,7 @@ export async function loginUser(req, res) {
         phone: user.phone,
         emailVerified: user.emailVerified,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'dev_jwt_secret',
       { expiresIn: "7d" }
     );
 
@@ -219,7 +265,8 @@ export async function verifyOTP(req, res) {
 export async function getProfile(req, res) {
   if (!req.user) return res.status(403).json({ error: "Unauthorized" });
   try {
-    const user = await User.findById(req.user.userId).select("-password");
+    const uid = getUserId(req);
+    const user = await User.findById(uid).select("-password");
     if (!user) return res.status(404).json({ error: "User not found" });
     res.json(sanitizeUser(user));
   } catch (err) {
@@ -238,7 +285,8 @@ export async function updateProfile(req, res) {
       updates.password = bcrypt.hashSync(updates.password, 10);
     }
 
-    const updatedUser = await User.findByIdAndUpdate(req.user.userId, updates, {
+    const uid = getUserId(req);
+    const updatedUser = await User.findByIdAndUpdate(uid, updates, {
       new: true,
       runValidators: true,
     }).select("-password");
@@ -255,7 +303,8 @@ export async function updateProfile(req, res) {
 export async function deleteAccount(req, res) {
   if (!req.user) return res.status(403).json({ error: "Unauthorized" });
   try {
-    await User.findByIdAndDelete(req.user.userId);
+    const uid = getUserId(req);
+    await User.findByIdAndDelete(uid);
     res.json({ message: "Account deleted successfully" });
   } catch (err) {
     console.error("Delete account error:", err);
@@ -266,9 +315,9 @@ export async function deleteAccount(req, res) {
 // Fetch paid courses for logged-in user
 export const getPaidCourses = async (req, res) => {
   try {
-    const userId = req.user._id;
+  const userId = getUserId(req);
 
-    const orders = await Order.find({ userId }).populate("courses.courseId");
+  const orders = await Order.find({ userId }).populate("courses.courseId");
 
     const purchasedCourses = [];
 
