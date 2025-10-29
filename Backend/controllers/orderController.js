@@ -5,7 +5,7 @@ import Notification from "../models/notification.js";
 
 export async function createOrder(req, res) {
   try {
-    console.log("Incoming order data:", req.body);
+  if (process.env.NODE_ENV !== 'production') console.log("Incoming order data:", req.body);
 
     // Generate new orderId
     const latestOrder = await Order.find().sort({ orderId: -1 }).limit(1);

@@ -42,11 +42,18 @@ const __dirname = path.dirname(__filename);
 
 // Enable CORS with credentials and correct origin
 app.use(
+  // Configure CORS. Default to the frontend dev server on port 3000 which is the
+  // common Create React App dev port. You can override with CLIENT_URL in
+  // Backend/.env (for example: CLIENT_URL=http://localhost:3000)
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3001",
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
     credentials: true,
   })
 );
+
+if (process.env.NODE_ENV !== 'production') {
+  console.log('CORS allowed origin:', process.env.CLIENT_URL || 'http://localhost:3000');
+}
 
 app.use(morgan("dev"));
 app.use(cookieParser());
@@ -121,8 +128,10 @@ app.post("/api/create-checkout-session", protect, createCourseCheckoutSession);
 
 // --- MONGOOSE CONNECTION ---
 const connectDB = async () => {
-  console.log("Connecting to MongoDB...");
-  console.log("MONGO_URI:", process.env.MONGO_URI || process.env.MONGO_URL);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log("Connecting to MongoDB...");
+    console.log("MONGO_URI:", process.env.MONGO_URI || process.env.MONGO_URL);
+  }
   const mongoURI = process.env.MONGO_URI || process.env.MONGO_URL;
   if (!mongoURI) {
     // Allow running the app without a DB for local testing (e.g. running the detection
@@ -138,7 +147,9 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log(`MongoDB connected: ${conn.connection.host}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`MongoDB connected: ${conn.connection.host}`);
+    }
   } catch (error) {
     console.error("MongoDB connection error:", error);
     // In CI / production we want to fail fast; keep the exit here to surface issues.
@@ -149,8 +160,42 @@ const connectDB = async () => {
 // Start server after DB connection
 const PORT = process.env.PORT || 3000;
 
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+// Small health endpoint to help debugging and process managers
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    env: process.env.NODE_ENV || 'development',
+    port: PORT,
+    ml_url: process.env.ML_URL || null,
+    client_url: process.env.CLIENT_URL || null,
+    time: new Date().toISOString(),
   });
+});
+
+connectDB().then(() => {
+  const server = app.listen(PORT, () => {
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`Server is running on port ${PORT}`);
+      console.log('ML_URL:', process.env.ML_URL || '(not set)');
+      console.log('CLIENT_URL:', process.env.CLIENT_URL || '(not set)');
+      console.log('NODE_ENV:', process.env.NODE_ENV || 'development');
+    }
+  });
+
+  // Graceful shutdown helpers
+  const shutdown = (signal) => {
+    if (process.env.NODE_ENV !== 'production') console.log(`Received ${signal}. Shutting down server...`);
+    server.close(() => {
+      if (process.env.NODE_ENV !== 'production') console.log('HTTP server closed. Exiting process.');
+      process.exit(0);
+    });
+    // Force exit after 5s
+    setTimeout(() => {
+      console.error('Forcing process exit after timeout');
+      process.exit(1);
+    }, 5000).unref();
+  };
+
+  process.on('SIGINT', () => shutdown('SIGINT'));
+  process.on('SIGTERM', () => shutdown('SIGTERM'));
 });

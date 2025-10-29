@@ -6,7 +6,7 @@ import path from 'path';
 
 const today = new Date();
 const formattedDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
-console.log(formattedDate);
+if (process.env.NODE_ENV !== 'production') console.log(formattedDate);
 
 // Joi validation schema
 const inventorySchema = Joi.object({

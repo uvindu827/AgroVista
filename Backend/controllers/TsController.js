@@ -37,8 +37,8 @@ export const addTools = async (req, res) => {
 
 export const getAllTools = async (req, res) => {
   try {
-    const toolsList = await tools.find();
-    console.log(toolsList); // Just for debugging in the terminal
+  const toolsList = await tools.find();
+  if (process.env.NODE_ENV !== 'production') console.log(toolsList); // Just for debugging in the terminal
 
     res.status(200).json({
       message: "Tools fetched successfully",

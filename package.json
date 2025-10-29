@@ -1,4 +1,12 @@
 {
+  "name": "agrovista-monorepo",
+  "private": true,
+  "scripts": {
+    "start:backend": "npm --prefix Backend start",
+    "start:frontend": "npm --prefix frontend start",
+    "start:all": "concurrently \"python Backend/ml_stub/app.py\" \"npm --prefix Backend start\"",
+    "dev:all": "concurrently \"python Backend/ml_stub/app.py\" \"npm --prefix Backend start\""
+  },
   "dependencies": {
     "@stripe/stripe-js": "^8.1.0",
     "@supabase/supabase-js": "^2.49.4",
@@ -12,6 +20,7 @@
     "swiper": "^11.0.7"
   },
   "devDependencies": {
-    "eslint-config-react-app": "^7.0.1"
+    "eslint-config-react-app": "^7.0.1",
+    "concurrently": "^8.0.1"
   }
 }

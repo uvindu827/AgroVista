@@ -205,7 +205,27 @@ def legacy_detect():
     return predict()
 
 if __name__ == '__main__':
-    # Helpful startup log
-    print('Starting ML scaffold on http://127.0.0.1:5001')
+    # Helpful startup log and environment-aware binding so the service can
+    # be run inside containers or on hosts where 0.0.0.0 is required.
+    host = os.environ.get('ML_HOST', os.environ.get('HOST', '0.0.0.0'))
+    port = int(os.environ.get('ML_PORT', os.environ.get('PORT', '5001')))
+    api_key = os.environ.get('ML_API_KEY')
+
+    # If an API key is set, enforce it on incoming requests to prevent abuse.
+    if api_key:
+        @app.before_request
+        def check_api_key():
+            # Allow health checks without API key
+            if request.path == '/health':
+                return None
+            header = request.headers.get('X-API-KEY') or request.headers.get('x-api-key')
+            if not header or header != api_key:
+                return jsonify({'success': False, 'error': 'Unauthorized (invalid API key)'}), 401
+
+    @app.route('/health', methods=['GET'])
+    def health():
+        return jsonify({'status': 'ok', 'model_loaded': MODEL is not None, 'source': SOURCE, 'time': __import__('datetime').datetime.utcnow().isoformat()})
+
+    print(f'Starting ML scaffold on http://{host}:{port} (MODEL_PATH={os.environ.get("MODEL_PATH")})')
     load_model()
-    app.run(host='127.0.0.1', port=5001)
+    app.run(host=host, port=port)

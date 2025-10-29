@@ -4,7 +4,7 @@ import User from "../models/user.js";
 
 export const authenticateUser = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  console.log("Auth Header:", authHeader);
+  if (process.env.NODE_ENV !== 'production') console.log("Auth Header:", authHeader);
 
   if (!authHeader?.startsWith("Bearer ")) {
     return res.status(401).json({ error: "No token provided" });
@@ -17,7 +17,7 @@ export const authenticateUser = async (req, res, next) => {
     const user = await User.findById(decoded.userId).select("-password");
     req.user = user;
     if (user) req.user.id = user._id; // Ensure req.user.id is set
-    console.log("User ID from token:", req.user?.id);
+  if (process.env.NODE_ENV !== 'production') console.log("User ID from token:", req.user?.id);
     next();
   } catch (err) {
     console.error("JWT Error:", err);

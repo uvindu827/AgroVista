@@ -51,43 +51,12 @@ export async function registerUser(req, res) {
 export async function loginUser(req, res) {
   try {
     // If the DB is not connected, return a clear 503 so the client knows
-    // the service is temporarily unavailable instead of timing out.
+    // the service is temporarily unavailable instead of timing out. The
+    // previous developer convenience (DEV_AUTH fallback) has been removed
+    // for production safety. If you need local dev shortcuts, enable them
+    // explicitly in a separate, non-production-only branch.
     if (!mongoose.connection || mongoose.connection.readyState !== 1) {
       console.warn('Login attempted but MongoDB is not connected (readyState=' + (mongoose.connection ? mongoose.connection.readyState : 'none') + ')');
-      // Developer convenience: allow a local fallback login when DEV_AUTH=1 is set.
-      if (process.env.DEV_AUTH === '1') {
-        const { email, password } = req.body;
-        const devEmail = process.env.DEV_USER_EMAIL || 'dev@local';
-        const devPass = process.env.DEV_USER_PASS || 'devpass';
-        if (email === devEmail && password === devPass) {
-          const fakeUser = {
-            _id: '000000000000000000000000',
-            firstName: 'Dev',
-            lastName: 'User',
-            email: devEmail,
-            role: 'admin',
-            profilePicture: null,
-            phone: null,
-            emailVerified: true,
-          };
-          const token = jwt.sign(
-            {
-              userId: fakeUser._id,
-              firstName: fakeUser.firstName,
-              lastName: fakeUser.lastName,
-              email: fakeUser.email,
-              role: fakeUser.role,
-              profilePicture: fakeUser.profilePicture,
-              phone: fakeUser.phone,
-              emailVerified: fakeUser.emailVerified,
-            },
-            process.env.JWT_SECRET || 'dev_jwt_secret',
-            { expiresIn: '7d' }
-          );
-          return res.json({ message: 'Login successful (dev)', token, user: sanitizeUser(fakeUser) });
-        }
-        return res.status(401).json({ error: 'Invalid dev credentials' });
-      }
       return res.status(503).json({ error: 'Authentication service temporarily unavailable. Please try again later.' });
     }
     const { email, password } = req.body;

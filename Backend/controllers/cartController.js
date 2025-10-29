@@ -37,8 +37,8 @@ export const getCart = async (req, res) => {
   try {
     const userId = req.user.id;
     const cartItems = await Cart.find({ user: userId }).populate("course");
-    // Log cart items for debugging
-    console.log("Cart items for user:", userId, JSON.stringify(cartItems, null, 2));
+  // Log cart items for debugging
+  if (process.env.NODE_ENV !== 'production') console.log("Cart items for user:", userId, JSON.stringify(cartItems, null, 2));
     res.status(200).json(cartItems);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
