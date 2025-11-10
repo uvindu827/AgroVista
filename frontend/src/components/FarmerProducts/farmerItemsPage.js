@@ -13,8 +13,9 @@ export default function FarmerItemsPage() {
   useEffect(() => {
     if (!itemsLoaded) {
       const token = localStorage.getItem("token");
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
       axios
-        .get("http://localhost:3000/api/products", {
+        .get(`${apiBase}/api/products`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -31,8 +32,9 @@ export default function FarmerItemsPage() {
     if (window.confirm("Are you sure you want to delete this item?")) {
       setItems(items.filter((item) => item.key !== key));
       const token = localStorage.getItem("token");
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
       axios
-        .delete(`http://localhost:3000/api/products/${key}`, {
+        .delete(`${apiBase}/api/products/${key}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => setItemsLoaded(false))

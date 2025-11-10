@@ -2,6 +2,7 @@ import { FaRegBookmark, FaRegUser, FaChevronDown, FaUserEdit, FaSignOutAlt } fro
 import { MdOutlineSpeaker } from "react-icons/md";
 import { Link, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { normalizeRole } from "../../utils/roleUtils";
 import axios from "axios";
 
 // Page imports
@@ -33,14 +34,15 @@ export default function FarmerPage() {
       }
 
       try {
-        const response = await axios.get("http://localhost:3000/api/users/", {
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        const response = await axios.get(`${apiBase}/api/users/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         const user = response.data;
-        if (user.role === "farmer") {
+        if (normalizeRole(user.role) === "farmer") {
           setUserValidated(true);
           setUserData(user);
         } else {
@@ -115,6 +117,7 @@ export default function FarmerPage() {
             icon={<FaRegUser size={20} />}
             label="Inquiries"
           />
+          {/* Crop detection link removed */}
           <NavLink
             to="/newsfeed"
             icon={<FaRegUser size={20} />}

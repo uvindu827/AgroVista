@@ -16,7 +16,8 @@ export default function OrdersPage() {
       }
 
       try {
-        const response = await axios.get("http://localhost:3000/api/orders/", {
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        const response = await axios.get(`${apiBase}/api/orders/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -34,8 +35,9 @@ export default function OrdersPage() {
 
   const updateOrderStatus = async (orderId, status) => {
     try {
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
       const response = await axios.put(
-        `http://localhost:3000/api/orders/${orderId}`,
+        `${apiBase}/api/orders/${orderId}`,
         { status },
         {
           headers: {

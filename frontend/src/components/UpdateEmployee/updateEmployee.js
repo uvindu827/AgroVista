@@ -18,7 +18,7 @@ function UpdateEmployee() {
   useEffect(() => {
     const fetchHandler = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/staff/${id}/getMemberById`);
+  const res = await axios.get(`http://localhost:3001/api/staff/${id}/getMemberById`);
         console.log("API Response:", res.data);
         setInputs(res.data.data);
       } catch (error) {
@@ -30,7 +30,7 @@ function UpdateEmployee() {
 
   const sendRequest = async () => {
     try {
-      await axios.put(`http://localhost:3000/api/staff/${id}/updateStaffMember`, {
+  await axios.put(`http://localhost:3001/api/staff/${id}/updateStaffMember`, {
         firstName: inputs.firstName,
         lastName: inputs.lastName,
         email: inputs.email,

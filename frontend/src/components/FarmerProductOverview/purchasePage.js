@@ -42,7 +42,8 @@ export default function PurchasePage() {
 
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/products/");
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        const response = await axios.get(`${apiBase}/api/products/`);
         const allProducts = response.data;
         const filteredProducts = allProducts.filter((product) =>
           cart.some((item) => item.key && item.key === product.key)
@@ -99,7 +100,8 @@ export default function PurchasePage() {
         address: fullAddress,
       };
       console.log("Order data to send:", orderData);
-      await axios.post("http://localhost:3000/api/orders", orderData, {
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+      await axios.post(`${apiBase}/api/orders`, orderData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

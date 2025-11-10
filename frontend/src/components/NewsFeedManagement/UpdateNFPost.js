@@ -17,7 +17,7 @@ function UpdateNFPost() {
   useEffect(() => {
     const fetchHandler = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/newsFeed/${id}/getPostById`);
+  const res = await axios.get(`http://localhost:3001/api/newsFeed/${id}/getPostById`);
         setFormData(res.data.data);
       } catch (error) {
         console.error("Error fetching post data:", error);
@@ -80,7 +80,7 @@ function UpdateNFPost() {
       });
 
       await axios.put(
-        `http://localhost:3000/api/newsFeed/${id}`,
+        `http://localhost:3001/api/newsFeed/${id}`,
         formDataToSend,
         {
           headers: {

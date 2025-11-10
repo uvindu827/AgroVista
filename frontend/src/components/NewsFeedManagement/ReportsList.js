@@ -5,7 +5,7 @@ import ReportDetails from "./ReportDetails";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const URL = "http://localhost:3000/api/newsFeed/getAllReports";
+const URL = "http://localhost:3001/api/newsFeed/getAllReports";
 
 const fetchHandler = async () => {
   try {
@@ -41,7 +41,7 @@ function ReportsList() {
     if (!window.confirm('Please confirm the report resolution?')) return;
     console.log('Resolving report with ID:', reportId);
     try {
-      await axios.delete(`http://localhost:3000/api/newsFeed/deleteReport/${reportId}`);
+  await axios.delete(`http://localhost:3001/api/newsFeed/deleteReport/${reportId}`);
       setReports((prev) => prev.filter((report) => report.id !== reportId));
       toast.success("Report resolved successfully!");
     } catch (err) {

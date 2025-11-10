@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+// import { useNavigate } from "react-router-dom";
 
 export default function InspectorAssistant() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  // const navigate = useNavigate();
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -14,7 +16,8 @@ export default function InspectorAssistant() {
     setLoading(true);
     try {
       // You can add inspector location or context here if needed
-      const res = await axios.post("/api/ai-assistant/chat", {
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+      const res = await axios.post(`${apiBase}/api/ai-assistant/chat`, {
         message: input,
         location: { lat: 0, lng: 0 }, // Replace with real location if available
       });
@@ -67,6 +70,7 @@ export default function InspectorAssistant() {
         >
           Send
         </button>
+        {/* Crop detection shortcut removed */}
       </div>
     </div>
   );

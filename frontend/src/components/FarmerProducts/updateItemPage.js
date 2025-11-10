@@ -34,8 +34,9 @@ export default function UpdateItemPage() {
 
     if (token) {
       try {
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
         const result = await axios.put(
-          `http://localhost:3000/api/products/${productKey}`,
+          `${apiBase}/api/products/${productKey}`,
           {
             name: productName,
             price: productPrice,

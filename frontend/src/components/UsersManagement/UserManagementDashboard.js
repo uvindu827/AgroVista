@@ -3,6 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminDashboard from "../Admin_dashboard/adminDashboard";
+import { prettyRole } from "../../utils/roleUtils";
 import { FaBars, FaTimes, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 // Remove Next.js router import
 // Using window.location for navigation instead
@@ -24,7 +25,7 @@ function UserManagementDashboard() {
     setError(null);
     try {
       const response = await fetch(
-        `http://localhost:3000/api/users/getUsersByRole/${role}`
+  `http://localhost:3001/api/users/getUsersByRole/${role}`
       );
       if (!response.ok) throw new Error("Failed to fetch users");
       const data = await response.json();
@@ -40,7 +41,7 @@ function UserManagementDashboard() {
   const onDeletePost = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
-      await axios.delete(`http://localhost:3000/api/users/delete/${userId}`);
+  await axios.delete(`http://localhost:3001/api/users/delete/${userId}`);
       setUsers((prev) => prev.filter((user) => user._id !== userId));
       toast.success("User deleted successfully");
     } catch (err) {
@@ -220,7 +221,7 @@ function UserManagementDashboard() {
           {users.length > 0 && !loading && (
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-darkGreen capitalize text-center mb-6">
-                {selectedRole} Users
+                {prettyRole(selectedRole)} Users
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {users.map((user) => (
@@ -235,7 +236,7 @@ function UserManagementDashboard() {
                       <p className="text-gray-600">{user.email}</p>
                       <div className="flex items-center text-sm text-gray-500">
                         <span className="inline-block w-20">Role:</span>
-                        <span className="capitalize">{user.role}</span>
+                        <span className="capitalize">{prettyRole(user.role)}</span>
                       </div>
                       <div className="flex items-center text-sm text-gray-500">
                         <span className="inline-block w-20">Status:</span>

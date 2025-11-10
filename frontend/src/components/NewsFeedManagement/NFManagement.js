@@ -17,7 +17,7 @@ function NFManagement() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/newsFeed/getAllPosts');
+  const response = await axios.post('http://localhost:3001/api/newsFeed/getAllPosts');
         setPosts(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -45,7 +45,7 @@ function NFManagement() {
     const loadingToastId = toast.loading('Deleting post...');
 
     try {
-      await axios.delete(`http://localhost:3000/api/newsFeed/${postId}`);
+  await axios.delete(`http://localhost:3001/api/newsFeed/${postId}`);
       // Update local state to remove the deleted post
       setPosts((prev) => prev.filter((post) => post.id !== postId));
       
@@ -79,7 +79,7 @@ function NFManagement() {
     setSearchError('');
     
     try {
-      const response = await axios.get(`http://localhost:3000/api/newsFeed/${searchId}/getPostById`);
+  const response = await axios.get(`http://localhost:3001/api/newsFeed/${searchId}/getPostById`);
       const foundPost = response.data.data;
       
       setPosts([foundPost]);
@@ -98,7 +98,7 @@ function NFManagement() {
     // Reset to show all posts
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3000/api/newsFeed/getAllPosts');
+  const response = await axios.post('http://localhost:3001/api/newsFeed/getAllPosts');
       setPosts(response.data.data);
       setLoading(false);
     } catch (err) {

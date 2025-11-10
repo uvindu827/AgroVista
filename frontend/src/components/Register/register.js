@@ -65,7 +65,7 @@ export default function RegisterPage() {
     if (validateForm()) {
       setIsLoading(true);
       axios
-        .post("http://localhost:3000/api/users/", {
+  .post("http://localhost:3001/api/users/", {
           email,
           firstName,
           lastName,

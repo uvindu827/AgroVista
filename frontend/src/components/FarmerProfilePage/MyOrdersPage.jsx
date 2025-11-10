@@ -19,7 +19,8 @@ export default function MyOrdersPage() {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:3000/api/orders", {
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        const response = await fetch(`${apiBase}/api/orders`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

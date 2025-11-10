@@ -15,7 +15,7 @@ function UserNewsfeed() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.post('http://localhost:3000/api/newsFeed/getAllPosts');
+  const response = await axios.post('http://localhost:3001/api/newsFeed/getAllPosts');
         setPosts(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -34,7 +34,7 @@ function UserNewsfeed() {
     
     setIsSearching(true);
     try {
-      const response = await axios.get(`http://localhost:3000/api/newsFeed/admin/posts/search?search=${searchTerm}`);
+  const response = await axios.get(`http://localhost:3001/api/newsFeed/admin/posts/search?search=${searchTerm}`);
       setPosts(response.data.data);
       setIsSearching(false);
     } catch (err) {

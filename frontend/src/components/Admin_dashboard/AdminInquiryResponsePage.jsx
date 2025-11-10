@@ -12,7 +12,8 @@ export default function AdminInquiryResponsePage() {
     const fetchInquiries = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3000/api/inquiries/", {
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        const response = await axios.get(`${apiBase}/api/inquiries/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -40,8 +41,9 @@ export default function AdminInquiryResponsePage() {
     try {
       const token = localStorage.getItem("token");
 
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
       await axios.put(
-        `http://localhost:3000/api/inquiries/${inquiryId}/response`,
+        `${apiBase}/api/inquiries/${inquiryId}/response`,
         { response: responseTexts[inquiryId] }, // ✅ FIXED HERE
         {
           headers: {

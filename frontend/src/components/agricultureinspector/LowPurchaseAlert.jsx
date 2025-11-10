@@ -7,7 +7,10 @@ export default function LowPurchaseAlert() {
   useEffect(() => {
     const fetchLowCourses = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/courses/low-purchases");
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        const token = localStorage.getItem('token');
+        const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+        const res = await axios.get(`${apiBase}/api/courses/low-purchases`, { headers });
         setLowCourses(res.data);
       } catch (err) {
         console.error("Error fetching low-purchase courses", err);

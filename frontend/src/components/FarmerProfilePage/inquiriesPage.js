@@ -15,7 +15,8 @@ export default function InquiriesPage() {
     const fetchInquiries = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:3000/api/inquiries/", {
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        const response = await axios.get(`${apiBase}/api/inquiries/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -36,8 +37,9 @@ export default function InquiriesPage() {
     setError(null);
     try {
       const token = localStorage.getItem("token");
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
       await axios.post(
-        "http://localhost:3000/api/inquiries/",
+        `${apiBase}/api/inquiries/`,
         { message },
         {
           headers: {
@@ -47,7 +49,7 @@ export default function InquiriesPage() {
       );
       setMessage("");
       // Refresh inquiries list
-      const response = await axios.get("http://localhost:3000/api/inquiries/", {
+      const response = await axios.get(`${apiBase}/api/inquiries/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -16,6 +16,7 @@ export default function CourseList() {
   const pageSize = 6;
 
   const token = localStorage.getItem("token");
+  const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
   const config = useMemo(() => ({ headers: { Authorization: `Bearer ${token}` } }), [token]);
 
   // --- Creative background ---
@@ -31,13 +32,13 @@ export default function CourseList() {
     setLoading(true);
     try {
       const deletedQuery = filterStatus === "deleted" ? "true" : "false";
-      const res = await axios.get(`http://localhost:3000/api/courses?deleted=${deletedQuery}`, config);
+      const res = await axios.get(`${apiBase}/api/courses?deleted=${deletedQuery}`, config);
       setCourses(res.data || []);
     } catch {
       toast.error("Failed to load courses");
     }
     setLoading(false);
-  }, [filterStatus, config]);
+  }, [filterStatus, config, apiBase]);
 
   useEffect(() => {
     fetchCourses();
@@ -89,7 +90,7 @@ export default function CourseList() {
     });
     if (confirm.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:3000/api/courses/${courseId}`, config);
+        await axios.delete(`${apiBase}/api/courses/${courseId}`, config);
         toast.success("Course deleted successfully");
         fetchCourses();
       } catch {
@@ -100,7 +101,8 @@ export default function CourseList() {
 
   const handleRestore = async (courseId) => {
     try {
-      await axios.patch(`http://localhost:3000/api/courses/${courseId}/restore`, {}, config);
+      // Backend expects POST /api/courses/restore/:id
+      await axios.post(`${apiBase}/api/courses/restore/${courseId}`, {}, config);
       toast.success("Course restored successfully");
       fetchCourses();
     } catch {
@@ -152,7 +154,7 @@ export default function CourseList() {
                 <div style={{ fontWeight: "bold", fontSize: "1.25rem", color: "#22c55e" }}>
                   {user.name || user.email}
                 </div>
-                <div style={{ fontSize: "1rem", color: "#38b2ac" }}>{user.role}</div>
+            <div style={{ fontSize: "1rem", color: "#38b2ac" }}>{user.role}</div>
               </div>
             </div>
           </div>

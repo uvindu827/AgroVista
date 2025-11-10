@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";  // Import back icon from react-icons
 import StaffMember from "../StaffMember/StaffMember";
 
-const URL = "http://localhost:3000/api/staff/getStaff";
+const URL = "http://localhost:3001/api/staff/getStaff";
 
 const fetchHandler = async () => {
   return await axios.get(URL).then((res) => res.data);
@@ -60,7 +60,7 @@ function Staff() {
 
     try {
       await axios.delete(
-        `http://localhost:3000/api/staff/${employeeId}/deleteStaffMember`
+  `http://localhost:3001/api/staff/${employeeId}/deleteStaffMember`
       );
       
       // Update local state to remove the deleted employee
@@ -96,11 +96,11 @@ function Staff() {
   
     try {
       const generateResponse = await axios.post(
-        `http://localhost:3000/api/staff/${employeeId}/payslip`,
+  `http://localhost:3001/api/staff/${employeeId}/payslip`,
         { payPeriod }
       );
       
-      const downloadUrl = `http://localhost:3000${generateResponse.data.data.downloadPath}`;
+  const downloadUrl = `http://localhost:3001${generateResponse.data.data.downloadPath}`;
             
       const response = await fetch(downloadUrl);
       const blob = await response.blob();

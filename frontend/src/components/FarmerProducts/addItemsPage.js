@@ -50,8 +50,9 @@ export default function AddItemPage() {
 
         const imageUrls = await Promise.all(promises);
 
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
         const result = await axios.post(
-          "http://localhost:3000/api/products",
+          `${apiBase}/api/products`,
           {
             key: productKey,
             name: productName,

@@ -16,8 +16,9 @@ export default function ProductOverview() {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
+    const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
     axios
-      .get(`http://localhost:3000/api/products/${key}`)
+      .get(`${apiBase}/api/products/${key}`)
       .then((res) => {
         setProduct(res.data);
         setLoadingStatus("loaded");
@@ -28,10 +29,6 @@ export default function ProductOverview() {
       });
 
     // Load reviews from sessionStorage
-    loadReviewsFromStorage();
-  }, [key]);
-
-  const loadReviewsFromStorage = () => {
     try {
       const storedReviews = sessionStorage.getItem(`reviews_${key}`);
       if (storedReviews) {
@@ -40,7 +37,8 @@ export default function ProductOverview() {
     } catch (error) {
       console.error("Error loading reviews from storage:", error);
     }
-  };
+  }, [key]);
+
 
   const saveReviewsToStorage = (reviewsData) => {
     try {

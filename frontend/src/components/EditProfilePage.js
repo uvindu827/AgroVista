@@ -30,7 +30,8 @@ export default function EditProfilePage() {
       }
 
       try {
-        const response = await axios.get("http://localhost:3000/api/users/", {
+        const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+        const response = await axios.get(`${apiBase}/api/users/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -72,7 +73,8 @@ export default function EditProfilePage() {
     const token = localStorage.getItem("token");
 
     try {
-      await axios.put("http://localhost:3000/api/users/profile", formData, {
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+      await axios.put(`${apiBase}/api/users/profile`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

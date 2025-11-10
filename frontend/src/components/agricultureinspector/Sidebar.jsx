@@ -6,7 +6,6 @@ import {
   FiShoppingCart,
   FiPlusCircle,
   FiLogOut,
-  FiAlertCircle,
 } from "react-icons/fi";
 import Swal from "sweetalert2";
 
@@ -79,10 +78,7 @@ export default function Sidebar() {
           <FiPlusCircle className="transition-transform duration-200 group-hover:scale-125" size={22} />
           <span style={{ fontWeight: 600, fontSize: '1.1rem', color: '#fff' }}>Add Course</span>
         </NavLink>
-        <NavLink to="/crop-disease-detection" className={linkClasses} style={{ transition: 'all 0.2s' }}>
-          <FiAlertCircle className="transition-transform duration-200 group-hover:scale-125" size={22} />
-          <span style={{ fontWeight: 600, fontSize: '1.1rem', color: '#fff' }}>Crop Disease Detection</span>
-        </NavLink>
+        {/* Crop disease detection link removed */}
       </nav>
 
       <div className="px-4 mt-8 mb-4">

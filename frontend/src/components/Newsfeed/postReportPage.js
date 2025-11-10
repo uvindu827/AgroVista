@@ -19,7 +19,7 @@ const PostReportPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/newsFeed/post/report",
+        "http://localhost:3001/api/newsFeed/post/report",
         {
           postID: postId,
           reason: inputs.reason,

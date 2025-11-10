@@ -9,8 +9,9 @@ export default function PurchaseItem({ itemKey, qty, refresh }) {
 
   useEffect(() => {
     if (status === "loading") {
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
       axios
-        .get(`http://localhost:3000/api/products/${itemKey}`)
+        .get(`${apiBase}/api/products/${itemKey}`)
         .then((res) => {
           setItem(res.data);
           setStatus("success");
@@ -22,7 +23,7 @@ export default function PurchaseItem({ itemKey, qty, refresh }) {
           refresh();
         });
     }
-  }, [status]);
+  }, [status, itemKey, refresh]);
 
   if (status === "loading") {
     return <div className="text-accent">Loading...</div>;

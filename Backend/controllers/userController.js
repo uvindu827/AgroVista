@@ -51,14 +51,61 @@ export async function registerUser(req, res) {
 export async function loginUser(req, res) {
   try {
     // If the DB is not connected, return a clear 503 so the client knows
-    // the service is temporarily unavailable instead of timing out. The
-    // previous developer convenience (DEV_AUTH fallback) has been removed
-    // for production safety. If you need local dev shortcuts, enable them
-    // explicitly in a separate, non-production-only branch.
-    if (!mongoose.connection || mongoose.connection.readyState !== 1) {
-      console.warn('Login attempted but MongoDB is not connected (readyState=' + (mongoose.connection ? mongoose.connection.readyState : 'none') + ')');
-      return res.status(503).json({ error: 'Authentication service temporarily unavailable. Please try again later.' });
-    }
+      // If the DB is not connected, allow a developer-friendly mock login when
+      // `USE_INPROCESS_MOCK=1` is set in .env. This lets the frontend and
+      // inspector flows be exercised without a running MongoDB during local dev.
+      if (!mongoose.connection || mongoose.connection.readyState !== 1) {
+        console.warn('Login attempted but MongoDB is not connected (readyState=' + (mongoose.connection ? mongoose.connection.readyState : 'none') + ')');
+
+        // Developer shortcut: return a mock authenticated user when requested.
+        if (process.env.USE_INPROCESS_MOCK === '1') {
+          console.info('USE_INPROCESS_MOCK=1 — returning mock login response');
+
+          // Allow a dev to force a role using the X-MOCK-ROLE header (useful when
+          // exercising role-specific UI like the agricultural inspector). If not
+          // provided, try to infer the role from the email (emails containing
+          // "inspect" or "agri" will be treated as inspector accounts). Default
+          // to 'farmer' for other cases.
+          const forcedRole = (req.headers && (req.headers['x-mock-role'] || req.headers['X-MOCK-ROLE'])) || null;
+          const emailForMock = (req.body && req.body.email) || 'dev@example.com';
+          let inferredRole = 'farmer';
+          const emailLower = String(emailForMock).toLowerCase();
+          if (forcedRole) {
+            inferredRole = String(forcedRole).toLowerCase();
+          } else if (emailLower.includes('inspect') || emailLower.includes('inspector') || emailLower.includes('agri')) {
+            inferredRole = 'agricultural inspector';
+          }
+
+          const mockUser = {
+            _id: '000000000000000000000000',
+            firstName: 'Dev',
+            lastName: 'User',
+            email: emailForMock,
+            role: inferredRole,
+            profilePicture: null,
+            phone: null,
+            emailVerified: false,
+          };
+          const token = jwt.sign(
+            {
+              userId: mockUser._id,
+              firstName: mockUser.firstName,
+              lastName: mockUser.lastName,
+              email: mockUser.email,
+              role: mockUser.role,
+              profilePicture: mockUser.profilePicture,
+              phone: mockUser.phone,
+              emailVerified: mockUser.emailVerified,
+            },
+            process.env.JWT_SECRET || 'dev_jwt_secret',
+            { expiresIn: '7d' }
+          );
+
+          return res.json({ message: 'Login successful (mock)', token, user: sanitizeUser(mockUser) });
+        }
+
+        return res.status(503).json({ error: 'Authentication service temporarily unavailable. Please try again later.' });
+      }
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 

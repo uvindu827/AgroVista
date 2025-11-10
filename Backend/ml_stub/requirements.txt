@@ -1,6 +1,0 @@
-flask>=2.0
-torch
-torchvision
-Pillow
-numpy
-gunicorn

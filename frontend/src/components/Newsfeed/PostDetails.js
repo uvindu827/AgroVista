@@ -14,7 +14,7 @@ function PostDetails() {
     const fetchPostDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/newsFeed/${postId}/getPostById`
+          `http://localhost:3001/api/newsFeed/${postId}/getPostById`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch post details");
@@ -48,7 +48,7 @@ function PostDetails() {
     try {
       console.log("Sending content for summarization:", post.content.substring(0, 100) + "...");
       
-      const response = await fetch("http://localhost:3000/api/newsFeed/summarize", {
+  const response = await fetch("http://localhost:3001/api/newsFeed/summarize", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

@@ -47,7 +47,7 @@ function Atool() {
     }
 
     try {
-      await axios.post("http://localhost:3000/api/tools/addTools", formData, {
+  await axios.post("http://localhost:3001/api/tools/addTools", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

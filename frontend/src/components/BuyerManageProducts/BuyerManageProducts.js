@@ -34,7 +34,8 @@ function BuyerManageProducts() {
           return;
         }
 
-        const response = await axios.get(`http://localhost:3000/api/inventory`, {
+  const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+  const response = await axios.get(`${apiBase}/api/inventory`, {
           params: {
             page: currentPage,
             limit: itemsPerPage,
@@ -67,7 +68,8 @@ function BuyerManageProducts() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:3000/api/inventory/${id}`, {
+  const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+  await axios.delete(`${apiBase}/api/inventory/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

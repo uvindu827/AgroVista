@@ -61,7 +61,8 @@ function BuyerAddProducts() {
     });
     
     try {
-      const response = await fetch('http://localhost:3000/api/inventory', {
+      const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${apiBase}/api/inventory`, {
         method: 'POST',
         body: formDataToSend,
       });

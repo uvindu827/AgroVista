@@ -61,7 +61,7 @@ function AddPost() {
         inputs.keywords.split(',').map(k => k.trim()).filter(k => k)
       ));
 
-      const response = await axios.post('http://localhost:3000/api/newsFeed/addPost', formData, {
+  const response = await axios.post('http://localhost:3001/api/newsFeed/addPost', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

@@ -19,6 +19,8 @@ minEndDate.setDate(today.getDate() + 21);
 export default function CourseForm({ initialData = null, onSuccess, onCancel }) {
   // Creative agriculture-themed background
   const backgroundUrl = "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1500&q=80"; // Agriculture field
+  const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+  const token = localStorage.getItem('token');
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [startingdate, setStartingdate] = useState("");
@@ -88,13 +90,16 @@ export default function CourseForm({ initialData = null, onSuccess, onCancel }) 
       formData.append("coordinator", coordinator);
       if (imageFile) formData.append("image", imageFile);
 
+      const headers = {
+        "Content-Type": "multipart/form-data",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      };
+
       if (initialData) {
         await axios.put(
-          `http://localhost:3000/api/courses/${initialData._id}`,
+          `${apiBase}/api/courses/${initialData._id}`,
           formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          }
+          { headers }
         );
         await MySwal.fire({
           icon: "success",
@@ -103,9 +108,7 @@ export default function CourseForm({ initialData = null, onSuccess, onCancel }) 
           confirmButtonColor: "#22c55e",
         });
       } else {
-        await axios.post("http://localhost:3000/api/courses", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await axios.post(`${apiBase}/api/courses`, formData, { headers });
         await MySwal.fire({
           icon: "success",
           title: "Created!",

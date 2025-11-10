@@ -50,9 +50,10 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:3000/api/users/login", {
+      const base = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+      const res = await axios.post(`${base.replace(/\/$/, '')}/api/users/login`, {
         email: email.trim(),
-        password
+        password,
       });
 
       toast.success("Login Successful");
@@ -65,7 +66,26 @@ export default function LoginPage() {
       setUser(user);
       setToken(token);
 
-      switch (user.role) {
+      // Normalize role to handle variations coming from backend or dev mocks
+      // (e.g. 'agriculture inspector', 'Agri Inspector', 'agricultural-inspector')
+      const rawRole = String(user.role || "").toLowerCase().trim();
+      // Map common alias patterns to canonical role strings used in routing
+      let normRole = rawRole;
+      if (rawRole.includes("inspect") || rawRole.includes("agri")) {
+        normRole = "agricultural inspector";
+      } else if (rawRole.includes("tool") && rawRole.includes("dealer")) {
+        normRole = "tool dealer";
+      } else if (rawRole === "admin" || rawRole.includes("admin")) {
+        normRole = "admin";
+      } else if (rawRole === "buyer") {
+        normRole = "buyer";
+      } else if (rawRole === "farmer") {
+        normRole = "farmer";
+      } else if (rawRole === "customer") {
+        normRole = "customer";
+      }
+
+      switch (normRole) {
         case "farmer":
           navigate("/farmer/orders");
           break;

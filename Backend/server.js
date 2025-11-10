@@ -10,11 +10,5 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Dynamically import app.js after env is loaded
-import('./app.js')
-  .then(() => {
-    if (process.env.NODE_ENV !== 'production') console.log('Application module loaded');
-  })
-  .catch((err) => {
-    console.error('Failed to load application module:', err);
-    process.exit(1);
-  });
+await import('./app.js');
+if (process.env.NODE_ENV !== 'production') console.log('Application module loaded');
