@@ -95,7 +95,8 @@ function BuyerUpdateProducts() {
           throw new Error('No authentication token found');
         }
 
-        const response = await axios.get(`http://localhost:3000/api/inventory/${id}`, {
+  const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+  const response = await axios.get(`${apiBase}/api/inventory/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -170,7 +171,8 @@ function BuyerUpdateProducts() {
         console.log(`FormData: ${key} = ${value}`);
       }
 
-      const response = await axios.put(`http://localhost:3000/api/inventory/${id}`, updateData, {
+  const apiBase = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+  const response = await axios.put(`${apiBase}/api/inventory/${id}`, updateData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -180,7 +182,7 @@ function BuyerUpdateProducts() {
       console.log('Full server response:', JSON.stringify(response.data, null, 2));
 
       // Refetch to verify database state
-      const refetchResponse = await axios.get(`http://localhost:3000/api/inventory/${id}`, {
+  const refetchResponse = await axios.get(`${apiBase}/api/inventory/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

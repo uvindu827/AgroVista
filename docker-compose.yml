@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  ml:
+    build:
+      context: ./Backend/ml_stub
+    image: agrovista-ml:local
+    ports:
+      - "5001:5001"
+    environment:
+      - MODEL_PATH=/models/crop_model.pt
+    volumes:
+      - ./Backend/ml_stub/models:/models
+    restart: unless-stopped
