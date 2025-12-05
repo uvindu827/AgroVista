@@ -25,6 +25,7 @@ import BuyerOrders from "./components/BuyerOrders/BuyerOrders";
 import ChartDashboard from "./components/ChartDashboard/ChartDashboard";
 import PaymentDetails from "./components/PaymentDetails/PaymentDetails";
 import Header from "./components/Header/Header"; 
+import HomePage from "./components/HomePage/HomePage";
 
 
 function App() {
@@ -32,7 +33,8 @@ function App() {
     <div>
       <React.Fragment>
         <Routes>
-          <Route path="/" element={<Login/>}/>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login/>}/>
           <Route path="/buyerHome" element={<BuyerHomePage />} />
           <Route path="/add-product" element={<BuyerAddProducts />} />
           <Route path="/manage-products" element={<BuyerManageProducts/>} />

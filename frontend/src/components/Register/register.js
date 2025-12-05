@@ -77,7 +77,7 @@ export default function RegisterPage() {
         })
         .then(() => {
           toast.success("Registration Successful");
-          navigate("/");
+          navigate("/login");
         })
         .catch((err) => {
           toast.error(err?.response?.data?.error || "An error occurred");
@@ -359,7 +359,7 @@ export default function RegisterPage() {
               <p className="text-green-100">
                 Already have an account?{" "}
                 <Link
-                  to="/"
+                  to="/login"
                   className="text-white font-semibold hover:text-green-300 transition-colors"
                 >
                   Sign in here
