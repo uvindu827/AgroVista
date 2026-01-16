@@ -1,71 +1,241 @@
+<<<<<<< HEAD
+// src/pages/LoginPage.jsx
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
+=======
+import React, { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate, Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
+import { useAuth } from "../Farmer/pages/context/AuthContext";
+>>>>>>> Agriculture-Inspector-review-query
 
 export default function LoginPage() {
+  const { setUser, setToken } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const navigate = useNavigate();
 
-  function handleOnSubmit(e) {
+<<<<<<< HEAD
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) return "Email is required";
+    if (!emailRegex.test(email)) return "Please enter a valid email address";
+    return "";
+  };
+
+  const validatePassword = (password) => {
+    if (!password) return "Password is required";
+    if (password.length < 6)
+      return "Password must be at least 6 characters long";
+    return "";
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (touched.email) {
+      setErrors((prev) => ({
+        ...prev,
+        email: validateEmail(value),
+      }));
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    if (touched.password) {
+      setErrors((prev) => ({
+        ...prev,
+        password: validatePassword(value),
+      }));
+    }
+  };
+
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    if (field === "email") {
+      setErrors((prev) => ({
+        ...prev,
+        email: validateEmail(email),
+      }));
+    } else if (field === "password") {
+      setErrors((prev) => ({
+        ...prev,
+        password: validatePassword(password),
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+    const newErrors = {
+      email: emailError,
+      password: passwordError,
+    };
+    setErrors(newErrors);
+    setTouched({ email: true, password: true });
+    return !emailError && !passwordError;
+  };
+
+=======
+>>>>>>> Agriculture-Inspector-review-query
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      toast.error("Please fix the errors below");
+      return;
+    }
+
     setIsLoading(true);
 
-    axios
-      .post(`http://localhost:3000/api/users/login`, { email, password })
-      .then((res) => {
-        toast.success("Login Successful");
-        const user = res.data.user;
-
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("ID", res.data.user._id); // Set ID to localStorage
-        localStorage.setItem("user", JSON.stringify(user));
-
-        // Navigate based on role
-        if (user.role === "farmer") {
-          navigate("/farmer/"); // Navigate to farmer home page
-        } else if (user.role === "buyer") {
-          navigate("/buyerHome/"); // Navigate to buyer home page
-        } else if (user.role === "admin") {
-          navigate("/adminDashboard/"); // Navigate to buyer home page
-        } else if (user.role === "tool dealer") {
-          navigate("/"); // Navigate to tool dealer home page
-        } else if (user.role === "agricultural inspector") {
-          navigate("/"); // Navigate to agricultural inspector home page
-        } else if (user.role === "customer") {
-          navigate("/"); // Navigate to customer home page
+    try {
+<<<<<<< HEAD
+      const response = await axios.post(
+        `http://localhost:3000/api/users/login`,
+        {
+          email: email.trim(),
+          password,
+          rememberMe,
         }
-        else {
-          navigate("/"); // Default fallback route if no role matches
+      );
+
+      toast.success("Login Successful");
+
+      const user = response.data.user;
+
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("ID", response.data.user._id);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      switch (user.role) {
+        case "farmer":
+          navigate("/farmer/orders");
+=======
+      const res = await axios.post("http://localhost:3000/api/users/login", { email, password });
+
+      toast.success("Login Successful");
+      const user = res.data.user;
+      const token = res.data.token;
+
+      // Save token and user info in localStorage (AuthContext also syncs)
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("ID", user._id);
+
+      // Update AuthContext state
+      setUser(user);
+      setToken(token);
+
+      // Navigate based on user role
+      switch (user.role) {
+        case "farmer":
+          navigate("/farmer/");
+>>>>>>> Agriculture-Inspector-review-query
+          break;
+        case "buyer":
+          navigate("/buyerHome/");
+          break;
+        case "admin":
+          navigate("/users_management/");
+          break;
+        case "tool dealer":
+<<<<<<< HEAD
+          navigate("/welcome");
+          break;
+        case "agricultural inspector":
+        case "customer":
+=======
+          navigate("/");
+          break;
+        case "agricultural inspector":
+          navigate("/instructor");
+          break;
+        case "customer":
+          navigate("/");
+          break;
+>>>>>>> Agriculture-Inspector-review-query
+        default:
+          navigate("/");
+      }
+    } catch (err) {
+<<<<<<< HEAD
+      console.error("Login error:", err);
+      if (err.response) {
+        const errorMessage =
+          err.response.data?.error ||
+          err.response.data?.message ||
+          "Login failed";
+        if (err.response.status === 401) {
+          toast.error("Invalid email or password");
+        } else if (err.response.status === 404) {
+          toast.error("User not found");
+        } else if (err.response.status === 429) {
+          toast.error("Too many login attempts. Please try again later");
+        } else {
+          toast.error(errorMessage);
         }
-      })
-      .catch((err) => {
-        toast.error(err.response?.data?.error || "An error occurred");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
+      } else if (err.request) {
+        toast.error(
+          "Network error. Please check your connection and try again"
+        );
+      } else {
+        toast.error("An unexpected error occurred. Please try again");
+      }
+=======
+      toast.error(err.response?.data?.error || "An error occurred");
+>>>>>>> Agriculture-Inspector-review-query
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
+<<<<<<< HEAD
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
+      style={{ backgroundImage: "url('/loginbg.jpg')" }}
+    >
+      <div className="absolute inset-0 bg-black/50 z-0"></div>
+      <div className="absolute top-10 left-10 w-24 h-24 bg-white/10 rounded-full blur-2xl animate-float z-0"></div>
+      <div className="absolute bottom-20 right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-float2 z-0"></div>
+
+      <div className="z-10 flex w-11/12 max-w-6xl bg-white/10 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl">
+        <div className="w-1/2 p-10 text-white hidden lg:flex flex-col justify-center">
+          <h1 className="text-5xl font-bold mb-4">Welcome Back</h1>
+          <p className="text-lg mb-6">
+            It is a long established fact that a reader will be distracted by
+            the readable content of a page.
+          </p>
+          <div className="flex space-x-4">
+            {["facebook", "twitter", "instagram", "youtube"].map((icon) => (
+              <a
+                key={icon}
+                href="#"
+                className="text-white hover:text-green-300 transition duration-300"
+=======
     <div className="min-h-screen flex flex-col">
       <div className="flex-grow flex justify-center items-center bg-cover bg-center relative overflow-hidden">
-        {/* Background with overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-green-900/70 to-green-800/70 z-10"></div>
         <div
           className="absolute inset-0 bg-cover bg-center animate-[backgroundScroll_30s_linear_infinite]"
           style={{ backgroundImage: "url('/loginbg.jpg')" }}
         ></div>
 
-        {/* Floating elements */}
+        {/* Floating animated circles */}
         <div className="absolute top-20 left-20 w-24 h-24 bg-yellow-200/20 rounded-full blur-xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-32 h-32 bg-green-300/20 rounded-full blur-xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-amber-300/20 rounded-full blur-xl animate-pulse delay-500"></div>
 
-        {/* Login form */}
         <div className="z-20 w-full max-w-md px-4">
           <form
             onSubmit={handleOnSubmit}
@@ -73,67 +243,58 @@ export default function LoginPage() {
           >
             <div className="text-center mb-8">
               <div className="flex justify-center mb-4">
-                <img src="/agrologo.png" alt="logo" className="w-24 h-auto" />
+                <img src="/agrologo.png" alt="AgroVista Logo" className="w-24 h-auto" />
               </div>
-              <h2 className="text-4xl font-bold text-white mb-2">
-                Welcome Back
-              </h2>
-              <p className="text-green-100">
-                Sign in to your AgroVista account
-              </p>
+              <h2 className="text-4xl font-bold text-white mb-2">Welcome Back</h2>
+              <p className="text-green-100">Sign in to your AgroVista account</p>
             </div>
 
             <div className="space-y-5">
-              {[
-                {
-                  label: "Email",
-                  value: email,
-                  setValue: setEmail,
-                  type: "email",
-                  icon: (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-black"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                      />
-                    </svg>
-                  ),
-                },
-                {
-                  label: "Password",
-                  value: password,
-                  setValue: setPassword,
-                  type: "password",
-                  icon: (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-black"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                      />
-                    </svg>
-                  ),
-                },
-              ].map(({ label, value, setValue, type, icon }, idx) => (
+              {[{
+                label: "Email",
+                value: email,
+                setValue: setEmail,
+                type: "email",
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-black"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                ),
+              }, {
+                label: "Password",
+                value: password,
+                setValue: setPassword,
+                type: "password",
+                icon: (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-black"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
+                  </svg>
+                ),
+              }].map(({ label, value, setValue, type, icon }, idx) => (
                 <div key={idx} className="relative">
-                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                    {icon}
-                  </div>
+                  <div className="absolute left-3 top-1/2 transform -translate-y-1/2">{icon}</div>
                   <input
                     type={type}
                     placeholder={label}
@@ -151,60 +312,168 @@ export default function LoginPage() {
                 type="submit"
                 disabled={isLoading}
                 className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 rounded-lg font-semibold text-lg hover:from-green-700 hover:to-green-600 transition-all duration-300 shadow-lg hover:shadow-green-500/30 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+>>>>>>> Agriculture-Inspector-review-query
               >
-                {isLoading ? (
-                  <span className="flex items-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Signing in...
-                  </span>
-                ) : (
-                  "Sign In"
-                )}
-              </button>
+                <i className={`fab fa-${icon} text-xl`}></i>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="w-full lg:w-1/2 p-10 bg-white/20">
+          <h2 className="text-3xl font-semibold text-white mb-6 text-center">
+            Sign in
+          </h2>
+
+          <form onSubmit={handleOnSubmit} className="space-y-6" noValidate>
+            <div>
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={email}
+                onChange={handleEmailChange}
+                onBlur={() => handleBlur("email")}
+                className={`w-full px-4 py-3 rounded bg-white/70 text-black placeholder-gray-600 focus:outline-none focus:ring-2 transition-all ${
+                  errors.email && touched.email
+                    ? "focus:ring-red-400 ring-2 ring-red-400"
+                    : "focus:ring-green-400"
+                }`}
+              />
+              {errors.email && touched.email && (
+                <p className="text-red-300 text-sm mt-1 flex items-center">
+                  <span className="mr-1">⚠️</span>
+                  {errors.email}
+                </p>
+              )}
             </div>
 
-            <div className="mt-6 text-center">
-              <p className="text-green-100">
-                Don't have an account?{" "}
-                <Link
-                  to="/users/"
-                  className="text-white font-semibold hover:text-green-300 transition-colors"
-                >
-                  Register here
-                </Link>
-              </p>
+            <div>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+                onBlur={() => handleBlur("password")}
+                className={`w-full px-4 py-3 rounded bg-white/70 text-black placeholder-gray-600 focus:outline-none focus:ring-2 transition-all ${
+                  errors.password && touched.password
+                    ? "focus:ring-red-400 ring-2 ring-red-400"
+                    : "focus:ring-green-400"
+                }`}
+              />
+              {errors.password && touched.password && (
+                <p className="text-red-300 text-sm mt-1 flex items-center">
+                  <span className="mr-1">⚠️</span>
+                  {errors.password}
+                </p>
+              )}
             </div>
+
+            <div className="flex justify-between items-center text-white">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="accent-green-500"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
+                />
+                <span className="text-sm">Remember Me</span>
+              </label>
+              <Link to="/forgot-password" className="text-sm hover:underline">
+                Lost your password?
+              </Link>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full py-3 rounded font-semibold transition-all ${
+                isLoading
+                  ? "bg-gray-500 cursor-not-allowed"
+                  : "bg-green-600 hover:bg-green-700 active:bg-green-800"
+              } text-white`}
+            >
+              {isLoading ? (
+                <span className="flex items-center justify-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Signing in...
+                </span>
+              ) : (
+                "Sign in now"
+              )}
+            </button>
+
+            {/* ✅ Fixed Sign Up Link */}
+            <p className="text-sm text-white text-center">
+              Don't have an account?{" "}
+              <Link
+                to="/users/"
+                className="underline hover:text-green-300 font-medium"
+              >
+                Sign up
+              </Link>
+            </p>
+
+            <p className="text-sm text-white text-center mt-4">
+              By clicking on "Sign in now" you agree to our{" "}
+              <a href="#" className="underline hover:text-green-300">
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a href="#" className="underline hover:text-green-300">
+                Privacy Policy
+              </a>
+              .
+            </p>
           </form>
         </div>
       </div>
-      <Footer />
 
+<<<<<<< HEAD
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-20px); }
+        }
+
+        @keyframes float2 {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(15px); }
+        }
+
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-float2 {
+          animation: float2 8s ease-in-out infinite;
+        }
+      `}</style>
+=======
       <style>
         {`
           @keyframes backgroundScroll {
             0% { background-position: 0% 0%; }
             100% { background-position: 100% 100%; }
           }
-          
           @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
@@ -212,6 +481,7 @@ export default function LoginPage() {
           }
         `}
       </style>
+>>>>>>> Agriculture-Inspector-review-query
     </div>
   );
 }

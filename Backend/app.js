@@ -1,61 +1,88 @@
 import express from "express";
-import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import biRoutes from "./routes/biRoutes.js"; // Buyer Inventory routes
-import cartRouter from './routes/cCartRoutes.js'; // Cart routes
+import biRoutes from "./routes/biRoutes.js";
+import cartRouter from "./routes/cCartRoutes.js";
 import userRouter from "./routes/userRouter.js";
 import nfRouter from "./routes/nfRoutes.js";
-import cOrderRoutes from './routes/cOrderRoutes.js';  // Import order routes
-import cors from "cors"; // Enable Cross-Origin Resource Sharing
+import cOrderRoutes from "./routes/cOrderRoutes.js";
+import cors from "cors";
 import jwt from "jsonwebtoken";
-import path from "path"; // Path utilities
-
+import path from "path";
+import { fileURLToPath } from "url";  // ✅ Add this line
+import morgan from "morgan";          // ✅ Also missing import
+import cookieParser from "cookie-parser"; // ✅ Also missing import
 
 import staffRouter from "./routes/staffRoutes.js";
 import productRouter from "./routes/productRouter.js";
 import inquiryRouter from "./routes/inquiryRouter.js";
 
+import stripeRoutes from "./routes/stripeRoutes.js";
 dotenv.config();
 
 const app = express();
 
-app.use(cors()); // Enable CORS for all routes
+// Setup __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.use(bodyParser.json());
+// Enable CORS with credentials and correct origin
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:3001",
+  credentials: true,
+}));
+
+app.use(morgan("dev"));
+app.use(cookieParser());
+
+// Serve uploads folder statically
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Stripe webhook route MUST come BEFORE express.json() middleware
+// It needs raw body for signature verification
+app.use(
+  "/api/stripe/webhook",
+  express.raw({ type: "application/json" }),
+  stripeRoutes
+);
+
+// JSON body parser for other routes
+app.use(express.json({
+  verify: (req, res, buf) => {
+    // Keep rawBody for webhook for extra safety (if needed)
+    if (req.originalUrl.startsWith("/api/stripe/webhook")) {
+      req.rawBody = buf.toString();
+    }
+  }
+}));
+
+// JWT token extraction middleware for all routes except webhook
 app.use((req, res, next) => {
-  let token = req.header("Authorization");
-  if (token != null) {
-    token = token.replace("Bearer ", "");
+  // Don't extract for webhook route (it already got raw body)
+  if (req.originalUrl.startsWith("/api/stripe/webhook")) {
+    return next();
+  }
 
-    jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
-      if (!error) {
-        req.user = decoded;
-      }
-    });
+  const authHeader = req.header("Authorization") || req.header("authorization");
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    const token = authHeader.slice(7);
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = decoded; // You can populate user in a real app
+    } catch (err) {
+      // Token invalid or expired — just continue, routes can protect if needed
+      req.user = null;
+    }
+  } else {
+    req.user = null;
   }
   next();
 });
 
-// Serve uploaded images statically
-app.use("/uploads", express.static(path.join(path.resolve(), "uploads"))); // Only needed once
-
-// Serve static files for uploaded images
-app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
-app.use("/uploads", express.static(path.join(path.resolve(), "uploads")));
-
-let mongoUrl = process.env.MONGO_URL;
-
-mongoose.connect(mongoUrl);
-
-const connection = mongoose.connection;
-connection.once("open", () => {
-  console.log("MongoDB connection established successfully");
-});
-
+// Mount your routes
 app.use("/api/users", userRouter);
 app.use("/api/newsFeed", nfRouter);
-app.use("/api/inventory", biRoutes); // Buyer Inventory API routes
+app.use("/api/inventory", biRoutes);
 app.use("/api/staff", staffRouter);
 app.use("/api/products",productRouter);
 app.use("/api/inquiries",inquiryRouter);
@@ -66,3 +93,4 @@ app.use("/api/orders", cOrderRoutes);  // Mount routes on /api/orders
 app.listen(3000, () => {
   console.log("Server is runing on port 3000");
 });
+

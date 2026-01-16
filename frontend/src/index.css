@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+<<<<<<< HEAD
+@tailwind screens;
+=======
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Open+Sans&display=swap');
+>>>>>>> Agriculture-Inspector-review-query
